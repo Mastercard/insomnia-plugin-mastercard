@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "floatinglacier <floatinglacier@gmail.com>",
   "description": "Mastercard API Auth for Insomnia",
-  "license": "BSD-3",
+  "license": "Apache-2.0",
   "repository": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth",
   "bugs": {
     "url": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth"
