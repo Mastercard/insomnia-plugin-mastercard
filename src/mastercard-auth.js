@@ -1,8 +1,11 @@
+const {buildQueryStringFromParams, joinUrlAndQueryString, smartEncodeUrl} = require('insomnia-url');
 const MasterCardAPI = require('mastercard-api-core');
 const URL = require('url');
 
 module.exports = function (context) {
-  const url = context.request.getUrl();
+  const qs = buildQueryStringFromParams(context.request.getParameters());
+  const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
+  const url = smartEncodeUrl(fullUrl, true);
   if (isMastercard(url)) {
     const mastercard = context.request.getEnvironmentVariable('mastercard');
     if (mastercard) {
