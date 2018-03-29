@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-mastercard-auth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "floatinglacier <floatinglacier@gmail.com>",
   "description": "Mastercard API Auth for Insomnia",
   "license": "Apache-2.0",
