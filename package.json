@@ -14,6 +14,7 @@
     "description": "Add Mastercard API auth header to requests"
   },
   "dependencies": {
+    "insomnia-url": "^0.1.2",
     "mastercard-api-core": "^1.4.1"
   }
 }
