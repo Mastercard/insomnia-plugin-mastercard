@@ -31,5 +31,6 @@ module.exports = function (context) {
 function isMastercard (url) {
   return url.startsWith('https://sandbox.api.mastercard.com')
     || url.startsWith('https://api.mastercard.com')
-    || url.startsWith('https://sandbox.proxy.api.mastercard.com');
+    || url.startsWith('https://sandbox.proxy.api.mastercard.com')
+    || url.startsWith('https://stage.api.mastercard.com');
 }
