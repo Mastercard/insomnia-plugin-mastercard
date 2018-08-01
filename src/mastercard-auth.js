@@ -6,31 +6,19 @@ module.exports = function (context) {
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
   const url = smartEncodeUrl(fullUrl, true);
-  if (isMastercard(url)) {
-    const mastercard = context.request.getEnvironmentVariable('mastercard');
-    if (mastercard) {
-      try {
-        const oauth = new MasterCardAPI.OAuth(
-          mastercard.consumerKey,
-          mastercard.keystoreP12Path,
-          mastercard.keyAlias,
-          mastercard.keystorePassword);
-        const authHeader = oauth.sign(URL.parse(url), context.request.getMethod(), context.request.getBodyText());
-        context.request.setHeader('Authorization', authHeader);
-      }
-      catch (err) {
-        alert(err.message);
-      }
-    }
-    else {
-      alert(`Environment variable 'mastercard' is not set.`);
+
+  const mastercard = context.request.getEnvironmentVariable('mastercard');
+  if (mastercard) {
+    try {
+      const oauth = new MasterCardAPI.OAuth(
+        mastercard.consumerKey,
+        mastercard.keystoreP12Path,
+        mastercard.keyAlias,
+        mastercard.keystorePassword);
+      const authHeader = oauth.sign(URL.parse(url), context.request.getMethod(), context.request.getBodyText());
+      context.request.setHeader('Authorization', authHeader);
+    } catch (err) {
+      alert(err.message);
     }
   }
 };
-
-function isMastercard (url) {
-  return url.startsWith('https://sandbox.api.mastercard.com')
-    || url.startsWith('https://api.mastercard.com')
-    || url.startsWith('https://sandbox.proxy.api.mastercard.com')
-    || url.startsWith('https://stage.api.mastercard.com');
-}
