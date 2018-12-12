@@ -15,6 +15,11 @@
   },
   "dependencies": {
     "insomnia-url": "^0.1.2",
-    "mastercard-api-core": "^1.4.1"
+    "mastercard-api-core": "^1.4.1",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "jshint": "^2.9.7"
   }
 }
