@@ -1,7 +1,10 @@
 {
   "name": "insomnia-plugin-mastercard-auth",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "author": "floatinglacier <floatinglacier@gmail.com>",
+  "contributors": [
+    "Mania36 <brian.thompson@mastercard.com>"
+  ],
   "description": "Mastercard API Auth for Insomnia",
   "license": "Apache-2.0",
   "repository": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth",
@@ -13,6 +16,11 @@
     "name": "mastercard-auth",
     "description": "Add Mastercard API auth header to requests"
   },
+  "scripts": {
+    "test": "ava tests/unit/*.js --verbose",
+    "test:watch": "ava tests/unit/*.js --verbose --watch",
+    "ava": "ava --verbose"
+  },
   "dependencies": {
     "insomnia-url": "^0.1.5",
     "mastercard-api-core": "^1.4.18"
@@ -20,5 +28,8 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "jshint": "^2.9.7"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
