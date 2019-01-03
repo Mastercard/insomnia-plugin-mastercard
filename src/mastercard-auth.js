@@ -3,6 +3,13 @@ const MasterCardAPI = require('mastercard-api-core');
 const URL = require('url');
 
 module.exports = function (context) {
+  
+  //handling for comma values because the gateway expects it to be percent encoded
+  context.request.getParameters().forEach( (entry) => {
+    context.request.setParameter(entry.name, entry.value.replace(/,/g, "%25252C"));    
+  });
+
+  
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
   const url = smartEncodeUrl(fullUrl, true);
