@@ -1,5 +1,5 @@
-import test from 'ava';
-import { insomniaOAuth } from '../../src/mastercard-auth';
+const test = require( 'ava' );
+const insomniaOAuth = require( '../../src/mastercard-auth' );
 
 test( 'Does exist', t => {
   const ioa = new insomniaOAuth();
