@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-mastercard-auth",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "floatinglacier <floatinglacier@gmail.com>",
   "contributors": [
     "puppynapper <brian.thompson@mastercard.com>"
