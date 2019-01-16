@@ -16,17 +16,11 @@
     "name": "mastercard-auth",
     "description": "Add Mastercard API auth header to requests"
   },
-  "scripts": {
-    "test": "ava tests/unit/*.js --verbose",
-    "test:watch": "ava tests/unit/*.js --verbose --watch",
-    "ava": "ava --verbose"
-  },
   "dependencies": {
     "insomnia-url": "^0.1.5",
     "mastercard-api-core": "^1.4.18"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
     "eslint": "^5.12.0",
     "eslint-config-google": "^0.11.0"
   },
