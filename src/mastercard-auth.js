@@ -1,5 +1,7 @@
 const {buildQueryStringFromParams, joinUrlAndQueryString, smartEncodeUrl} = require('insomnia-url');
-const MasterCardAPI = require('mastercard-api-core');
+const oauth = require('mastercard-oauth1-signer');
+const forge = require('node-forge');
+const fs = require('fs');
 const URL = require('url');
 
 module.exports = function (context) {
@@ -17,13 +19,20 @@ module.exports = function (context) {
   const mastercard = context.request.getEnvironmentVariable('mastercard');
   if (mastercard) {
     try {
-      const oauth = new MasterCardAPI.OAuth(
-        mastercard.consumerKey,
-        mastercard.keystoreP12Path,
-        mastercard.keyAlias,
-        mastercard.keystorePassword);
-      const authHeader = oauth.sign(URL.parse(url), context.request.getMethod(), context.request.getBodyText());
+
+      const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
+      const p12Asn1 = forge.asn1.fromDer(p12Content, false);
+      const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, mastercard.keystorePassword);
+      const keyObj = p12.getBags({
+                      friendlyName: mastercard.keyAlias,
+                           bagType: forge.pki.oids.pkcs8ShroudedKeyBag
+                            }).friendlyName[0];
+      const signingKey = forge.pki.privateKeyToPem(keyObj.key);
+
+      const authHeader = oauth.getAuthorizationHeader(URL.parse(url), context.request.getMethod(), context.request.getBodyText(), mastercard.consumerKey, signingKey);
       context.request.setHeader('Authorization', authHeader);
+
+
     } catch (err) {
       alert(err.message);
     }
