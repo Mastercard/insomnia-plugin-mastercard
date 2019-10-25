@@ -35,12 +35,20 @@ As part of this set up, you'll receive credentials for your app:
 
 ### Installation <a name="installation"></a>
 
+#### From the Plugins Tab
 1. Open Insomnia
 2. Go to Application > Preferences > Plugins
 3. Type "insomnia-plugin-mastercard-auth"
 4. Click "Install Plugin"
 
 ![installing-mastercard-plugin](https://user-images.githubusercontent.com/3964455/66712914-d291e000-ed9b-11e9-8b1f-7246b83f8b83.gif)
+
+#### Manual Installation
+1. Download "insomnia-plugin-mastercard-auth.tar.gz" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
+2. Go to Application > Preferences > Plugins
+3. Click "Show Plugins Folder"
+4. Extract the tar.gz from step 1 to the "plugins" folder
+5. Click "Reload Plugin List"
 
 ### Configuration <a name="configuration"></a>
 
