@@ -41,7 +41,7 @@ As part of this set up, you'll receive credentials for your app:
 3. Type "insomnia-plugin-mastercard-auth"
 4. Click "Install Plugin"
 
-![installing-mastercard-plugin](https://user-images.githubusercontent.com/3964455/66712914-d291e000-ed9b-11e9-8b1f-7246b83f8b83.gif)
+![](https://user-images.githubusercontent.com/3964455/67882592-66a0cd00-fb3a-11e9-9e57-15736b605396.gif)
 
 #### Manual Installation
 1. Download "insomnia-plugin-mastercard-auth.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
@@ -49,6 +49,8 @@ As part of this set up, you'll receive credentials for your app:
 3. Click "Show Plugins Folder"
 4. Extract the zip from step 1 to the "plugins" folder
 5. Click "Reload Plugin List"
+
+![](https://user-images.githubusercontent.com/3964455/67882595-66a0cd00-fb3a-11e9-8909-f2188f9a94da.gif)
 
 ### Configuration <a name="configuration"></a>
 
@@ -66,12 +68,12 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
   }
 }
 ```
-![updating-environment](https://user-images.githubusercontent.com/3964455/66712916-d32a7680-ed9b-11e9-934b-4aaddc418dff.gif)
+![](https://user-images.githubusercontent.com/3964455/66712916-d32a7680-ed9b-11e9-934b-4aaddc418dff.gif)
 
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
 
-![authenticated-requests](https://user-images.githubusercontent.com/3964455/66712915-d32a7680-ed9b-11e9-8047-7571be2d3cd8.gif)
+![](https://user-images.githubusercontent.com/3964455/66712915-d32a7680-ed9b-11e9-8047-7571be2d3cd8.gif)
 
 ## Further Reading <a name="further-reading"></a>
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
