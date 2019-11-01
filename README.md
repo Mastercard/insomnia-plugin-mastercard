@@ -80,7 +80,7 @@ Alternatively, you can import two ready to be used "sandbox" and "production" en
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
 
-![](https://user-images.githubusercontent.com/3964455/66712915-d32a7680-ed9b-11e9-8047-7571be2d3cd8.gif)
+![](https://user-images.githubusercontent.com/3964455/68042376-a72f5080-fcca-11e9-85d9-d60cdd2da920.gif)
 
 ## Further Reading <a name="further-reading"></a>
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
