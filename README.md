@@ -68,7 +68,14 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
   }
 }
 ```
-![](https://user-images.githubusercontent.com/3964455/66712916-d32a7680-ed9b-11e9-934b-4aaddc418dff.gif)
+Alternatively, you can import two ready to be used "sandbox" and "production" environments:
+1. Go to Application > Preferences > Data
+2. Click "Import Data"
+3. Click "From URL"
+4. Type "https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases/latest/download/mastercard-apis-insomnia-workspace.json"
+5. Click "Fetch and Import"
+
+![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
 
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
