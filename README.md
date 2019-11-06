@@ -2,6 +2,7 @@
 
 [![](https://img.shields.io/npm/v/insomnia-plugin-mastercard-auth.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
 [![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/blob/master/LICENSE)
+[![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases/latest/download/mastercard-apis-insomnia-workspace.json)
 
 ## Table of Contents
 - [Overview](#overview)
