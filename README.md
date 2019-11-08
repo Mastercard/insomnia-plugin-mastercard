@@ -55,6 +55,21 @@ As part of this set up, you'll receive credentials for your app:
 
 ### Configuration <a name="configuration"></a>
 
+#### One-Click Import
+To import two ready to be used "sandbox" and "production" environments:
+1. Click [![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases/latest/download/mastercard-apis-insomnia-workspace.json)
+2. Click "Run Import Mastercard Workspace"
+
+Alternatively, you can:
+1. Go to Application > Preferences > Data
+2. Click "Import Data"
+3. Click "From URL"
+4. Type "https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases/latest/download/mastercard-apis-insomnia-workspace.json"
+5. Click "Fetch and Import"
+
+![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
+
+#### Manual Configuration
 Update your [environment](https://support.insomnia.rest/article/18-environment-variables):
 1. Click "Manage Environments"
 2. Create a "mastercard" environment variable with your credentials:
@@ -69,14 +84,6 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
   }
 }
 ```
-Alternatively, you can import two ready to be used "sandbox" and "production" environments:
-1. Go to Application > Preferences > Data
-2. Click "Import Data"
-3. Click "From URL"
-4. Type "https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases/latest/download/mastercard-apis-insomnia-workspace.json"
-5. Click "Fetch and Import"
-
-![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
 
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
