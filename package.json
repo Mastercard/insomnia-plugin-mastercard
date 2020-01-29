@@ -1,11 +1,12 @@
 {
   "name": "insomnia-plugin-mastercard-auth",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "contributors": [
     "floatinglacier <floatinglacier@gmail.com>",
     "Kenny Chow",
     "Piyush Hirpara",
-    "Brian Thompson"
+    "Brian Thompson",
+    "Ross Phelan"
   ],
   "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs.",
   "license": "Apache-2.0",
