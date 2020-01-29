@@ -6,14 +6,14 @@ const URL = require('url');
 
 module.exports = function (context) {
   
-  //handling for comma values because the gateway expects it to be percent encoded
-  context.request.getParameters().forEach( (entry) => {
-    context.request.setParameter(entry.name, entry.value.replace(/,/g, "%25252C"));    
-  });
-
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
-  const url = smartEncodeUrl(fullUrl, true);
+  const commaDecodedUrl = smartEncodeUrl(fullUrl, true);
+
+  //OAuth requires all , as %2C
+  //In the above functions (at insomnia-url/src/queryString.js:72) all %2C gets decoded
+  url = commaDecodedUrl.replace(/,/g, "%2C");
+
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
   if (mastercard) {
