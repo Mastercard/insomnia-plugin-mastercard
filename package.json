@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "insomnia-url": "^0.1.2",
-    "mastercard-oauth1-signer": ">=1.1.4",
+    "mastercard-oauth1-signer": ">=1.1.5",
     "node-forge": ">=0.9.1"
   }
 }
