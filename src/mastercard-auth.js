@@ -5,7 +5,7 @@ const fs = require('fs');
 const URL = require('url');
 
 module.exports = function (context) {
-  
+
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
   const commaDecodedUrl = smartEncodeUrl(fullUrl, true);
@@ -16,7 +16,7 @@ module.exports = function (context) {
 
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
-  if (mastercard) {
+  if (mastercard && commaDecodedUrl.includes('api.mastercard.com')) {
     try {
       const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
       const p12Asn1 = forge.asn1.fromDer(p12Content, false);
