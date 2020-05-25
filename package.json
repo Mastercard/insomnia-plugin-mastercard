@@ -6,7 +6,8 @@
     "Kenny Chow",
     "Piyush Hirpara",
     "Brian Thompson",
-    "Ross Phelan"
+    "Ross Phelan",
+    "Danny Gallagher"
   ],
   "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs.",
   "license": "Apache-2.0",
