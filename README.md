@@ -74,6 +74,7 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
 1. Click "Manage Environments"
 2. Create a "mastercard" environment variable with your credentials:
 
+Linux/MacOS
 ```json
 {
   "mastercard": {
@@ -84,6 +85,18 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
   }
 }
 ```
+Windows
+```json
+{
+  "mastercard": {
+    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+    "keyAlias": "keyalias",
+    "keystoreP12Path": "C:\path\to\keystore.p12",
+    "keystorePassword": "keystorepassword"
+  }
+}
+```
+
 
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
