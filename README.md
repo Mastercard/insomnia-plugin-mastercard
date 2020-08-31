@@ -22,7 +22,7 @@ A plugin for handling Mastercard API authentication. This plugin computes and ad
 Insomnia v5.15.0+
 
 ### References <a name="references"></a>
-* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/using-oauth-1a-to-access-mastercard-apis/)
+* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/security-and-authentication/using-oauth-1a-to-access-mastercard-apis/)
 * [A Mastercard Plugin for Insomnia REST Client](https://developer.mastercard.com/blog/a-mastercard-plugin-for-insomnia-rest-client)
 
 ## Usage <a name="usage"></a>
