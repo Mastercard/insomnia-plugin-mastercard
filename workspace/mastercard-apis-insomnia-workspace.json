@@ -1,0 +1,122 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2019-11-01T11:12:59.607Z",
+    "__export_source": "insomnia.desktop.app:v7.0.1",
+    "resources": [
+        {
+            "_id": "req_b001742bb7d44122b32b597195b253a1",
+            "authentication": {},
+            "body": {},
+            "created": 1572009619195,
+            "description": "",
+            "headers": [
+                {
+                    "id": "pair_6ee06233d94744bb82fec669f98d45f1",
+                    "name": "content-type",
+                    "value": "application/json"
+                }
+            ],
+            "isPrivate": false,
+            "metaSortKey": -1572009619195,
+            "method": "GET",
+            "modified": 1572606757333,
+            "name": "Mastercard ATM Location (update me!)",
+            "parameters": [],
+            "parentId": "wrk_426ef946c0164b68a71f63380a76d395",
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingSendCookies": true,
+            "settingStoreCookies": true,
+            "url": "{{ host  }}/atms/v1/atm?PageOffset=0&PageLength=5&PostalCode=11101&Format=JSON",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_426ef946c0164b68a71f63380a76d395",
+            "created": 1551873508932,
+            "description": "Don't forget to update your environment with your credentials!",
+            "modified": 1572009721574,
+            "name": "Mastercard APIs",
+            "parentId": null,
+            "_type": "workspace"
+        },
+        {
+            "_id": "env_8123369b2b7043948346f0ebbc7283c1",
+            "color": null,
+            "created": 1551873508962,
+            "data": {},
+            "dataPropertyOrder": {},
+            "isPrivate": false,
+            "metaSortKey": 1551873508962,
+            "modified": 1572009219908,
+            "name": "New Environment",
+            "parentId": "wrk_426ef946c0164b68a71f63380a76d395",
+            "_type": "environment"
+        },
+        {
+            "_id": "env_e14bd1c7087f403ea8713aff9883e868",
+            "color": "#00ff00",
+            "created": 1572009184884,
+            "data": {
+                "host": "https://api.mastercard.com",
+                "mastercard": {
+                    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+                    "keyAlias": "keyalias",
+                    "keystoreP12Path": "/path/to/production-signing-key.p12",
+                    "keystorePassword": "keystorepassword"
+                }
+            },
+            "dataPropertyOrder": {
+                "&": [
+                    "host",
+                    "mastercard"
+                ],
+                "&~|mastercard": [
+                    "consumerKey",
+                    "keyAlias",
+                    "keystoreP12Path",
+                    "keystorePassword"
+                ]
+            },
+            "isPrivate": false,
+            "metaSortKey": 1572009184884,
+            "modified": 1572549108242,
+            "name": "Production",
+            "parentId": "env_8123369b2b7043948346f0ebbc7283c1",
+            "_type": "environment"
+        },
+        {
+            "_id": "env_a763af8c6b3e43999df1b62d9800dc98",
+            "color": "#ff8040",
+            "created": 1572542085385,
+            "data": {
+                "host": "https://sandbox.api.mastercard.com",
+                "mastercard": {
+                    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+                    "keyAlias": "keyalias",
+                    "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
+                    "keystorePassword": "keystorepassword"
+                }
+            },
+            "dataPropertyOrder": {
+                "&": [
+                    "host",
+                    "mastercard"
+                ],
+                "&~|mastercard": [
+                    "consumerKey",
+                    "keyAlias",
+                    "keystoreP12Path",
+                    "keystorePassword"
+                ]
+            },
+            "isPrivate": false,
+            "metaSortKey": 1572542085385,
+            "modified": 1572549087695,
+            "name": "Sandbox",
+            "parentId": "env_8123369b2b7043948346f0ebbc7283c1",
+            "_type": "environment"
+        }
+    ]
+}
