@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/npm/v/insomnia-plugin-mastercard-auth.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
 [![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/blob/master/LICENSE)
-[![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
+[![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -57,7 +57,7 @@ As part of this set up, you'll receive credentials for your app:
 
 #### One-Click Import
 To import two ready to be used "sandbox" and "production" environments:
-1. Click [![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
+1. Click [![](https://img.shields.io/badge/insomnia-workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
 2. Click "Run Import Mastercard Workspace"
 
 Alternatively, you can:
