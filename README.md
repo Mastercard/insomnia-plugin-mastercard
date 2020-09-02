@@ -22,7 +22,7 @@ A plugin for handling Mastercard API authentication. This plugin computes and ad
 Insomnia v5.15.0+
 
 ### References <a name="references"></a>
-* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/using-oauth-1a-to-access-mastercard-apis/)
+* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/security-and-authentication/using-oauth-1a-to-access-mastercard-apis/)
 * [A Mastercard Plugin for Insomnia REST Client](https://developer.mastercard.com/blog/a-mastercard-plugin-for-insomnia-rest-client)
 
 ## Usage <a name="usage"></a>
@@ -74,6 +74,7 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
 1. Click "Manage Environments"
 2. Create a "mastercard" environment variable with your credentials:
 
+Linux/MacOS
 ```json
 {
   "mastercard": {
@@ -84,6 +85,18 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
   }
 }
 ```
+Windows
+```
+{
+  "mastercard": {
+    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+    "keyAlias": "keyalias",
+    "keystoreP12Path": "C:\\path\\to\\keystore.p12",
+    "keystorePassword": "keystorepassword"
+  }
+}
+```
+
 
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
