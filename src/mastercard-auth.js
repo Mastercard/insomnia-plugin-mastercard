@@ -5,7 +5,6 @@ const fs = require('fs');
 const URL = require('url');
 
 module.exports = function (context) {
-
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
   const commaDecodedUrl = smartEncodeUrl(fullUrl, true);
@@ -18,6 +17,14 @@ module.exports = function (context) {
 
   if (mastercard && commaDecodedUrl.includes('api.mastercard.com')) {
     try {
+      
+      if(mastercard.keystoreP12Path === '/path/to/sandbox-signing-key.p12'){
+        throw Error("Please update sandbox keystoreP12Path from default")
+      }
+      if(mastercard.keystoreP12Path === '/path/to/production-signing-key.p12'){
+        throw Error("Please update production keystoreP12Path from default")
+      }
+
       const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
       const p12Asn1 = forge.asn1.fromDer(p12Content, false);
       const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, mastercard.keystorePassword);
