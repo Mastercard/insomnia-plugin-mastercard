@@ -5,6 +5,7 @@ const fs = require('fs');
 const URL = require('url');
 
 module.exports = function (context) {
+
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
   const commaDecodedUrl = smartEncodeUrl(fullUrl, true);
@@ -17,12 +18,11 @@ module.exports = function (context) {
 
   if (mastercard && commaDecodedUrl.includes('api.mastercard.com')) {
     try {
-      
-      if(mastercard.keystoreP12Path === '/path/to/sandbox-signing-key.p12'){
-        throw Error("Please update sandbox keystoreP12Path from default")
+      if (mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd) {
+        throw Error("Please update keystoreP12Path from default")
       }
-      if(mastercard.keystoreP12Path === '/path/to/production-signing-key.p12'){
-        throw Error("Please update production keystoreP12Path from default")
+      if (mastercard.consumerKey === defaultConsumerKey) {
+        throw Error("Please update consumerKey from default")
       }
 
       const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
@@ -37,7 +37,14 @@ module.exports = function (context) {
 
       context.request.setHeader('Authorization', authHeader);
     } catch (err) {
+      if (err.code === 'ENOENT') {
+        err.message = "No P12 file found at location: " + err.path
+      }
       alert(err.message);
     }
   }
 };
+
+const defaultKeystoreP12PathSandbox = "/path/to/sandbox-signing-key.p12"
+const defaultKeystoreP12PathProd = "/path/to/production-signing-key.p12"
+const defaultConsumerKey = "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000";
