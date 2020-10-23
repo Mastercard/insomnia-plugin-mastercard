@@ -65,7 +65,7 @@ Alternatively, you can:
 1. Go to Application > Preferences > Data
 2. Click "Import Data"
 3. Click "From URL"
-4. Type "https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json"
+4. Type: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json
 5. Click "Fetch and Import"
 
 ![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
