@@ -41,6 +41,7 @@ module.exports = function (context) {
         err.message = "No P12 file found at location: " + err.path
       }
       alert(err.message);
+      throw Error(err)
     }
   }
 };
