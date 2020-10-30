@@ -18,11 +18,11 @@ module.exports = function (context) {
 
   if (mastercard && commaDecodedUrl.includes('api.mastercard.com')) {
     try {
-      if (mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd) {
-        throw Error("Please update keystoreP12Path from default")
+      if(mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd){
+        throw Error("Please update the keystoreP12Path property from the default in the Mastercard environment settings")
       }
-      if (mastercard.consumerKey === defaultConsumerKey) {
-        throw Error("Please update consumerKey from default")
+      if(mastercard.consumerKey === defaultConsumerKey){
+        throw Error("Please update the consumerKey property from the default in the Mastercard environment settings")
       }
 
       const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
