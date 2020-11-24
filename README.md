@@ -1,5 +1,6 @@
 # insomnia-plugin-mastercard-auth
 
+[![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard-auth&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard-auth)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
 [![](https://img.shields.io/npm/v/insomnia-plugin-mastercard-auth.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
 [![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/blob/master/LICENSE)
