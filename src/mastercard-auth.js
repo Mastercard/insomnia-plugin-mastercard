@@ -12,7 +12,7 @@ module.exports = function (context) {
 
   //OAuth requires all , as %2C
   //In the above functions (at insomnia-url/src/queryString.js:72) all %2C gets decoded
-  url = commaDecodedUrl.replace(/,/g, "%2C");
+  const url = commaDecodedUrl.replace(/,/g, "%2C");
 
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
