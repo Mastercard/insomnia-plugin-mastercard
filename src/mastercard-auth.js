@@ -16,7 +16,7 @@ module.exports = function (context) {
 
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
-  if (mastercard && commaDecodedUrl.includes('api.mastercard.com')) {
+  if (mastercard && commaDecodedUrl.includes('mastercard.com')) {
     try {
       if(mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd){
         throw Error("Please update the keystoreP12Path property from the default in the Mastercard environment settings")
