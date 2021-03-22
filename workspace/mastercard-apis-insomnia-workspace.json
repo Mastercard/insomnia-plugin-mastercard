@@ -1,8 +1,8 @@
 {
     "_type": "export",
     "__export_format": 4,
-    "__export_date": "2019-11-01T11:12:59.607Z",
-    "__export_source": "insomnia.desktop.app:v7.0.1",
+    "__export_date": "2021-03-22T13:36:11.469Z",
+    "__export_source": "insomnia.desktop.app:v2021.1.1",
     "resources": [
         {
             "_id": "req_b001742bb7d44122b32b597195b253a1",
@@ -64,7 +64,10 @@
                     "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
                     "keyAlias": "keyalias",
                     "keystoreP12Path": "/path/to/production-signing-key.p12",
-                    "keystorePassword": "keystorepassword"
+                    "keystorePassword": "keystorepassword",
+                    "appliesTo": [
+                      "mastercard.com"
+                    ]
                 }
             },
             "dataPropertyOrder": {
@@ -76,7 +79,8 @@
                     "consumerKey",
                     "keyAlias",
                     "keystoreP12Path",
-                    "keystorePassword"
+                    "keystorePassword",
+                    "appliesTo"
                 ]
             },
             "isPrivate": false,
@@ -96,7 +100,10 @@
                     "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
                     "keyAlias": "keyalias",
                     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
-                    "keystorePassword": "keystorepassword"
+                    "keystorePassword": "keystorepassword",
+                    "appliesTo": [
+                      "mastercard.com"
+                    ]
                 }
             },
             "dataPropertyOrder": {
@@ -108,7 +115,8 @@
                     "consumerKey",
                     "keyAlias",
                     "keystoreP12Path",
-                    "keystorePassword"
+                    "keystorePassword",
+                    "appliesTo"
                 ]
             },
             "isPrivate": false,
