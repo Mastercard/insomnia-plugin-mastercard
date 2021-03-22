@@ -16,48 +16,50 @@ module.exports = function (context) {
 
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
-  if(mastercard){
-    try {
-      if(mastercard.appliesTo){
-        var validConfiguration = false
-        mastercard.appliesTo.forEach((it) => {
-          if(commaDecodedUrl.includes(it)){
-            validConfiguration = true
-            return 
-          }
-        })
-        if(!validConfiguration){
-          return
-        }
-      }else{
-        throw Error("Please add at least one domain to appliesTo in the Mastercard environment settings")
+  // No mastercard configuration in the current environment, do nothing  
+  if(!mastercard){
+    return
+  }
+  try {
+    var signRequest = false
+    
+    // The plugin is only active for certain URIs. By default, it intercepts API calls 
+    // sent to "mastercard.com" URIs.
+    const appliesTo = mastercard.appliesTo ? mastercard.appliesTo : [ "mastercard.com" ]
+    appliesTo.forEach((it) => {
+      if(commaDecodedUrl.includes(it)){
+        signRequest = true
+        return 
       }
-
-      if(mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd){
-        throw Error("Please update the keystoreP12Path property from the default in the Mastercard environment settings")
-      }
-      if(mastercard.consumerKey === defaultConsumerKey){
-        throw Error("Please update the consumerKey property from the default in the Mastercard environment settings")
-      }
-
-      const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
-      const p12Asn1 = forge.asn1.fromDer(p12Content, false);
-      const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, mastercard.keystorePassword);
-      const keyObj = p12.getBags({
-                      friendlyName: mastercard.keyAlias,
-                           bagType: forge.pki.oids.pkcs8ShroudedKeyBag
-                            }).friendlyName[0];
-      const signingKey = forge.pki.privateKeyToPem(keyObj.key);
-      const authHeader = oauth.getAuthorizationHeader(URL.parse(url), context.request.getMethod(), context.request.getBodyText(), mastercard.consumerKey, signingKey);
-
-      context.request.setHeader('Authorization', authHeader);
-    } catch (err) {
-      if (err.code === 'ENOENT') {
-        err.message = "No P12 file found at location: " + err.path
-      }
-      alert(err.message);
-      throw Error(err)
+    })
+    if(!signRequest){
+      return
     }
+
+    if(mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd){
+      throw Error("Please update the keystoreP12Path property from the default in the Mastercard environment settings")
+    }
+    if(mastercard.consumerKey === defaultConsumerKey){
+      throw Error("Please update the consumerKey property from the default in the Mastercard environment settings")
+    }
+
+    const p12Content = fs.readFileSync(mastercard.keystoreP12Path, 'binary');
+    const p12Asn1 = forge.asn1.fromDer(p12Content, false);
+    const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, false, mastercard.keystorePassword);
+    const keyObj = p12.getBags({
+                    friendlyName: mastercard.keyAlias,
+                         bagType: forge.pki.oids.pkcs8ShroudedKeyBag
+                          }).friendlyName[0];
+    const signingKey = forge.pki.privateKeyToPem(keyObj.key);
+    const authHeader = oauth.getAuthorizationHeader(URL.parse(url), context.request.getMethod(), context.request.getBodyText(), mastercard.consumerKey, signingKey);
+
+    context.request.setHeader('Authorization', authHeader);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      err.message = "No P12 file found at location: " + err.path
+    }
+    alert(err.message);
+    throw Error(err)
   }
 };
 
