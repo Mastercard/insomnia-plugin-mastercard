@@ -83,7 +83,10 @@ Linux/MacOS
     "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
     "keyAlias": "keyalias",
     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
-    "keystorePassword": "keystorepassword"
+    "keystorePassword": "keystorepassword",
+    "appliesTo": [
+      "mastercard.com"
+    ]
   }
 }
 ```
@@ -94,7 +97,10 @@ Windows
     "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
     "keyAlias": "keyalias",
     "keystoreP12Path": "C:\\path\\to\\keystore.p12",
-    "keystorePassword": "keystorepassword"
+    "keystorePassword": "keystorepassword",
+    "appliesTo": [
+      "mastercard.com"
+    ]
   }
 }
 ```

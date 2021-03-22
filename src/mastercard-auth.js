@@ -16,8 +16,23 @@ module.exports = function (context) {
 
   const mastercard = context.request.getEnvironmentVariable('mastercard');
 
-  if (mastercard) {
+  if(mastercard){
     try {
+      if(mastercard.appliesTo){
+        var validConfiguration = false
+        mastercard.appliesTo.forEach((it) => {
+          if(commaDecodedUrl.includes(it)){
+            validConfiguration = true
+            return 
+          }
+        })
+        if(!validConfiguration){
+          return
+        }
+      }else{
+        throw Error("Please add at least one domain to appliesTo in the Mastercard environment settings")
+      }
+
       if(mastercard.keystoreP12Path === defaultKeystoreP12PathSandbox || mastercard.keystoreP12Path === defaultKeystoreP12PathProd){
         throw Error("Please update the keystoreP12Path property from the default in the Mastercard environment settings")
       }
