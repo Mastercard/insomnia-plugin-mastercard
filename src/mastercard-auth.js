@@ -25,7 +25,7 @@ module.exports = function (context) {
     
     // The plugin is only active for certain URIs. By default, it intercepts API calls 
     // sent to "mastercard.com" URIs.
-    const appliesTo = mastercard.appliesTo ? mastercard.appliesTo : [ "mastercard.com" ]
+    const appliesTo = mastercard.appliesTo ? mastercard.appliesTo : [ "mastercard.com", "ethocaweb.com" ]
     appliesTo.forEach((it) => {
       if(commaDecodedUrl.includes(it)){
         signRequest = true
