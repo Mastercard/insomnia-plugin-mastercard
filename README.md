@@ -85,7 +85,8 @@ Linux/MacOS
     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
     "appliesTo": [
-      "mastercard.com"
+      "mastercard.com",
+      "api.ethocaweb.com"
     ]
   }
 }
@@ -99,7 +100,8 @@ Windows
     "keystoreP12Path": "C:\\path\\to\\keystore.p12",
     "keystorePassword": "keystorepassword",
     "appliesTo": [
-      "mastercard.com"
+      "mastercard.com",
+      "api.ethocaweb.com"
     ]
   }
 }
