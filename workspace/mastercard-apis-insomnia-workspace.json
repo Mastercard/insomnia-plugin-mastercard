@@ -66,7 +66,8 @@
                     "keystoreP12Path": "/path/to/production-signing-key.p12",
                     "keystorePassword": "keystorepassword",
                     "appliesTo": [
-                      "mastercard.com"
+                      "mastercard.com",
+                      "api.ethocaweb.com"
                     ]
                 }
             },
@@ -102,7 +103,8 @@
                     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
                     "keystorePassword": "keystorepassword",
                     "appliesTo": [
-                      "mastercard.com"
+                      "mastercard.com",
+                      "api.ethocaweb.com"  
                     ]
                 }
             },
