@@ -1,7 +1,7 @@
 {
   "name": "insomnia-plugin-mastercard-auth",
   "version": "1.1.12",
-  "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs.",
+  "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs",
   "license": "Apache-2.0",
   "repository": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth",
   "bugs": {
@@ -10,7 +10,15 @@
   "main": "index.js",
   "insomnia": {
     "name": "mastercard-auth",
-    "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs."
+    "displayName": "Mastercard API",
+    "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs",
+    "images": {
+      "icon": "icon.svg"
+    },
+    "publisher": {
+      "name": "Mastercard Developers",
+      "icon": "https://mstr.cd/3gzFGnY"
+    }
   },
   "dependencies": {
     "insomnia-url": "^0.1.2",
