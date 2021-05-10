@@ -1,4 +1,4 @@
-# insomnia-plugin-mastercard-auth
+# insomnia-plugin-mastercard
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard-auth&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard-auth)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
