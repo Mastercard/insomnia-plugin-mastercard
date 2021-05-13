@@ -1,4 +1,5 @@
-# insomnia-plugin-mastercard
+# insomnia-plugin-mastercard 
+<img src="https://developer.mastercard.com/img/logo_cogs.svg" />
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
@@ -47,10 +48,10 @@ As part of this set up, you'll receive credentials for your app:
 ![](https://user-images.githubusercontent.com/3964455/67882592-66a0cd00-fb3a-11e9-9e57-15736b605396.gif)
 
 #### Manual Installation
-1. Download "insomnia-plugin-mastercard-auth.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
+1. Download "insomnia-plugin-mastercard-auth-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
 2. Go to Application > Preferences > Plugins
 3. Click "Show Plugins Folder"
-4. Extract the zip from step 1 to the "plugins" folder
+4. Extract the ZIP file from step 1 to the "plugins" folder
 5. Click "Reload Plugin List"
 
 ![](https://user-images.githubusercontent.com/3964455/67882595-66a0cd00-fb3a-11e9-8909-f2188f9a94da.gif)
@@ -76,7 +77,7 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
 1. Click "Manage Environments"
 2. Create a "mastercard" environment variable with your credentials:
 
-Linux/MacOS
+Linux/macOS
 ```json
 {
   "mastercard": {
@@ -92,12 +93,12 @@ Linux/MacOS
 }
 ```
 Windows
-```
+```json
 {
   "mastercard": {
     "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
     "keyAlias": "keyalias",
-    "keystoreP12Path": "C:\\path\\to\\keystore.p12",
+    "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
     "appliesTo": [
       "mastercard.com",
@@ -107,7 +108,6 @@ Windows
 }
 ```
 
-
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
 
@@ -115,4 +115,5 @@ From now on, an `Authorization` header will be automatically added to every requ
 
 ## Further Reading <a name="further-reading"></a>
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
+* [The Insomnia Plugin Hub](https://insomnia.rest/plugins)
 * [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature
