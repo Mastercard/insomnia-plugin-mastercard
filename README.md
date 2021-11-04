@@ -1,5 +1,5 @@
 # insomnia-plugin-mastercard 
-<img src="https://developer.mastercard.com/img/logo_cogs.svg" />
+[![](https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-dark.svg)](https://developer.mastercard.com/)
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
