@@ -28,6 +28,7 @@ jobs:
           npm run build --if-present
           npm test
           npm run coverage
+          cat .nyc_output/coverage.lcov
       - name: SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         env:
