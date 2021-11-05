@@ -9,7 +9,7 @@ name: Linter
   schedule:
     - cron: 0 14 * * *
 jobs:
-  sonarcloud:
+  linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
