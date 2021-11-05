@@ -35,9 +35,7 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
         with:
-          projectBaseDir: .
           args: >
-            -Dsonar.sources=.
             -Dsonar.exclusions=test/**/*
             -Dsonar.tests=./test
             -Dsonar.coverage.jacoco.xmlReportPaths=test-results.xml
