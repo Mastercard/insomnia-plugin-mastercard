@@ -1,3 +1,4 @@
-module.exports.requestHooks = [
-  require('./src/mastercard-auth')
-];
+module.exports = {
+  requestHooks: require('./src/plugin').request,
+  responseHooks: require('./src/plugin').response
+};
