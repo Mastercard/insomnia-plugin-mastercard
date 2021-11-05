@@ -36,6 +36,7 @@ jobs:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
         with:
           args: >
+            -Dsonar.sources=.
             -Dsonar.exclusions=test/**/*
             -Dsonar.tests=./test
             -Dsonar.coverage.jacoco.xmlReportPaths=test-results.xml
