@@ -125,11 +125,11 @@ This plugin can take care of encrypting requests and/or decrypting response payl
 you will need to configure in the environment the `encryptionConfig` property. 
 
 See an example below:
-```json
+```jsonc
 {
   "mastercard": {
     
-    ...
+    // ... // 
     
     "encryptionConfig": {
       "paths": [
