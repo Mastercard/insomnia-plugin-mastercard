@@ -2,8 +2,8 @@
 [![](https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-dark.svg)](https://developer.mastercard.com/)
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard)
-[![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
-[![](https://img.shields.io/npm/v/insomnia-plugin-mastercard-auth.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
+[![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
+[![](https://img.shields.io/npm/v/insomnia-plugin-mastercard.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
 [![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/blob/master/LICENSE)
 [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
 
@@ -119,6 +119,7 @@ From now on, an `Authorization` header will be automatically added to every requ
 ![](https://user-images.githubusercontent.com/3964455/68042376-a72f5080-fcca-11e9-85d9-d60cdd2da920.gif)
 
 ## Further Reading <a name="further-reading"></a>
+* [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature
+* [client-encryption-nodejs](https://github.com/Mastercard/client-encryption-nodejs) — Library for Mastercard API compliant payload encryption/decryption.
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
 * [The Insomnia Plugin Hub](https://insomnia.rest/plugins)
-* [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature
