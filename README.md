@@ -16,16 +16,18 @@
   * [Installation](#installation)
   * [Configuration](#configuration)
   * [Authenticated Requests](#authenticated-requests)
+  * [Encryption](#encryption)
 - [Further Reading](#further-reading)
 
 ## Overview <a name="overview"></a>
-A plugin for handling Mastercard API authentication. This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/).
+A plugin for consuming Mastercard API with support for authentication and encryption. This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/). In addition, when configured, it can be used to automatically of encrypting request and/or decrypting response payloads.
 
 ### Compatibility <a name="compatibility"></a>
 Insomnia v5.15.0+
 
 ### References <a name="references"></a>
 * [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/security-and-authentication/using-oauth-1a-to-access-mastercard-apis/)
+* [Securing Sensitive Data Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/)
 * [A Mastercard Plugin for Insomnia REST Client](https://developer.mastercard.com/blog/a-mastercard-plugin-for-insomnia-rest-client)
 
 ## Usage <a name="usage"></a>
@@ -118,7 +120,58 @@ From now on, an `Authorization` header will be automatically added to every requ
 
 ![](https://user-images.githubusercontent.com/3964455/68042376-a72f5080-fcca-11e9-85d9-d60cdd2da920.gif)
 
+### Encryption <a name="encryption"></a>
+This plugin can take care of encrypting requests and/or decrypting response payloads. To enable encryption support, 
+you will need to configure in the environment the `encryptionConfig` property. 
+
+See an example below:
+```json
+{
+  "mastercard": {
+    
+    ...
+    
+    "encryptionConfig": {
+      "paths": [
+        {
+          "path": "/tokenize",
+          "toEncrypt": [
+            {
+              "element": "cardInfo.encryptedData",
+              "obj": "cardInfo"
+            },
+            {
+              "element": "fundingAccountInfo.encryptedPayload.encryptedData",
+              "obj": "fundingAccountInfo.encryptedPayload"
+            }
+          ],
+          "toDecrypt": [
+            {
+              "element": "tokenDetail",
+              "obj": "tokenDetail.encryptedData"
+            }
+          ]
+        }
+      ],
+      "oaepPaddingDigestAlgorithm": "SHA-512",
+      "ivFieldName": "iv",
+      "encryptedKeyFieldName": "encryptedKey",
+      "encryptedValueFieldName": "encryptedData",
+      "oaepHashingAlgorithmFieldName": "oaepHashingAlgorithm",
+      "publicKeyFingerprintFieldName": "publicKeyFingerprint",
+      "publicKeyFingerprintType": "certificate",
+      "dataEncoding": "hex",
+      "encryptionCertificate": "/path/to/the/encryption/certificate",
+      "privateKey": "/path/to/private/key"
+    }
+  }
+}
+```
+
+For further details on the configuration object and predefined service configurations, please checkout this [page](https://github.com/Mastercard/client-encryption-nodejs/wiki). 
+
 ## Further Reading <a name="further-reading"></a>
+
 * [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature
 * [client-encryption-nodejs](https://github.com/Mastercard/client-encryption-nodejs) — Library for Mastercard API compliant payload encryption/decryption.
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
