@@ -124,7 +124,7 @@ From now on, an `Authorization` header will be automatically added to every requ
 
 ### Encryption <a name="encryption"></a>
 This plugin can take care of encrypting requests and/or decrypting response payloads. To enable encryption support, 
-you need to configure in the environment the `encryptionConfig` property. See an example below:
+you need to configure in the environment the `encryptionConfig` property:
 
 ```jsonc
 {
