@@ -20,9 +20,9 @@
 - [Further Reading](#further-reading)
 
 ## Overview <a name="overview"></a>
-A plugin for consuming Mastercard API with support for authentication and encryption. 
-This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/).
-In addition, when configured, it can be used to automatically encrypt request and/or decrypt response payloads.
+A plugin for consuming Mastercard APIs with support for authentication and encryption. 
+This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/) 
+and it can be used to automatically encrypt request and/or decrypt response payloads.
 
 ### Compatibility <a name="compatibility"></a>
 Insomnia v5.15.0+
@@ -44,20 +44,20 @@ As part of this set up, you'll receive credentials for your app:
 ### Installation <a name="installation"></a>
 
 #### 1. One-Click Installation
-1. Go to https://insomnia.rest/plugins/insomnia-plugin-mastercard-auth
+1. Go to https://insomnia.rest/plugins/insomnia-plugin-mastercard
 2. Click the "Install Plugin" button
 3. Click "Open Insomnia" and "Install"
 
 #### 2. From the Plugins Tab
 1. Open Insomnia
 2. Go to Application > Preferences > Plugins
-3. Type "insomnia-plugin-mastercard-auth"
+3. Type "insomnia-plugin-mastercard"
 4. Click "Install Plugin"
 
 ![](https://user-images.githubusercontent.com/3964455/67882592-66a0cd00-fb3a-11e9-9e57-15736b605396.gif)
 
 #### 3. Manual Installation
-1. Download "insomnia-plugin-mastercard-auth-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
+1. Download "insomnia-plugin-mastercard-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
 2. Go to Application > Preferences > Plugins
 3. Click "Reveal Plugins Folder"
 4. Extract the ZIP file from step 1 to the "plugins" folder
