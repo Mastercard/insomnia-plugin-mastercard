@@ -22,7 +22,7 @@
 ## Overview <a name="overview"></a>
 A plugin for consuming Mastercard APIs with support for authentication and encryption. 
 This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/) 
-and it can be used to automatically encrypt request and/or decrypt response payloads.
+and it can be configured to automatically encrypt request and/or decrypt response payloads.
 
 ### Compatibility <a name="compatibility"></a>
 Insomnia v5.15.0+
