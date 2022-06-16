@@ -2,10 +2,10 @@
 [![](https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-dark.svg)](https://developer.mastercard.com/)
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_insomnia-plugin-mastercard&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_insomnia-plugin-mastercard)
-[![](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/actions?query=workflow%3A%22broken+links%3F%22)
-[![](https://img.shields.io/npm/v/insomnia-plugin-mastercard-auth.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard-auth)
-[![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/blob/master/LICENSE)
-[![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
+[![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3A%22broken+links%3F%22)
+[![](https://img.shields.io/npm/v/insomnia-plugin-mastercard.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard)
+[![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/blob/master/LICENSE)
+[![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -16,16 +16,20 @@
   * [Installation](#installation)
   * [Configuration](#configuration)
   * [Authenticated Requests](#authenticated-requests)
+  * [Encryption](#encryption)
 - [Further Reading](#further-reading)
 
 ## Overview <a name="overview"></a>
-A plugin for handling Mastercard API authentication. This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/).
+A plugin for consuming Mastercard APIs with support for authentication and encryption. 
+This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/) 
+and it can be configured to automatically encrypt request and/or decrypt response payloads.
 
 ### Compatibility <a name="compatibility"></a>
 Insomnia v5.15.0+
 
 ### References <a name="references"></a>
 * [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/security-and-authentication/using-oauth-1a-to-access-mastercard-apis/)
+* [Securing Sensitive Data Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/)
 * [A Mastercard Plugin for Insomnia REST Client](https://developer.mastercard.com/blog/a-mastercard-plugin-for-insomnia-rest-client)
 
 ## Usage <a name="usage"></a>
@@ -40,20 +44,20 @@ As part of this set up, you'll receive credentials for your app:
 ### Installation <a name="installation"></a>
 
 #### 1. One-Click Installation
-1. Go to https://insomnia.rest/plugins/insomnia-plugin-mastercard-auth
+1. Go to https://insomnia.rest/plugins/insomnia-plugin-mastercard
 2. Click the "Install Plugin" button
 3. Click "Open Insomnia" and "Install"
 
 #### 2. From the Plugins Tab
 1. Open Insomnia
 2. Go to Application > Preferences > Plugins
-3. Type "insomnia-plugin-mastercard-auth"
+3. Type "insomnia-plugin-mastercard"
 4. Click "Install Plugin"
 
 ![](https://user-images.githubusercontent.com/3964455/67882592-66a0cd00-fb3a-11e9-9e57-15736b605396.gif)
 
 #### 3. Manual Installation
-1. Download "insomnia-plugin-mastercard-auth-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard-auth/releases)
+1. Download "insomnia-plugin-mastercard-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard/releases)
 2. Go to Application > Preferences > Plugins
 3. Click "Reveal Plugins Folder"
 4. Extract the ZIP file from step 1 to the "plugins" folder
@@ -65,14 +69,14 @@ As part of this set up, you'll receive credentials for your app:
 
 #### One-Click Import
 To import two ready to be used "sandbox" and "production" environments:
-1. Click [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json)
+1. Click [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json)
 2. Click "Run Import Mastercard Workspace"
 
 Alternatively, you can:
 1. Go to Application > Preferences > Data
 2. Click "Import Data"
 3. Click "From URL"
-4. Type: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard-auth/master/workspace/mastercard-apis-insomnia-workspace.json
+4. Type: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json
 5. Click "Fetch and Import"
 
 ![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
@@ -118,7 +122,58 @@ From now on, an `Authorization` header will be automatically added to every requ
 
 ![](https://user-images.githubusercontent.com/3964455/68042376-a72f5080-fcca-11e9-85d9-d60cdd2da920.gif)
 
+### Encryption <a name="encryption"></a>
+This plugin can take care of encrypting requests and/or decrypting response payloads. To enable encryption support, 
+you need to configure in the environment the `encryptionConfig` property:
+
+```jsonc
+{
+  "mastercard": {
+    
+    // ... // 
+    
+    "encryptionConfig": {
+      "paths": [
+        {
+          "path": "/tokenize",
+          "toEncrypt": [
+            {
+              "element": "cardInfo.encryptedData",
+              "obj": "cardInfo"
+            },
+            {
+              "element": "fundingAccountInfo.encryptedPayload.encryptedData",
+              "obj": "fundingAccountInfo.encryptedPayload"
+            }
+          ],
+          "toDecrypt": [
+            {
+              "element": "tokenDetail",
+              "obj": "tokenDetail.encryptedData"
+            }
+          ]
+        }
+      ],
+      "oaepPaddingDigestAlgorithm": "SHA-512",
+      "ivFieldName": "iv",
+      "encryptedKeyFieldName": "encryptedKey",
+      "encryptedValueFieldName": "encryptedData",
+      "oaepHashingAlgorithmFieldName": "oaepHashingAlgorithm",
+      "publicKeyFingerprintFieldName": "publicKeyFingerprint",
+      "publicKeyFingerprintType": "certificate",
+      "dataEncoding": "hex",
+      "encryptionCertificate": "/path/to/the/encryption/certificate",
+      "privateKey": "/path/to/private/key"
+    }
+  }
+}
+```
+
+For further details on the configuration object and predefined service configurations, please checkout this [page](https://github.com/Mastercard/client-encryption-nodejs/wiki). 
+
 ## Further Reading <a name="further-reading"></a>
+
+* [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature
+* [client-encryption-nodejs](https://github.com/Mastercard/client-encryption-nodejs) — Library for Mastercard API compliant payload encryption/decryption.
 * [Insomnia Plugins](https://support.insomnia.rest/article/26-plugins)
 * [The Insomnia Plugin Hub](https://insomnia.rest/plugins)
-* [oauth1-signer-nodejs](https://github.com/Mastercard/oauth1-signer-nodejs) — A zero dependency library for generating a Mastercard API compliant OAuth signature

@@ -1,0 +1,23 @@
+name: Linter
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: 0 14 * * *
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 13
+        uses: actions/setup-node@v1
+        with:
+          node-version: 13
+      - name: Run eslint
+        run: |
+          npm ci
+          npm run lint

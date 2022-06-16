@@ -1,7 +1,7 @@
 {
-  "name": "insomnia-plugin-mastercard-auth",
-  "version": "1.1.14",
-  "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs",
+  "name": "insomnia-plugin-mastercard",
+  "version": "2.0.0",
+  "description": "An Insomnia plugin for consuming Mastercard APIs",
   "license": "Apache-2.0",
   "repository": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth",
   "bugs": {
@@ -11,7 +11,7 @@
   "insomnia": {
     "name": "mastercard-auth",
     "displayName": "Mastercard API",
-    "description": "An Insomnia plugin for handling authentication when integrating with Mastercard APIs",
+    "description": "An Insomnia plugin for consuming Mastercard APIs",
     "images": {
       "icon": "icon.svg"
     },
@@ -20,9 +20,47 @@
       "icon": "https://mstr.cd/3BQPnFz"
     }
   },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "none",
+    "singleQuote": true
+  },
+  "scripts": {
+    "test": "mocha --recursive && mocha --recursive --reporter mocha-sonar-generic-test-coverage > test-results.xml",
+    "coverage": "nyc mocha --recursive && nyc report --reporter=text-lcov > .nyc_output/coverage.lcov",
+    "lint": "eslint src --ext .js",
+    "lint:fix": "eslint src --ext .js --fix",
+    "lint:report": "npm run lint -- -f checkstyle --output-file target/checkstyle.xml",
+    "precommit": "lint-staged"
+  },
+  "mocha": {
+    "timeout": "5000"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,json,scss}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
+  },
   "dependencies": {
-    "insomnia-url": "^0.1.2",
-    "mastercard-oauth1-signer": "1.1.5",
-    "node-forge": ">=0.10.0"
+    "insomnia-url": "^2.3.2",
+    "mastercard-client-encryption": "^1.4.0",
+    "mastercard-oauth1-signer": "^1.1.6",
+    "node-forge": "^1.3.0",
+    "swagger-parser": "^10.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-mocha": "^9.0.0",
+    "mocha": "^9.1.1",
+    "mocha-sonar-generic-test-coverage": "^0.0.6",
+    "nyc": "^15.1.0",
+    "prettier": "^2.4.1",
+    "sinon": "^11.1.2",
+    "uuid": "^8.3.2"
   }
 }
