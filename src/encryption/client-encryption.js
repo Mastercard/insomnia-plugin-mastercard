@@ -1,6 +1,6 @@
 const MastercardContext = require('../mastercard-context');
-const clientEncryption = require('mastercard-client-encryption');
 const fs = require('fs');
+const utils = require('./utils');
 
 module.exports.request = async (context) => {
   const mcContext = new MastercardContext(context);
@@ -15,9 +15,13 @@ module.exports.request = async (context) => {
   ) {
     const headers = mcContext.requestHeader();
 
-    const fle = new clientEncryption.FieldLevelEncryption(
-      mcContext.encryptionConfig
-    );
+    const fle = utils.cryptoService(mcContext.encryptionConfig);
+
+    if (utils.isJWE(mcContext.encryptionConfig)) {
+      // Convert cert
+      fle.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
+    }
+
     const encrypted = fle.encrypt(
       mcContext.url,
       headers,
@@ -44,9 +48,7 @@ module.exports.response = async (context) => {
     mcContext.isJsonResponse() &&
     mcContext.encryptionConfig
   ) {
-    const fle = new clientEncryption.FieldLevelEncryption(
-      mcContext.encryptionConfig
-    );
+    const fle = utils.cryptoService(mcContext.encryptionConfig);
 
     const response = JSON.parse(fs.readFileSync(body.path));
     const decryptedBody = fle.decrypt({

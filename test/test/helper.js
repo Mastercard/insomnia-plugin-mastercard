@@ -43,5 +43,23 @@ module.exports = {
     () => {
     },
     config
+  ),
+  contextJWE: (
+    {
+      url = 'https://api.mastercard.com/service/api',
+      config = require('../__res__/config-jwe.json').mastercard,
+      body = null,
+      header = 'application/json;charset=UTF-8'
+    } = {}
+  ) => mockContext(
+    'POST',
+    url,
+    [{ name: 'name', value: 'value' }],
+    header,
+    () => [{ name: 'foo', value: 'bar' }],
+    body,
+    () => {
+    },
+    config
   )
 };
