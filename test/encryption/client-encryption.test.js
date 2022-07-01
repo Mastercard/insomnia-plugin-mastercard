@@ -34,6 +34,11 @@ describe('Encryption', () => {
     config: require('../__res__/config-with-header.json').mastercard
   });
 
+  const contextJWE = helper.contextJWE({
+    url: 'https://api.mastercard.com/service/api/resource',
+    body: body
+  });
+
   const mockResponse = (_path) => {
     const readFileSync = fs.readFileSync;
     const fn = (path, options) => {
@@ -64,6 +69,21 @@ describe('Encryption', () => {
     assert.strictEqual(json.foo, 'bar');
   });
 
+  it('should JWE encrypt the request', async () => {
+
+    sinon.spy(contextJWE.request, 'setBodyText');
+
+    await plugin.requestHooks[0](contextJWE); // JWE encrypt
+
+    const body = contextJWE.request.setBodyText.getCall(0).args[0];
+    const json = JSON.parse(body);
+    assert.ok(body);
+    assert.ok(json);
+    assert.ok(json.elem1);
+    assert.ok(json.elem1.encryptedData);
+    assert.strictEqual(json.foo, 'bar');
+  });
+
   it('should decrypt the response', async () => {
     mockResponse('./test/__res__/mock-response.json');
 
@@ -74,6 +94,23 @@ describe('Encryption', () => {
     await plugin.responseHooks[0](context); // decrypt
 
     const body = context.response.setBody.getCall(0).args[0];
+    const json = JSON.parse(body);
+    assert.ok(body);
+    assert.ok(json);
+    assert.strictEqual(json.foo.accountNumber, '5123456789012345');
+    fs.readFileSync.restore();
+  });
+
+  it('should JWE decrypt the response', async () => {
+    mockResponse('./test/__res__/mock-jwe-response.json');
+
+    sinon.spy(contextJWE.response, 'setBody');
+    sinon.mock(contextJWE.response).expects('getHeader').returns('application/json');
+    sinon.mock(contextJWE.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+
+    await plugin.responseHooks[0](contextJWE); // decrypt
+
+    const body = contextJWE.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
     assert.ok(body);
     assert.ok(json);

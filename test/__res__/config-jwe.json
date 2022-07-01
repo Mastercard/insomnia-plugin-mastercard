@@ -1,0 +1,33 @@
+{
+  "host": "https://sandbox.api.mastercard.com",
+  "mastercard": {
+    "consumerKey": "H5MR_EL6fmGG_jzvC6T7Wu43IZ-0plTTTfalNHft2482b23a!eab46a89cc2b46ebb31aeec610f52eeb0000000000000000",
+    "keyAlias": "mykeyalias",
+    "keystoreP12Path": "./test/__res__/test_key_container.p12",
+    "keystorePassword": "Password1",
+    "encryptionConfig": {
+      "paths": [
+        {
+          "path": "/resource",
+          "toEncrypt": [
+            {
+              "element": "elem1.encryptedData",
+              "obj": "elem1"
+            }
+          ],
+          "toDecrypt": [
+            {
+              "element": "foo.elem1",
+              "obj": "foo"
+            }
+          ]
+        }
+      ],
+      "mode": "JWE",
+      "encryptedValueFieldName": "encryptedData",
+      "publicKeyFingerprintType": "certificate",
+      "encryptionCertificate": "./test/__res__/test_certificate.cert",
+      "privateKey": "./test/__res__/test_key.der"
+    }
+  }
+}
