@@ -2,24 +2,25 @@ name: Sonar
 'on':
   push:
     branches:
-      - main
+      - "**"
   pull_request_target:
     branches:
-      - main
+      - "**"
+    types: [opened, synchronize, reopened, labeled]
   schedule:
     - cron: 0 14 * * *
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Check for external PR
         if: ${{ !(contains(github.event.pull_request.labels.*.name, 'safe') ||
           github.event.pull_request.head.repo.full_name == github.repository ||
           github.event_name != 'pull_request_target') }}
         run: echo "Unsecure PR, must be labelled with the 'safe' label, then run the workflow again" && exit 1
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Use Node.js 13
         uses: actions/setup-node@v1
         with:
@@ -43,3 +44,5 @@ jobs:
             -Dsonar.tests=./test
             -Dsonar.coverage.jacoco.xmlReportPaths=test-results.xml
             -Dsonar.javascript.lcov.reportPaths=.nyc_output/coverage.lcov
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+            -Dsonar.scm.revision=${{ github.event.pull_request.head.sha }}
