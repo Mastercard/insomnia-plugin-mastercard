@@ -51,13 +51,17 @@ module.exports.response = async (context) => {
     const fle = utils.cryptoService(mcContext.encryptionConfig);
 
     const response = JSON.parse(fs.readFileSync(body.path));
-    const decryptedBody = fle.decrypt({
-      body: response,
-      header: mcContext.responseHeader(),
-      request: {
-        url: mcContext.url
-      }
-    });
-    context.response.setBody(JSON.stringify(decryptedBody));
+    try {
+      const decryptedBody = fle.decrypt({
+        body: response,
+        header: mcContext.responseHeader(),
+        request: {
+          url: mcContext.url
+        }
+      });
+      context.response.setBody(JSON.stringify(decryptedBody));
+    } catch (e) {
+      context.response.setBody(JSON.stringify(response));
+    }
   }
 };

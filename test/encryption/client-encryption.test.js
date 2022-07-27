@@ -39,6 +39,12 @@ describe('Encryption', () => {
     body: body
   });
 
+  const contextWithRootElem = helper.context({
+    url: 'https://api.mastercard.com/service/api/resource',
+    body: body,
+    config: require('../__res__/config-root-element.json').mastercard
+  });
+
   const mockResponse = (_path) => {
     const readFileSync = fs.readFileSync;
     const fn = (path, options) => {
@@ -251,4 +257,23 @@ describe('Encryption', () => {
 
     assert(setBody.notCalled);
   });
+
+  it('should not override response if decryption fails', async () => {
+    mockResponse('./test/__res__/mock-response-error.json');
+    sinon.spy(contextWithRootElem.response, 'setBody');
+    sinon.mock(contextWithRootElem.response).expects('getHeader').returns('application/json');
+    sinon.mock(contextWithRootElem.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+
+    await plugin.responseHooks[0](contextWithRootElem); // decrypt
+
+    const body = contextWithRootElem.response.setBody.getCall(0).args[0];
+    const json = JSON.parse(body);
+    assert.ok(body);
+    assert.ok(json);
+    fs.readFileSync.restore();
+
+    const mockedResp = JSON.parse(fs.readFileSync('./test/__res__/mock-response-error.json'));
+    assert.ok(JSON.stringify(mockedResp) === JSON.stringify(json));
+  });
+
 });
