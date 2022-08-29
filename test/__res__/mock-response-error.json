@@ -1,0 +1,13 @@
+{
+  "Errors": [
+    {
+      "Error": {
+        "Source": "Gateway",
+        "ReasonCode": "DECLINED",
+        "Description": "Unauthorized - Access Not Granted",
+        "Recoverable": false,
+        "Details": null
+      }
+    }
+  ]
+}

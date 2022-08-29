@@ -39,6 +39,12 @@ describe('Encryption', () => {
     body: body
   });
 
+  const contextWithRootElem = helper.context({
+    url: 'https://api.mastercard.com/service/api/resource',
+    body: body,
+    config: require('../__res__/config-root-element.json').mastercard
+  });
+
   const mockResponse = (_path) => {
     const readFileSync = fs.readFileSync;
     const fn = (path, options) => {
@@ -251,4 +257,30 @@ describe('Encryption', () => {
 
     assert(setBody.notCalled);
   });
+
+  it('should not override response if decryption fails', async () => {
+    mockResponse('./test/__res__/mock-response-error.json');
+    sinon.spy(contextWithRootElem.response, 'setBody');
+    sinon.mock(contextWithRootElem.response).expects('getHeader').returns('application/json');
+    sinon.mock(contextWithRootElem.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+
+    await plugin.responseHooks[0](contextWithRootElem); // decrypt
+
+    sinon.assert.notCalled(contextWithRootElem.response.setBody);
+
+    fs.readFileSync.restore();
+  });
+
+  it('should not ovveride request if encryption fails', async () => {
+    let ctx = helper.context({ body: "invalid json" });
+    const setHeader = sinon.spy(ctx.request, 'setHeader');
+    const setBodyText = sinon.spy(ctx.request, 'setBodyText');
+
+    await plugin.requestHooks[0](ctx); // encrypt
+
+    assert(setHeader.notCalled);
+    assert(setBodyText.notCalled);
+  });
+
+
 });
