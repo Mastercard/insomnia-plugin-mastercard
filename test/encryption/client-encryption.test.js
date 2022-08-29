@@ -266,14 +266,21 @@ describe('Encryption', () => {
 
     await plugin.responseHooks[0](contextWithRootElem); // decrypt
 
-    const body = contextWithRootElem.response.setBody.getCall(0).args[0];
-    const json = JSON.parse(body);
-    assert.ok(body);
-    assert.ok(json);
-    fs.readFileSync.restore();
+    sinon.assert.notCalled(contextWithRootElem.response.setBody);
 
-    const mockedResp = JSON.parse(fs.readFileSync('./test/__res__/mock-response-error.json'));
-    assert.ok(JSON.stringify(mockedResp) === JSON.stringify(json));
+    fs.readFileSync.restore();
   });
+
+  it('should not ovveride request if encryption fails', async () => {
+    let ctx = helper.context({ body: "invalid json" });
+    const setHeader = sinon.spy(ctx.request, 'setHeader');
+    const setBodyText = sinon.spy(ctx.request, 'setBodyText');
+
+    await plugin.requestHooks[0](ctx); // encrypt
+
+    assert(setHeader.notCalled);
+    assert(setBodyText.notCalled);
+  });
+
 
 });

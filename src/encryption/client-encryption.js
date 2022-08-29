@@ -22,19 +22,23 @@ module.exports.request = async (context) => {
       fle.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
     }
 
-    const encrypted = fle.encrypt(
-      mcContext.url,
-      headers,
-      JSON.parse(body.text)
-    );
+    try {
+      const encrypted = fle.encrypt(
+        mcContext.url,
+        headers,
+        JSON.parse(body.text)
+      );
 
-    // override header
-    for (const [name, value] of Object.entries(encrypted.header)) {
-      context.request.setHeader(name, value);
+      // override header
+      for (const [name, value] of Object.entries(encrypted.header)) {
+        context.request.setHeader(name, value);
+      }
+
+      // replace body
+      context.request.setBodyText(JSON.stringify(encrypted.body));
+    } catch (e) {
+      // ignore
     }
-
-    // replace body
-    context.request.setBodyText(JSON.stringify(encrypted.body));
   }
 };
 
@@ -61,7 +65,7 @@ module.exports.response = async (context) => {
       });
       context.response.setBody(JSON.stringify(decryptedBody));
     } catch (e) {
-      context.response.setBody(JSON.stringify(response));
+      // ignore
     }
   }
 };
