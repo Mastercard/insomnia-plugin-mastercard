@@ -15,15 +15,15 @@ module.exports.request = async (context) => {
   ) {
     const headers = mcContext.requestHeader();
 
-    const fle = utils.cryptoService(mcContext.encryptionConfig);
+    const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
     if (utils.isJWE(mcContext.encryptionConfig)) {
       // Convert cert
-      fle.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
+      cryptoService.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
     }
 
     try {
-      const encrypted = fle.encrypt(
+      const encrypted = cryptoService.encrypt(
         mcContext.url,
         headers,
         JSON.parse(body.text)
@@ -37,7 +37,8 @@ module.exports.request = async (context) => {
       // replace body
       context.request.setBodyText(JSON.stringify(encrypted.body));
     } catch (e) {
-      // ignore
+      // eslint-disable-next-line no-console
+      console.log("Error occurred encrypting the request", e);
     }
   }
 };
@@ -52,11 +53,11 @@ module.exports.response = async (context) => {
     mcContext.isJsonResponse() &&
     mcContext.encryptionConfig
   ) {
-    const fle = utils.cryptoService(mcContext.encryptionConfig);
+    const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
     const response = JSON.parse(fs.readFileSync(body.path));
     try {
-      const decryptedBody = fle.decrypt({
+      const decryptedBody = cryptoService.decrypt({
         body: response,
         header: mcContext.responseHeader(),
         request: {
@@ -65,7 +66,8 @@ module.exports.response = async (context) => {
       });
       context.response.setBody(JSON.stringify(decryptedBody));
     } catch (e) {
-      // ignore
+      // eslint-disable-next-line no-console
+      console.log("Error occurred decrypting the response", e);
     }
   }
 };
