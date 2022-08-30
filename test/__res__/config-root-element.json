@@ -11,24 +11,28 @@
           "path": "/resource",
           "toEncrypt": [
             {
-              "element": "elem1.encryptedData",
-              "obj": "elem1"
+              "element": "$",
+              "obj": "$"
             }
           ],
           "toDecrypt": [
             {
-              "element": "foo.elem1",
-              "obj": "foo"
+              "element": "$",
+              "obj": "$"
             }
           ]
         }
       ],
-      "mode": "JWE",
+      "oaepPaddingDigestAlgorithm": "SHA-512",
+      "ivFieldName": "iv",
+      "encryptedKeyFieldName": "encryptedKey",
       "encryptedValueFieldName": "encryptedData",
+      "oaepHashingAlgorithmFieldName": "oaepHashingAlgorithm",
+      "publicKeyFingerprintFieldName": "publicKeyFingerprint",
       "publicKeyFingerprintType": "certificate",
+      "dataEncoding": "hex",
       "encryptionCertificate": "./test/__res__/test_certificate.cert",
-      "privateKey": "./test/__res__/test_key.der",
-      "dataEncoding": "base64"
+      "privateKey": "./test/__res__/test_key.der"
     }
   }
 }

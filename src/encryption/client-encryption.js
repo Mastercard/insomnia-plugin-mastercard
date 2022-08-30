@@ -15,26 +15,31 @@ module.exports.request = async (context) => {
   ) {
     const headers = mcContext.requestHeader();
 
-    const fle = utils.cryptoService(mcContext.encryptionConfig);
+    const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
     if (utils.isJWE(mcContext.encryptionConfig)) {
       // Convert cert
-      fle.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
+      cryptoService.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
     }
 
-    const encrypted = fle.encrypt(
-      mcContext.url,
-      headers,
-      JSON.parse(body.text)
-    );
+    try {
+      const encrypted = cryptoService.encrypt(
+        mcContext.url,
+        headers,
+        JSON.parse(body.text)
+      );
 
-    // override header
-    for (const [name, value] of Object.entries(encrypted.header)) {
-      context.request.setHeader(name, value);
+      // override header
+      for (const [name, value] of Object.entries(encrypted.header)) {
+        context.request.setHeader(name, value);
+      }
+
+      // replace body
+      context.request.setBodyText(JSON.stringify(encrypted.body));
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log("Error occurred encrypting the request", e);
     }
-
-    // replace body
-    context.request.setBodyText(JSON.stringify(encrypted.body));
   }
 };
 
@@ -48,16 +53,21 @@ module.exports.response = async (context) => {
     mcContext.isJsonResponse() &&
     mcContext.encryptionConfig
   ) {
-    const fle = utils.cryptoService(mcContext.encryptionConfig);
+    const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
     const response = JSON.parse(fs.readFileSync(body.path));
-    const decryptedBody = fle.decrypt({
-      body: response,
-      header: mcContext.responseHeader(),
-      request: {
-        url: mcContext.url
-      }
-    });
-    context.response.setBody(JSON.stringify(decryptedBody));
+    try {
+      const decryptedBody = cryptoService.decrypt({
+        body: response,
+        header: mcContext.responseHeader(),
+        request: {
+          url: mcContext.url
+        }
+      });
+      context.response.setBody(JSON.stringify(decryptedBody));
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log("Error occurred decrypting the response", e);
+    }
   }
 };
