@@ -48,8 +48,6 @@ As part of this set up, you'll receive credentials for your app:
 2. Click the "Install Plugin" button
 3. Click "Open Insomnia" and "Install"
 
-![](https://user-images.githubusercontent.com/3964455/67882592-66a0cd00-fb3a-11e9-9e57-15736b605396.gif)
-
 #### 2. Manual Installation
 1. Download "insomnia-plugin-mastercard-{version}.zip" from [Releases > Assets](https://github.com/Mastercard/insomnia-plugin-mastercard/releases)
 2. Go to Application > Preferences > Plugins
