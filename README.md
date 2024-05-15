@@ -160,7 +160,22 @@ you need to configure in the environment the `encryptionConfig` property:
   }
 }
 ```
+As an alternative to providing the `privateKey` in the `encryptionConfig`, you can configure the keystore along with alias and password as shown below:
+```jsonc
+{
+  "mastercard": {
+    "encryptionConfig": {
 
+      // ... //
+
+      "encryptionCertificate": "/path/to/the/encryption/certificate",
+      "keyStore": "/path/to/the/keystore",
+      "keyStoreAlias": "keystorealias",
+      "keyStorePassword": "keystorepassword",
+    }
+  }
+}
+```
 For further details on the configuration object and predefined service configurations, please checkout this [page](https://github.com/Mastercard/client-encryption-nodejs/wiki). 
 
 ## Further Reading <a name="further-reading"></a>
