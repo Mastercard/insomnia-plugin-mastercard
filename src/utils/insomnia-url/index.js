@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.flexibleEncodeComponent = exports.smartEncodeUrl = exports.deconstructQueryStringToParams = exports.buildQueryStringFromParams = exports.buildQueryParameter = exports.extractQueryStringFromUrl = exports.joinUrlAndQueryString = exports.setDefaultProtocol = void 0;
-var protocol_1 = require("./protocol");
+const protocol_1 = require("./protocol");
 Object.defineProperty(exports, "setDefaultProtocol", { enumerable: true, get: function () { return protocol_1.setDefaultProtocol; } });
-var querystring_1 = require("./querystring");
+const querystring_1 = require("./querystring");
 Object.defineProperty(exports, "joinUrlAndQueryString", { enumerable: true, get: function () { return querystring_1.joinUrlAndQueryString; } });
 Object.defineProperty(exports, "extractQueryStringFromUrl", { enumerable: true, get: function () { return querystring_1.extractQueryStringFromUrl; } });
 Object.defineProperty(exports, "buildQueryParameter", { enumerable: true, get: function () { return querystring_1.buildQueryParameter; } });

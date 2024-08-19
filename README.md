@@ -65,7 +65,7 @@ To import two ready to be used "sandbox" and "production" environments:
 2. Click "Run Import Mastercard Workspace"
 
 Alternatively, you can:
-1. Go to Application > Preferences > Data 
+1. Go to Application > Preferences > Data
 2. Click "Import Data"
 3. Click "From URL"
 4. Type: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json
