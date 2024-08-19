@@ -3,7 +3,7 @@ function MastercardContext(context) {
     buildQueryStringFromParams,
     joinUrlAndQueryString,
     smartEncodeUrl
-  } = require('insomnia-url');
+  } = require('./utils/insomnia-url');
 
   const qs = buildQueryStringFromParams(context.request.getParameters());
   const fullUrl = joinUrlAndQueryString(context.request.getUrl(), qs);
