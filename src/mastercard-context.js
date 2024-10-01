@@ -30,15 +30,26 @@ function MastercardContext(context) {
     return !(!this.config) && isMastercardDomain;
   };
 
+  this.isJsonHeader = (header) => {
+    if(header) {
+      if (header.toLowerCase().includes('application/json'))
+        return true;
+      else if (header.toLowerCase().includes('application/merge-patch+json'))
+        return true;
+    }
+    return false;
+  };
+
   this.isJsonRequest = () => {
     const header = context.request.getHeader('content-type');
-    return header ? header.toLowerCase().includes('application/json') : false;
+    return this.isJsonHeader(header);
   };
 
   this.isJsonResponse = () => {
     const header = context.response.getHeader('content-type');
-    return header ? header.toLowerCase().includes('application/json') : false;
+    return this.isJsonHeader(header);
   };
+
 
   this.requestBody = () => {
     return context.request.getBody();

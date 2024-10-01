@@ -44,6 +44,24 @@ module.exports = {
     },
     config
   ),
+  contextPatch: (
+    {
+      url = 'https://api.mastercard.com/service/api',
+      config = require('../__res__/config.json').mastercard,
+      body = null,
+      header = 'application/merge-patch+json;charset=UTF-8'
+    } = {}
+  ) => mockContext(
+    'PATCH',
+    url,
+    [{ name: 'name', value: 'value' }],
+    header,
+    () => [{ name: 'foo', value: 'bar' }],
+    body,
+    () => {
+    },
+    config
+  ),
   contextJWE: (
     {
       url = 'https://api.mastercard.com/service/api',
@@ -53,6 +71,24 @@ module.exports = {
     } = {}
   ) => mockContext(
     'POST',
+    url,
+    [{ name: 'name', value: 'value' }],
+    header,
+    () => [{ name: 'foo', value: 'bar' }],
+    body,
+    () => {
+    },
+    config
+  ),
+  contextJWEPatch: (
+    {
+      url = 'https://api.mastercard.com/service/api',
+      config = require('../__res__/config-jwe.json').mastercard,
+      body = null,
+      header = 'application/merge-patch+json;charset=UTF-8'
+    } = {}
+  ) => mockContext(
+    'PATCH',
     url,
     [{ name: 'name', value: 'value' }],
     header,
