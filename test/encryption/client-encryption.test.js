@@ -27,7 +27,11 @@ describe('Encryption', () => {
     url: 'https://api.mastercard.com/service/api/resource',
     body: body
   });
-
+  
+  const contextPatch = helper.contextPatch({
+    url: 'https://api.mastercard.com/service/api/resource',
+    body: body
+  });
   const contextWithHeader = helper.context({
     url: 'https://api.mastercard.com/service/api/resource',
     body: bodyWithHeader,
@@ -39,6 +43,10 @@ describe('Encryption', () => {
     body: body
   });
 
+  const contextJWEPatch = helper.contextJWEPatch({
+    url: 'https://api.mastercard.com/service/api/resource',
+    body: body
+  });
   const contextWithRootElem = helper.context({
     url: 'https://api.mastercard.com/service/api/resource',
     body: body,
@@ -107,6 +115,23 @@ describe('Encryption', () => {
     fs.readFileSync.restore();
   });
 
+  it('should decrypt the response with merge-patch+json content type', async () => {
+    mockResponse('./test/__res__/mock-response.json');
+
+    sinon.spy(contextPatch.response, 'setBody');
+    sinon.mock(contextPatch.response).expects('getHeader').returns('application/merge-patch+json');
+    sinon.mock(contextPatch.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+
+    await plugin.responseHooks[0](contextPatch); // decrypt
+
+    const body = contextPatch.response.setBody.getCall(0).args[0];
+    const json = JSON.parse(body);
+    assert.ok(body);
+    assert.ok(json);
+    assert.strictEqual(json.foo.accountNumber, '5123456789012345');
+    fs.readFileSync.restore();
+  });
+
   it('should JWE decrypt the response', async () => {
     mockResponse('./test/__res__/mock-jwe-response.json');
 
@@ -117,6 +142,23 @@ describe('Encryption', () => {
     await plugin.responseHooks[0](contextJWE); // decrypt
 
     const body = contextJWE.response.setBody.getCall(0).args[0];
+    const json = JSON.parse(body);
+    assert.ok(body);
+    assert.ok(json);
+    assert.strictEqual(json.foo.accountNumber, '5123456789012345');
+    fs.readFileSync.restore();
+  });
+
+  it('should JWE decrypt the response with merge-patch+json content type', async () => {
+    mockResponse('./test/__res__/mock-jwe-response.json');
+
+    sinon.spy(contextJWEPatch.response, 'setBody');
+    sinon.mock(contextJWEPatch.response).expects('getHeader').returns('application/merge-patch+json');
+    sinon.mock(contextJWEPatch.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+
+    await plugin.responseHooks[0](contextJWEPatch); // decrypt
+
+    const body = contextJWEPatch.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
     assert.ok(body);
     assert.ok(json);
