@@ -190,7 +190,7 @@ As an alternative to providing the `privateKey` in the `encryptionConfig`, you c
 }
 ```
 
-[See more examples here](docs/encryption-examples.md).
+[See more examples here](docs/configuration-examples.md).
 
 Both Mastercard encryption and JWE encryption are supported.   
 For more details on the encryption configurations, checkout these links:  
