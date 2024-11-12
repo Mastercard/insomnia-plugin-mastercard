@@ -187,40 +187,40 @@ This is a real world example for an API which uses Mastercard Encryption.
 This is a real world example for an API which uses JWE Encryption.
 ```json
 {
-	"mastercard": {
-		"consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
-		"keyAlias": "keyalias",
-		"keystoreP12Path": "/path/to/auth-keystore.p12",
-		"keystorePassword": "keystorepassword",
-		"appliesTo": [
-			"mastercard.com"
-		],
-		"encryptionConfig": {
-			"paths": [
-				{
-					"path": "/*",
-					"toEncrypt": [
-						{
-							"element": "sensitiveData",
-							"obj": "encryptedValue"
-						}
-					],
-					"toDecrypt": [
-						{
-							"element": "encryptedValue",
-							"obj": "sensitiveData"
-						}
-					]
-				}
-			],
-			"mode": "JWE",
-			"encryptedValueFieldName": "encryptedValue",
-			"encryptionCertificate": "/path/to/encryption-certificate.pem",
-			"keyStore": "/path/to/decryption-keystore.p12",
-			"keyStoreAlias": "keyalias",
-			"keyStorePassword": "keystorepassword"
-		}
-	}
+  "mastercard": {
+    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+    "keyAlias": "keyalias",
+    "keystoreP12Path": "/path/to/auth-keystore.p12",
+    "keystorePassword": "keystorepassword",
+    "appliesTo": [
+      "mastercard.com"
+    ],
+    "encryptionConfig": {
+      "paths": [
+        {
+          "path": "/*",
+          "toEncrypt": [
+            {
+              "element": "sensitiveData",
+              "obj": "encryptedValue"
+            }
+          ],
+          "toDecrypt": [
+            {
+              "element": "encryptedValue",
+              "obj": "sensitiveData"
+            }
+          ]
+        }
+      ],
+      "mode": "JWE",
+      "encryptedValueFieldName": "encryptedValue",
+      "encryptionCertificate": "/path/to/encryption-certificate.pem",
+      "keyStore": "/path/to/decryption-keystore.p12",
+      "keyStoreAlias": "keyalias",
+      "keyStorePassword": "keystorepassword"
+    }
+  }
 }
 ```
 
