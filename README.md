@@ -61,14 +61,25 @@ As part of this set up, you'll receive credentials for your app:
 
 #### One-Click Import
 To import two ready to be used "sandbox" and "production" environments:
-1. Click [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json)
+1. Depending on your use case, click either of these:
+   - No encryption: 
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json) 
+
+   - Mastercard Encryption: 
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json)  
+
+   - JWE Encryption: 
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json)  
 2. Click "Run Import Mastercard Workspace"
 
 Alternatively, you can:
 1. Go to Application > Preferences > Data
 2. Click "Import Data"
 3. Click "From URL"
-4. Type: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json
+4. Input either of these depending on your use case:  
+    - No encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json
+    - Mastercard encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json
+    - JWE encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json
 5. Click "Fetch and Import"
 
 ![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
@@ -116,7 +127,9 @@ From now on, an `Authorization` header will be automatically added to every requ
 
 ### Encryption <a name="encryption"></a>
 This plugin can take care of encrypting requests and/or decrypting response payloads. To enable encryption support, 
-you need to configure in the environment the `encryptionConfig` property:
+you need to configure in the environment the `encryptionConfig` property.    
+
+Here's a quick example for Mastercard Encryption:  
 
 ```jsonc
 {
@@ -176,7 +189,14 @@ As an alternative to providing the `privateKey` in the `encryptionConfig`, you c
   }
 }
 ```
-For further details on the configuration object and predefined service configurations, please checkout this [page](https://github.com/Mastercard/client-encryption-nodejs/wiki). 
+
+[See more examples here](docs/encryption-examples.md).
+
+Both Mastercard encryption and JWE encryption are supported.   
+For more details on the encryption configurations, checkout these links:  
+ - [Mastercard Encryption](https://github.com/Mastercard/client-encryption-nodejs/blob/main/README.md#configuring-the-field-level-encryption)
+ - [JWE Encryption](https://github.com/Mastercard/client-encryption-nodejs/blob/main/README.md#configuring-the-jwe-encryption)
+
 
 ## Further Reading <a name="further-reading"></a>
 

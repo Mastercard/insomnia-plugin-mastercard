@@ -1,0 +1,240 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2024-11-12T12:17:08.952Z",
+    "__export_source": "insomnia.desktop.app:v10.0.0",
+    "resources": [
+      {
+        "_id": "req_3dbec0152dac4997bc286cfc10552b89",
+        "parentId": "wrk_9a317c88170c45799db5c1f9863c17ab",
+        "modified": 1731413792650,
+        "created": 1572009619195,
+        "url": "{{ host  }}/service/path",
+        "name": "Endpoint I'd like to call (update me!)",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"dummy\": \"request\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": -1572009619195,
+        "isPrivate": false,
+        "pathParameters": [],
+        "settingStoreCookies": true,
+        "settingSendCookies": true,
+        "settingDisableRenderRequestBody": false,
+        "settingEncodeUrl": true,
+        "settingRebuildPath": true,
+        "settingFollowRedirects": "global",
+        "_type": "request"
+      },
+      {
+        "_id": "wrk_9a317c88170c45799db5c1f9863c17ab",
+        "parentId": null,
+        "modified": 1731413759428,
+        "created": 1731413759428,
+        "name": "Mastercard APIs",
+        "description": "",
+        "scope": "collection",
+        "_type": "workspace"
+      },
+      {
+        "_id": "env_dcac0603f64848419e9b52229b1e80ca",
+        "parentId": "wrk_9a317c88170c45799db5c1f9863c17ab",
+        "modified": 1572009219908,
+        "created": 1551873508962,
+        "name": "New Environment",
+        "data": {},
+        "dataPropertyOrder": {},
+        "color": null,
+        "isPrivate": false,
+        "metaSortKey": 1551873508962,
+        "_type": "environment"
+      },
+      {
+        "_id": "jar_123fe23b518e49a185dbd17e6cd086b1",
+        "parentId": "wrk_9a317c88170c45799db5c1f9863c17ab",
+        "modified": 1731080492448,
+        "created": 1731080492448,
+        "name": "Default Jar",
+        "cookies": [],
+        "_type": "cookie_jar"
+      },
+      {
+        "_id": "env_9e83a06542a14b7bb52f5801bd507605",
+        "parentId": "env_dcac0603f64848419e9b52229b1e80ca",
+        "modified": 1731083756416,
+        "created": 1572009184884,
+        "name": "Production",
+        "data": {
+          "host": "https://api.mastercard.com",
+          "mastercard": {
+            "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+            "keyAlias": "keyalias",
+            "keystoreP12Path": "/path/to/production-signing-key.p12",
+            "keystorePassword": "keystorepassword",
+            "appliesTo": [
+              "mastercard.com"
+            ],
+            "encryptionConfig": {
+              "paths": [
+                {
+                  "path": "/*",
+                  "toEncrypt": [
+                    {
+                      "element": "path.to.element.to.be.encrypted",
+                      "obj": "path.to.encrypted.output.element"
+                    }
+                  ],
+                  "toDecrypt": [
+                    {
+                      "element": "path.to.element.to.be.decrypted",
+                      "obj": "path.to.decryption.output"
+                    }
+                  ]
+                }
+              ],
+              "mode": "JWE",
+              "encryptedValueFieldName": "encryptedData",
+              "encryptionCertificate": "/path/to/encryption-certificate.pem",
+              "keyStore": "/path/to/decryption-keystore.p12",
+              "keyStoreAlias": "decryption-keyalias",
+              "keyStorePassword": "decryption-keystorepassword"
+            }
+          }
+        },
+        "dataPropertyOrder": {
+          "&": [
+            "host",
+            "mastercard"
+          ],
+          "&~|mastercard": [
+            "consumerKey",
+            "keyAlias",
+            "keystoreP12Path",
+            "keystorePassword",
+            "appliesTo",
+            "encryptionConfig"
+          ],
+          "&~|mastercard~|encryptionConfig": [
+            "paths",
+            "mode",
+            "encryptedValueFieldName",
+            "encryptionCertificate",
+            "keyStore",
+            "keyStoreAlias",
+            "keyStorePassword"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0": [
+            "path",
+            "toEncrypt",
+            "toDecrypt"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0~|toEncrypt~|0": [
+            "element",
+            "obj"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0~|toDecrypt~|0": [
+            "element",
+            "obj"
+          ]
+        },
+        "color": "#00ff00",
+        "isPrivate": false,
+        "metaSortKey": 1572009184884,
+        "_type": "environment"
+      },
+      {
+        "_id": "env_8638bcdf0daa431eb26750192df09806",
+        "parentId": "env_dcac0603f64848419e9b52229b1e80ca",
+        "modified": 1731083769084,
+        "created": 1572542085385,
+        "name": "Sandbox",
+        "data": {
+          "host": "https://sandbox.api.mastercard.com",
+          "mastercard": {
+            "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+            "keyAlias": "keyalias",
+            "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
+            "keystorePassword": "keystorepassword",
+            "appliesTo": [
+              "mastercard.com"
+            ],
+            "encryptionConfig": {
+              "paths": [
+                {
+                  "path": "/*",
+                  "toEncrypt": [
+                    {
+                      "element": "path.to.element.to.be.encrypted",
+                      "obj": "path.to.encrypted.output.element"
+                    }
+                  ],
+                  "toDecrypt": [
+                    {
+                      "element": "path.to.element.to.be.decrypted",
+                      "obj": "path.to.decryption.output"
+                    }
+                  ]
+                }
+              ],
+              "mode": "JWE",
+              "encryptedValueFieldName": "encryptedData",
+              "encryptionCertificate": "/path/to/encryption-certificate.pem",
+              "keyStore": "/path/to/decryption-keystore.p12",
+              "keyStoreAlias": "decryption-keyalias",
+              "keyStorePassword": "decryption-keystorepassword"
+            }
+          }
+        },
+        "dataPropertyOrder": {
+          "&": [
+            "host",
+            "mastercard"
+          ],
+          "&~|mastercard": [
+            "consumerKey",
+            "keyAlias",
+            "keystoreP12Path",
+            "keystorePassword",
+            "appliesTo",
+            "encryptionConfig"
+          ],
+          "&~|mastercard~|encryptionConfig": [
+            "paths",
+            "mode",
+            "encryptedValueFieldName",
+            "encryptionCertificate",
+            "keyStore",
+            "keyStoreAlias",
+            "keyStorePassword"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0": [
+            "path",
+            "toEncrypt",
+            "toDecrypt"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0~|toEncrypt~|0": [
+            "element",
+            "obj"
+          ],
+          "&~|mastercard~|encryptionConfig~|paths~|0~|toDecrypt~|0": [
+            "element",
+            "obj"
+          ]
+        },
+        "color": "#ff8040",
+        "isPrivate": false,
+        "metaSortKey": 1572542085385,
+        "_type": "environment"
+      }
+    ]
+  }
