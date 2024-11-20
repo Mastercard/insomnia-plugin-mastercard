@@ -159,6 +159,7 @@ Here's a quick example for Mastercard Encryption:
           ]
         }
       ],
+      "mode": "JWE",
       "oaepPaddingDigestAlgorithm": "SHA-512",
       "ivFieldName": "iv",
       "encryptedKeyFieldName": "encryptedKey",
@@ -169,6 +170,8 @@ Here's a quick example for Mastercard Encryption:
       "dataEncoding": "hex",
       "encryptionCertificate": "/path/to/the/encryption/certificate",
       "privateKey": "/path/to/private/key"
+      "encryptionPath": "$.owner", "$",
+      "decryptionPath": "$,encryptedData", "$.owner",
     }
   }
 }
