@@ -64,11 +64,29 @@ describe('Encryption', () => {
     sinon.stub(fs, 'readFileSync').callsFake(fn);
   };
 
+  const requestHookPosition = 1;
+
+  const originalDocument = global.document;
+  before(() => {
+    global.document = {
+      createElement: () => ({
+        style: {},
+        appendChild: () => {},
+        innerHTML: '',
+        textContent: '',
+      })
+    }
+  })
+
+  after(() => {
+    global.document = originalDocument;
+  })
+
   it('should encrypt the request', async () => {
 
     sinon.spy(context.request, 'setBodyText');
 
-    await plugin.requestHooks[0](context); // encrypt
+    await plugin.requestHooks[requestHookPosition](context); // encrypt
 
     const body = context.request.setBodyText.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -87,7 +105,7 @@ describe('Encryption', () => {
 
     sinon.spy(contextJWE.request, 'setBodyText');
 
-    await plugin.requestHooks[0](contextJWE); // JWE encrypt
+    await plugin.requestHooks[requestHookPosition](contextJWE); // JWE encrypt
 
     const body = contextJWE.request.setBodyText.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -171,7 +189,7 @@ describe('Encryption', () => {
     sinon.spy(contextWithHeader.request, 'setBodyText');
     const setHeader = sinon.spy(contextWithHeader.request, 'setHeader');
 
-    await plugin.requestHooks[0](contextWithHeader); // encrypt
+    await plugin.requestHooks[requestHookPosition](contextWithHeader); // encrypt
 
     const body = contextWithHeader.request.setBodyText.getCall(0).args[0];
 
@@ -216,7 +234,7 @@ describe('Encryption', () => {
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
-    await plugin.requestHooks[0](ctx); // encrypt
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
 
     assert(setHeader.notCalled);
     assert(setBodyText.notCalled);
@@ -227,7 +245,7 @@ describe('Encryption', () => {
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
-    await plugin.requestHooks[0](ctx); // encrypt
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
 
     assert(setHeader.notCalled);
     assert(setBodyText.notCalled);
@@ -238,7 +256,7 @@ describe('Encryption', () => {
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
-    await plugin.requestHooks[0](ctx); // encrypt
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
 
     assert(setHeader.notCalled);
     assert(setBodyText.notCalled);
@@ -252,7 +270,7 @@ describe('Encryption', () => {
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
-    await plugin.requestHooks[0](ctx); // encrypt
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
 
     assert(setHeader.notCalled);
     assert(setBodyText.notCalled);
@@ -318,7 +336,7 @@ describe('Encryption', () => {
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
-    await plugin.requestHooks[0](ctx); // encrypt
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
 
     assert(setHeader.notCalled);
     assert(setBodyText.notCalled);
