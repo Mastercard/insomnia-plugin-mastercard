@@ -118,7 +118,7 @@ describe(`${configValidator.name}()`, () => {
         },
       });
 
-      expect(() => configValidator(context)).to.throw();
+      expect(() => configValidator(context)).to.throw("invalid config");
       expect(showValidationErrorsStub.calledOnce).to.be.true;
 
       const [, , { errors }] = showValidationErrorsStub.firstCall.args;
@@ -277,7 +277,7 @@ describe(`${configValidator.name}()`, () => {
         },
       });
 
-      expect(() => configValidator(context)).to.throw();
+      expect(() => configValidator(context)).to.throw("invalid config");
       expect(showValidationErrorsStub.calledOnce).to.be.true;
       expect(logWarningStub.calledOnce).to.be.true;
 
@@ -308,7 +308,7 @@ describe(`${configValidator.name}()`, () => {
         encryptionConfig: { keyStoreAlias, keyStorePassword },
       });
 
-      expect(() => configValidator(context)).to.throw();
+      expect(() => configValidator(context)).to.throw("invalid config");
       expect(showValidationErrorsStub.calledOnce).to.be.true;
       expect(logWarningStub.calledOnce).to.be.true;
 
@@ -343,7 +343,7 @@ describe(`${configValidator.name}()`, () => {
     });
 
     const expectedNumberOfWarnings = Object.keys(mastercardEncryptionConfig).length;
-    expect(() => configValidator(context)).to.throw();
+    expect(() => configValidator(context)).to.throw("invalid config");
     expect(showValidationErrorsStub.calledOnce).to.be.true;
     expect(logWarningStub.callCount).to.equal(expectedNumberOfWarnings);
 
@@ -384,7 +384,7 @@ describe(`${configValidator.name}()`, () => {
     });
 
     const expectedNumberOfWarnings = 0;
-    expect(() => configValidator(context)).to.throw();
+    expect(() => configValidator(context)).to.throw("invalid config");
     expect(showValidationErrorsStub.calledOnce).to.be.true;
     expect(logWarningStub.callCount).to.equal(expectedNumberOfWarnings);
 
