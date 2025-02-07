@@ -18,7 +18,7 @@ const commonEncryptionSchema = Joi.object({
           obj: Joi.string(),
         }).unknown(false)
       ),
-    })
+    }).unknown(false)
   ),
   mode: Joi.string().valid("JWE"),
   encryptionCertificate: Joi.string(),
