@@ -57,16 +57,16 @@ const warningsConfig = [
   {
     type: "object.without",
     buildMessage: (context) => {
-      const field1 = context && context.mainWithLabel;
-      const field2 = context && context.peerWithLabel;
+      const field1 = (context && context.mainWithLabel) || "unknown";
+      const field2 = (context && context.peerWithLabel) || "unknown";
       return `${field1} and ${field2} were specified together, only one of them should be`;
     },
   },
   {
     type: "object.with",
     buildMessage: (context) => {
-      const field1 = context && context.mainWithLabel;
-      const field2 = context && context.peerWithLabel;
+      const field1 = (context && context.mainWithLabel) || "unknown";
+      const field2 = (context && context.peerWithLabel) || "unknown";
       return `${field1} and ${field2} should be specified together, only one of them was found`;
     },
   },
