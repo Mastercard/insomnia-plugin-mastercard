@@ -7,6 +7,8 @@ const context = require('../test/helper').context;
 
 describe('OAuth', () => {
 
+  const oauthHookPosition = 2;
+
   it('should sign the request and set the Authorization header', async () => {
     let name, value;
     let ctx = context();
@@ -15,7 +17,7 @@ describe('OAuth', () => {
       value = _value;
     };
 
-    await plugin.requestHooks[1](ctx); // signer
+    await plugin.requestHooks[oauthHookPosition](ctx); // signer
 
     assert.strictEqual(name, 'Authorization');
     assert.match(value, /^OAuth oauth_body_hash=.*,oauth_consumer_key=.*,oauth_nonce=.*,oauth_signature_method=.*,oauth_timestamp=.*,oauth_version=.*,oauth_signature=.*$/);
@@ -25,7 +27,7 @@ describe('OAuth', () => {
     let ctx = context({ url: 'https://api.foo.com/bar' });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
 
-    await plugin.requestHooks[1](ctx); // signer
+    await plugin.requestHooks[oauthHookPosition](ctx); // signer
 
     assert(setHeader.notCalled);
   });
@@ -41,7 +43,7 @@ describe('OAuth', () => {
       const ctx = context({ config });
       await assert.rejects(
         async () => {
-          await plugin.requestHooks[1](ctx);
+          await plugin.requestHooks[oauthHookPosition](ctx);
         },
         {
           name: 'Error',
@@ -61,7 +63,7 @@ describe('OAuth', () => {
     const ctx = context({ config });
     await assert.rejects(
       async () => {
-        await plugin.requestHooks[1](ctx);
+        await plugin.requestHooks[oauthHookPosition](ctx);
       },
       {
         name: 'Error',
@@ -81,7 +83,7 @@ describe('OAuth', () => {
     const ctx = context({ config });
     await assert.rejects(
       async () => {
-        await plugin.requestHooks[1](ctx);
+        await plugin.requestHooks[oauthHookPosition](ctx);
       },
       {
         name: 'Error',
@@ -94,7 +96,7 @@ describe('OAuth', () => {
     const ctx = context({ config: null });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
 
-    await plugin.requestHooks[1](ctx);
+    await plugin.requestHooks[oauthHookPosition](ctx);
 
     assert(setHeader.notCalled);
   });

@@ -1,8 +1,10 @@
 const MastercardContext = require('../mastercard-context');
 const fs = require('fs');
 const utils = require('./utils');
+const { UserFeedback } = require('../utils/user-feedback');
 
 module.exports.request = async (context) => {
+  try {
   const mcContext = new MastercardContext(context);
 
   const body = mcContext.requestBody();
@@ -21,8 +23,6 @@ module.exports.request = async (context) => {
       // Convert cert
       cryptoService.crypto.encryptionCertificate = utils.pkcs8to1(mcContext.encryptionConfig.encryptionCertificate);
     }
-
-    try {
       const encrypted = cryptoService.encrypt(
         mcContext.url,
         headers,
@@ -36,14 +36,15 @@ module.exports.request = async (context) => {
 
       // replace body
       context.request.setBodyText(JSON.stringify(encrypted.body));
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log("Error occurred encrypting the request", e);
-    }
+  }
+} catch (e) {;
+    UserFeedback.logError("Error encrypting request", e);
+    UserFeedback.showUnexpectedError(context, 'Error encrypting request', e);
   }
 };
 
 module.exports.response = async (context) => {
+  try {
   const mcContext = new MastercardContext(context);
   const body = mcContext.responseBody();
 
@@ -56,7 +57,6 @@ module.exports.response = async (context) => {
     const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
     const response = JSON.parse(fs.readFileSync(body.path));
-    try {
       const decryptedBody = cryptoService.decrypt({
         body: response,
         header: mcContext.responseHeader(),
@@ -65,9 +65,9 @@ module.exports.response = async (context) => {
         }
       });
       context.response.setBody(JSON.stringify(decryptedBody));
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log("Error occurred decrypting the response", e);
-    }
   }
+} catch(e) {
+  UserFeedback.logError("Error decrypting response", e);
+  UserFeedback.showUnexpectedError(context, "Error decrypting response", e);
+}
 };

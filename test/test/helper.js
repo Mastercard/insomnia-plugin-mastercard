@@ -21,6 +21,9 @@ mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHea
       setBody: () => {
       },
       hasHeader: () => true
+    },
+    app: {
+      dialog: () => {}
     }
   };
 };
