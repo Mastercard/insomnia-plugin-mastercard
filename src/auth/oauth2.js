@@ -7,10 +7,12 @@ async function getAuthorizationHeaders(mcContext) {
   const config = mcContext.config;
   const signingKey = getSigningKey(config);
 
+  const tokenUrl = (config.oauth2 || {}).tokenUrl
+
   const oauth2Client = await OAuth2.clientCredentialsClient({
     clientId: config.consumerKey,
     privateKey: signingKey,
-    tokenUrl: "http://localhost:3000/oidc/token"
+    tokenUrl
   })
 
   return oauth2Client.getAuthHeaders({
@@ -24,12 +26,12 @@ module.exports = async (context) => {
   const mcContext = new MastercardContext(context);
 
   if (mcContext.isMastercardRequest()) {
-    const config = mcContext.config;
-    if(config.authMode !== 'oauth2') {
+    if(!mcContext.isOAuth2Request()) {
       return
     }
     
     try {
+      const config = mcContext.config;
       validateAuthConfig(config)
 
       const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)

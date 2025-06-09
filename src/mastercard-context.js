@@ -50,6 +50,10 @@ function MastercardContext(context) {
     return this.isJsonHeader(header);
   };
 
+  this.isOAuth2Request = () => {
+    return this.config.oauth2 != null;
+  }
+
 
   this.requestBody = () => {
     return context.request.getBody();

@@ -23,12 +23,12 @@ module.exports = async (context) => {
   const mcContext = new MastercardContext(context);
 
   if (mcContext.isMastercardRequest()) {
-    const config = mcContext.config;
-    if(config.authMode === 'oauth2') {
+    if(mcContext.isOAuth2Request()) {
       return
     }
     
     try {
+      const config = mcContext.config;
       validateAuthConfig(config)
 
       context.request.setHeader('Authorization', signRequest(mcContext));
