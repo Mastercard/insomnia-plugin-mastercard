@@ -3,24 +3,13 @@ const forge = require('node-forge');
 const oauth = require('mastercard-oauth1-signer');
 const URL = require('url');
 const MastercardContext = require('../mastercard-context');
+const { extractPrivateKeyFromP12 } = require('./helper');
 
 function signRequest(mcContext) {
   const config = mcContext.config;
   const insomnia = mcContext.insomnia;
-  const p12Content = fs.readFileSync(config.keystoreP12Path, 'binary');
-  const p12Asn1 = forge.asn1.fromDer(p12Content, false);
-  const p12 = forge.pkcs12.pkcs12FromAsn1(
-    p12Asn1,
-    false,
-    config.keystorePassword
-  );
-
-  const keyObj = p12.getBags({
-    friendlyName: config.keyAlias,
-    bagType: forge.pki.oids.pkcs8ShroudedKeyBag
-  }).friendlyName[0];
-
-  const signingKey = forge.pki.privateKeyToPem(keyObj.key);
+  
+  const signingKey = extractPrivateKeyFromP12(config.keystoreP12Path, config.keyAlias, config.keystorePassword)
 
   return oauth.getAuthorizationHeader(
     URL.parse(mcContext.url),

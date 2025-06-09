@@ -1,12 +1,19 @@
 const { OAuth2 } = require('oauth2-client');
 const MastercardContext = require('../mastercard-context');
+const { extractPrivateKeyFromP12 } = require('./helper');
 
 async function getAuthorizationHeaders(mcContext) {
   const insomnia = mcContext.insomnia;
-  const config = mcContext.config;
+  const config = mcContext.config.oAuth2;
 
   // config validation has been done by utils/validator.js already
-  const oauth2Client = await OAuth2.clientCredentialsClient(config.oAuth2)
+  const signingKey = extractPrivateKeyFromP12(config.keystoreP12Path, config.keyAlias, config.keystorePassword)
+  const oauth2Client = await OAuth2.clientCredentialsClient({
+    keyId: config.keyId,
+			clientId: config.clientId,
+			privateKey: signingKey,
+			tokenUrl: config.tokenUrl
+  })
   return oauth2Client.getAuthHeaders({
     url: mcContext.url,
     httpMethod: insomnia.request.getMethod()

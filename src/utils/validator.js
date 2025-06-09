@@ -52,11 +52,15 @@ const mastercardEncryptionSpecificSchema = Joi.object({
 const oAuth2Schema = Joi.object({
   keyId: Joi.string().optional(),
   clientId: Joi.string().required(),
-  privateKey: Joi.string().required(),
+  keystoreP12Path: Joi.string().required(),
+  keyAlias: Joi.string().required(),
+  keystorePassword: Joi.string().required(),
   tokenUrl: Joi.string().optional(),
   tokenFetchTimeout: Joi.number().optional(),
   tokenCacheExpiryBuffer: Joi.number().optional()
-}).required().unknown(false);
+}).required().unknown(false)
+.with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
+.with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone;
 
 const warningsConfig = [
   {
@@ -119,7 +123,7 @@ module.exports.configValidator = (context) => {
 
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
   const missingFiles = Object.entries({
-    ...(isOAuth2 ? {"config.oAuth2.privateKey" : config.oAuth2.privateKey} : {keystoreP12Path: config.keystoreP12Path}),
+    ...(isOAuth2 ? {"config.oAuth2.keystoreP12Path" : config.oAuth2.keystoreP12Path} : {keystoreP12Path: config.keystoreP12Path}),
     encryptionCertificate,
     privateKey,
     keyStore,
