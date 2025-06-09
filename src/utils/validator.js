@@ -52,10 +52,9 @@ const mastercardEncryptionSpecificSchema = Joi.object({
 const oAuth2Schema = Joi.object({
   keyId: Joi.string().optional(),
   clientId: Joi.string().required(),
+  privateKey: Joi.string().required(),
   tokenUrl: Joi.string().optional(),
-  /** In millis */
   tokenFetchTimeout: Joi.number().optional(),
-  /** Buffer when checking for token expiry, in millis */
   tokenCacheExpiryBuffer: Joi.number().optional()
 }).required().unknown(false);
 

@@ -51,7 +51,7 @@ function MastercardContext(context) {
   };
 
   this.isOAuth2Request = () => {
-    return this.config.oauth2 != null;
+    return this.config.oAuth2 != null;
   }
 
 
