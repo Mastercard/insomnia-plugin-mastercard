@@ -1,20 +1,12 @@
 const { OAuth2 } = require('oauth2-client');
 const MastercardContext = require('../mastercard-context');
-const { validateAuthConfig, getSigningKey } = require('./helpers');
 
 async function getAuthorizationHeaders(mcContext) {
   const insomnia = mcContext.insomnia;
   const config = mcContext.config;
-  const signingKey = getSigningKey(config);
 
-  const tokenUrl = (config.oauth2 || {}).tokenUrl
-
-  const oauth2Client = await OAuth2.clientCredentialsClient({
-    clientId: config.consumerKey,
-    privateKey: signingKey,
-    tokenUrl
-  })
-
+  // config validation has been done by utils/validator.js already
+  const oauth2Client = await OAuth2.clientCredentialsClient(config.oAuth2)
   return oauth2Client.getAuthHeaders({
     url: mcContext.url,
     httpMethod: insomnia.request.getMethod()
@@ -25,15 +17,8 @@ async function getAuthorizationHeaders(mcContext) {
 module.exports = async (context) => {
   const mcContext = new MastercardContext(context);
 
-  if (mcContext.isMastercardRequest()) {
-    if(!mcContext.isOAuth2Request()) {
-      return
-    }
-    
+  if (mcContext.isMastercardRequest() && mcContext.isOAuth2Request()) {
     try {
-      const config = mcContext.config;
-      validateAuthConfig(config)
-
       const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)
       context.request.setHeader('Authorization', Authorization);
       context.request.setHeader('DPoP', DPoP);

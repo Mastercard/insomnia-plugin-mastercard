@@ -49,6 +49,16 @@ const mastercardEncryptionSpecificSchema = Joi.object({
   useCertificateContent: Joi.boolean(),
 });
 
+const oAuth2Schema = Joi.object({
+  keyId: Joi.string().optional(),
+  clientId: Joi.string().required(),
+  tokenUrl: Joi.string().optional(),
+  /** In millis */
+  tokenFetchTimeout: Joi.number().optional(),
+  /** Buffer when checking for token expiry, in millis */
+  tokenCacheExpiryBuffer: Joi.number().optional()
+}).required().unknown(false);
+
 const warningsConfig = [
   {
     type: "object.unknown",
@@ -72,13 +82,22 @@ const warningsConfig = [
   },
 ];
 
-function getConfigSchema(encryptionMode) {
+function getConfigSchema(encryptionMode, isOAuth2) {
   const encryptionSchema =
     encryptionMode !== "JWE"
       ? commonEncryptionSchema.concat(mastercardEncryptionSpecificSchema)
       : commonEncryptionSchema;
   encryptionSchema.unknown(false);
 
+  if(isOAuth2) {
+    return Joi.object({
+      oAuth2: oAuth2Schema,
+      appliesTo: Joi.array().items(Joi.string()),
+      encryptionConfig: encryptionSchema,
+    }).unknown(false)
+  }
+
+  // oauth1
   return Joi.object({
     consumerKey: Joi.string(),
     keyAlias: Joi.string(),
@@ -97,15 +116,17 @@ module.exports.configValidator = (context) => {
     return;
   }
 
+  const isOAuth2 = config.oAuth2 != null;
+
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
   const missingFiles = Object.entries({
-    keystoreP12Path: config.keystoreP12Path,
+    ...(isOAuth2 ? {"config.oAuth2.privateKey" : config.oAuth2.privateKey} : {keystoreP12Path: config.keystoreP12Path}),
     encryptionCertificate,
     privateKey,
     keyStore,
   }).filter(([, path]) => path != null && !fs.existsSync(path)); // eslint-disable-line eqeqeq
 
-  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode);
+  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode, isOAuth2);
   const result = schema.validate(config, { abortEarly: false });
 
   const errorDetails = (result.error && result.error.details) || [];
