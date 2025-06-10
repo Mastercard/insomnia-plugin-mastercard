@@ -9,10 +9,11 @@ async function getAuthorizationHeaders(mcContext) {
   // config validation has been done by utils/validator.js already
   const signingKey = extractPrivateKeyFromP12(config.keystoreP12Path, config.keyAlias, config.keystorePassword)
   const oauth2Client = await OAuth2.clientCredentialsClient({
-    keyId: config.keyId,
+      keyId: config.keyId,
 			clientId: config.clientId,
 			privateKey: signingKey,
-			tokenUrl: config.tokenUrl
+			tokenUrl: config.tokenUrl,
+      signingAlgorithm: config.signingAlgorithm
   })
   return oauth2Client.getAuthHeaders({
     url: mcContext.url,

@@ -89,6 +89,7 @@ Update your [environment](https://support.insomnia.rest/article/18-environment-v
 1. Click "Manage Environments"
 2. Create a "mastercard" environment variable with your credentials:
 
+##### For OAuth1 Authentication:
 Linux/macOS
 ```json
 {
@@ -112,6 +113,57 @@ Windows
     "keyAlias": "keyalias",
     "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
+    "appliesTo": [
+      "mastercard.com",
+      "api.ethocaweb.com"
+    ]
+  }
+}
+```
+##### For OAuth2 Authentication
+Linux/macOS
+```json
+{
+  "mastercard": {
+    "oAuth2": {
+			"keyId": "your-key-id",
+			"clientId": "your-client-id",
+			"keyAlias": "keyalias",
+			"keystoreP12Path": "/path/to/signing/key.p12",
+			"keystorePassword": "keystorepassword",
+      // Optional. Defaults to https://api.mastercard.com/oauth2/token
+			"tokenUrl": "http://localhost:3000/oidc/token",
+      // Optional. Defaults to "RS256" for both clientAssertion and dPop
+			"signingAlgorithm": {
+				"clientAssertion": "RS256",
+				"dPop": "PS256"
+			}
+		},
+    "appliesTo": [
+      "mastercard.com",
+      "api.ethocaweb.com"
+    ]
+  }
+}
+```
+Windows
+```json
+{
+  "mastercard": {
+    "oAuth2": {
+			"keyId": "your-key-id",
+			"clientId": "your-client-id",
+			"keyAlias": "keyalias",
+			"keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
+			"keystorePassword": "keystorepassword",
+      // Optional. Defaults to https://api.mastercard.com/oauth2/token
+			"tokenUrl": "http://localhost:3000/oidc/token",
+      // Optional. Defaults to "RS256" for both clientAssertion and dPop
+			"signingAlgorithm": {
+				"clientAssertion": "RS256",
+				"dPop": "PS256"
+			}
+		},
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"

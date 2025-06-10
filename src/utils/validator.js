@@ -49,12 +49,19 @@ const mastercardEncryptionSpecificSchema = Joi.object({
   useCertificateContent: Joi.boolean(),
 });
 
+const validOAuth2SigningAlgorithms = Joi.string().valid('RS256', 'PS256');
+
 const oAuth2Schema = Joi.object({
   keyId: Joi.string().optional(),
   clientId: Joi.string().required(),
   keystoreP12Path: Joi.string().required(),
   keyAlias: Joi.string().required(),
   keystorePassword: Joi.string().required(),
+  /** either "signingAlgorithm": "RS256" or "signingAlgorithm": { "clientAssertionAlg": "RS256",  "dPopAlg": "RS256"}  */
+  signingAlgorithm: Joi.alternatives().try( validOAuth2SigningAlgorithms, Joi.object({
+    clientAssertion: validOAuth2SigningAlgorithms,
+    dPop: validOAuth2SigningAlgorithms,
+  })).optional(),
   tokenUrl: Joi.string().optional(),
   tokenFetchTimeout: Joi.number().optional(),
   tokenCacheExpiryBuffer: Joi.number().optional()
