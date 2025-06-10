@@ -48,6 +48,7 @@
     }
   },
   "dependencies": {
+    "fast-equals": "^5.2.2",
     "joi": "^17.13.3",
     "mastercard-client-encryption": "^1.10.5",
     "mastercard-oauth1-signer": "^1.1.8",

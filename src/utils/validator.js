@@ -64,7 +64,10 @@ const oAuth2Schema = Joi.object({
   })).optional(),
   tokenUrl: Joi.string().optional(),
   tokenFetchTimeout: Joi.number().optional(),
-  tokenCacheExpiryBuffer: Joi.number().optional()
+  tokenCache: Joi.object({
+    enabled: Joi.boolean().optional(),
+    tokenCacheExpiryBuffer: Joi.number().optional()
+  }).optional()
 }).required().unknown(false)
 .with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
 .with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone;
