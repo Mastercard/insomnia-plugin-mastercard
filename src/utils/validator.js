@@ -52,7 +52,7 @@ const mastercardEncryptionSpecificSchema = Joi.object({
 const validOAuth2SigningAlgorithms = Joi.string().valid('RS256', 'PS256');
 
 const oAuth2Schema = Joi.object({
-  keyId: Joi.string().optional(),
+  keyId: Joi.string().required(),
   clientId: Joi.string().required(),
   keystoreP12Path: Joi.string().required(),
   keyAlias: Joi.string().required(),
@@ -64,10 +64,11 @@ const oAuth2Schema = Joi.object({
   })).optional(),
   tokenUrl: Joi.string().optional(),
   tokenFetchTimeout: Joi.number().optional(),
-  tokenCache: Joi.object({
+  /** either "tokenCache": "true" or "tokenCache": { "enabled": true, tokenCacheExpiryBuffer: 10000} */
+  tokenCache: Joi.alternatives(Joi.boolean(), Joi.object({
     enabled: Joi.boolean().optional(),
     tokenCacheExpiryBuffer: Joi.number().optional()
-  }).optional()
+  })).optional(),
 }).required().unknown(false)
 .with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
 .with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone;

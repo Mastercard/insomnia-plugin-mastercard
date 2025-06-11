@@ -12,6 +12,7 @@ async function getAuthorizationHeaders(mcContext) {
   const insomnia = mcContext.insomnia;
   const config = mcContext.config.oAuth2;
 
+  // re-instantiate the client if this is the first time or if the config has changed
   if(!oAuth2Client || hasConfigChanged(lastUsedConfig, config)) {
     // config validation has been done by utils/validator.js already
     lastUsedConfig = config;
