@@ -57,7 +57,7 @@ const oAuth2Schema = Joi.object({
   keystoreP12Path: Joi.string().required(),
   keyAlias: Joi.string().required(),
   keystorePassword: Joi.string().required(),
-  /** either "signingAlgorithm": "RS256" or "signingAlgorithm": { "clientAssertionAlg": "RS256",  "dPopAlg": "RS256"}  */
+  /** either "signingAlgorithm": "RS256" or "signingAlgorithm": { "clientAssertion": "RS256",  "dPop": "RS256"}  */
   signingAlgorithm: Joi.alternatives().try( validOAuth2SigningAlgorithms, Joi.object({
     clientAssertion: validOAuth2SigningAlgorithms,
     dPop: validOAuth2SigningAlgorithms,
