@@ -22,9 +22,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Use Node.js 16
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Verify Node.js environment
+        run: |
+          node -v
+          node -e "require('node:os'); console.log('✅ node:os is available')"
       - name: Build with npm
         run: |
           npm ci
