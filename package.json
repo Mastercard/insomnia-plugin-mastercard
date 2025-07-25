@@ -60,7 +60,7 @@
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-mocha": "^10.0.5",
     "jsdom": "^17.0.0",
-    "mocha": "^9.1.1",
+    "mocha": "^11.7.1",
     "mocha-sonarqube-reporter": "^1.0.2",
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",
