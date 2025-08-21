@@ -29,7 +29,8 @@ async function getAuthorizationHeaders(mcContext) {
   }
   return oAuth2Client.getAuthHeaders({
     url: mcContext.url,
-    httpMethod: insomnia.request.getMethod()
+    httpMethod: insomnia.request.getMethod(),
+    scope: config.scope
   });
 }
 
