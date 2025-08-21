@@ -132,12 +132,7 @@ Linux/macOS
 			"keystoreP12Path": "/path/to/signing/key.p12",
 			"keystorePassword": "keystorepassword",
       // Optional. Defaults to https://api.mastercard.com/oauth2/token
-			"tokenUrl": "http://localhost:3000/oidc/token",
-      // Optional. Defaults to "RS256" for both clientAssertion and dPop
-			"signingAlgorithm": {
-				"clientAssertion": "RS256",
-				"dPop": "PS256"
-			}
+			"tokenUrl": "http://localhost:3000/oidc/token"
 		},
     "appliesTo": [
       "mastercard.com",
@@ -157,12 +152,7 @@ Windows
 			"keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
 			"keystorePassword": "keystorepassword",
       // Optional. Defaults to https://api.mastercard.com/oauth2/token
-			"tokenUrl": "http://localhost:3000/oidc/token",
-      // Optional. Defaults to "RS256" for both clientAssertion and dPop
-			"signingAlgorithm": {
-				"clientAssertion": "RS256",
-				"dPop": "PS256"
-			}
+			"tokenUrl": "http://localhost:3000/oidc/token"
 		},
     "appliesTo": [
       "mastercard.com",
