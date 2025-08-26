@@ -39,14 +39,44 @@ function hasConfigChanged(oldConfig, newConfig) {
 }
 
 
-module.exports = async (context) => {
+module.exports.request = async (context) => {
   const mcContext = new MastercardContext(context);
 
   if (mcContext.isMastercardRequest() && mcContext.isOAuth2Request()) {
     try {
-      const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)
+      await setAuthHeaders(context, mcContext)
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        err.message = `No P12 file found at location: ${err.path}`;
+      }
+      window.alert(err.message); // eslint-disable-line no-undef
+      throw Error(err);
+    }
+  }
+};
+
+const setAuthHeaders = async (context, mcContext) => {
+  const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)
       context.request.setHeader('Authorization', Authorization);
       context.request.setHeader('DPoP', DPoP);
+}
+
+module.exports.response = async (context) => {
+  const mcContext = new MastercardContext(context);
+
+  const wwwAuthenticateHeader = context.response.getHeader('www-authenticate')
+  const statusCode = context.response.getStatusCode()
+
+  if (mcContext.isMastercardRequest() && mcContext.isOAuth2Request() // is mastercard request
+     && statusCode === 400 && wwwAuthenticateHeader?.includes('use_dpop_nonce')) { // server needs nonce
+    try {
+      await setAuthHeaders(context, mcContext)
+      const retryResponse = await context.network.sendRequest(context.request)
+      context.response.setStatusCode(retryResponse.status);
+          context.response.setBody(retryResponse.body);
+          for (const [key, value] of Object.entries(retryResponse.headers)) {
+            context.response.setHeader(key, value);
+          }
     } catch (err) {
       if (err.code === 'ENOENT') {
         err.message = `No P12 file found at location: ${err.path}`;
