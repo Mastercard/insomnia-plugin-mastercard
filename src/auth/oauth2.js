@@ -2,7 +2,8 @@ const { OAuth2 } = require('oauth2-client');
 const MastercardContext = require('../mastercard-context');
 const { extractPrivateKeyFromP12 } = require('./helper');
 const { deepEqual } = require('fast-equals')
-const { stat } = require('fs/promises')
+const { stat } = require('fs/promises');
+const { UserFeedback } = require('../utils/user-feedback');
 
 
 // scope the client at the module level so it can make use of the token cache.
@@ -78,6 +79,11 @@ const fetchNonce = async (context, mcContext) => {
     headers: headersForFetch,
     body: JSON.parse(context.request.getBody()?.text) || null
   })
+
+  if(response.status >= 200 && response.status < 300) {
+    UserFeedback.showAlert(context, "Request Succeeded !!", new Error('Request succeeded unexpectedly during fetching dpop nonce. This should not have happened. Please alert this to Mastercard support'))
+    throw new Error('Request flow terminated to avoid duplication of requests')
+  }
 
   if(
     ![400/* remove 400 once the resource server bug is fixed */, 401].includes(response.status) ||
