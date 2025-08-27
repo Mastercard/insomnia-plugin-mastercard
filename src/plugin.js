@@ -7,6 +7,5 @@ module.exports = {
   ],
   response: [
     require('./encryption/client-encryption').response,
-    require('./auth/oauth2').response
   ]
 };

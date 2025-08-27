@@ -8,7 +8,7 @@ const { deepEqual } = require('fast-equals')
 let oAuth2Client;
 let lastUsedConfig;
 
-async function getAuthorizationHeaders(mcContext) {
+async function getAuthorizationHeaders(mcContext, dPopNonce = null) {
   const insomnia = mcContext.insomnia;
   const config = mcContext.config.oAuth2;
 
@@ -30,7 +30,8 @@ async function getAuthorizationHeaders(mcContext) {
   return oAuth2Client.getAuthHeaders({
     url: mcContext.url,
     httpMethod: insomnia.request.getMethod(),
-    scope: config.scope
+    scope: config.scope,
+    resourceServerDPopNonce: dPopNonce
   });
 }
 
@@ -44,39 +45,12 @@ module.exports.request = async (context) => {
 
   if (mcContext.isMastercardRequest() && mcContext.isOAuth2Request()) {
     try {
-      await setAuthHeaders(context, mcContext)
-    } catch (err) {
-      if (err.code === 'ENOENT') {
-        err.message = `No P12 file found at location: ${err.path}`;
-      }
-      window.alert(err.message); // eslint-disable-line no-undef
-      throw Error(err);
-    }
-  }
-};
+      
+      const dpopNonce = await fetchNonce(context, mcContext);
 
-const setAuthHeaders = async (context, mcContext) => {
-  const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)
+      const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext, dpopNonce)
       context.request.setHeader('Authorization', Authorization);
       context.request.setHeader('DPoP', DPoP);
-}
-
-module.exports.response = async (context) => {
-  const mcContext = new MastercardContext(context);
-
-  const wwwAuthenticateHeader = context.response.getHeader('www-authenticate')
-  const statusCode = context.response.getStatusCode()
-
-  if (mcContext.isMastercardRequest() && mcContext.isOAuth2Request() // is mastercard request
-     && statusCode === 400 && wwwAuthenticateHeader?.includes('use_dpop_nonce')) { // server needs nonce
-    try {
-      await setAuthHeaders(context, mcContext)
-      const retryResponse = await context.network.sendRequest(context.request)
-      context.response.setStatusCode(retryResponse.status);
-          context.response.setBody(retryResponse.body);
-          for (const [key, value] of Object.entries(retryResponse.headers)) {
-            context.response.setHeader(key, value);
-          }
     } catch (err) {
       if (err.code === 'ENOENT') {
         err.message = `No P12 file found at location: ${err.path}`;
@@ -86,3 +60,40 @@ module.exports.response = async (context) => {
     }
   }
 };
+
+const fetchNonce = async (context, mcContext) => {
+
+  const { Authorization, DPoP } = await getAuthorizationHeaders(mcContext)
+  
+  const headers = context.request.getHeaders();
+  const headersForFetch = {};
+  for(const header of headers) {
+    headersForFetch[header.name] = header.value
+  }
+
+  Object.assign(headersForFetch, { Authorization, DPoP })
+
+  const response = await fetch(context.request.getUrl(),{
+    method: context.request.getMethod(),
+    headers: headersForFetch,
+    body: JSON.parse(context.request.getBody()?.text) || null
+  })
+
+  if(
+    ![400/* remove 400 once the resource server bug is fixed */, 401].includes(response.status) ||
+    !response.headers.get('www-authenticate')?.includes('use_dpop_nonce') ||
+    !response.headers.get('dpop-nonce')
+  ) {
+
+    let errorMsg = ''
+    try {
+      errorMsg = await response.json()
+    } catch(e) {
+      errorMsg = e?.message ?? "Unknown error"
+    }
+
+    throw new Error('Expected dpop nonce, but did not receive it. Error ' + errorMsg)
+  }
+
+  return response.headers.get('dpop-nonce')
+}
