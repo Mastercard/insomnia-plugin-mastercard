@@ -85,6 +85,7 @@ const fetchNonce = async (context, mcContext) => {
     throw new Error('Request flow terminated to avoid duplication of requests')
   }
 
+  // request failed, but dpop nonce was not the cause
   if(
     ![400/* remove 400 once the resource server bug is fixed */, 401].includes(response.status) ||
     !response.headers.get('www-authenticate')?.includes('use_dpop_nonce') ||
