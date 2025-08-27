@@ -98,7 +98,9 @@ const fetchNonce = async (context, mcContext) => {
       errorMsg = e?.message ?? "Unknown error"
     }
 
-    throw new Error('Expected dpop nonce, but did not receive it. Error ' + errorMsg)
+    const error = new Error('Expected dpop nonce, but did not receive it. Error ' + errorMsg)
+    UserFeedback.showAlert(context, "Error fetching DPoP nonce", error)
+    throw error
   }
 
   return response.headers.get('dpop-nonce')
