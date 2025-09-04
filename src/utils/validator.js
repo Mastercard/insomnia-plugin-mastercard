@@ -49,6 +49,31 @@ const mastercardEncryptionSpecificSchema = Joi.object({
   useCertificateContent: Joi.boolean(),
 });
 
+const validOAuth2SigningAlgorithms = Joi.string().valid('RS256', 'PS256');
+
+const oAuth2Schema = Joi.object({
+  keyId: Joi.string().required(),
+  clientId: Joi.string().required(),
+  keystoreP12Path: Joi.string().required(),
+  keyAlias: Joi.string().required(),
+  keystorePassword: Joi.string().required(),
+  /** either "signingAlgorithm": "RS256" or "signingAlgorithm": { "clientAssertion": "RS256",  "dPop": "RS256"}  */
+  signingAlgorithm: Joi.alternatives().try( validOAuth2SigningAlgorithms, Joi.object({
+    clientAssertion: validOAuth2SigningAlgorithms,
+    dPop: validOAuth2SigningAlgorithms,
+  })).optional(),
+  tokenUrl: Joi.string().optional(),
+  tokenFetchTimeout: Joi.number().optional(),
+  /** either "tokenCache": "true" or "tokenCache": { "enabled": true, tokenCacheExpiryBuffer: 10000} */
+  tokenCache: Joi.alternatives(Joi.boolean(), Joi.object({
+    enabled: Joi.boolean().optional(),
+    tokenCacheExpiryBuffer: Joi.number().optional()
+  })).optional(),
+  scope: Joi.string().required()
+}).required().unknown(false)
+.with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
+.with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone;
+
 const warningsConfig = [
   {
     type: "object.unknown",
@@ -72,13 +97,22 @@ const warningsConfig = [
   },
 ];
 
-function getConfigSchema(encryptionMode) {
+function getConfigSchema(encryptionMode, isOAuth2) {
   const encryptionSchema =
     encryptionMode !== "JWE"
       ? commonEncryptionSchema.concat(mastercardEncryptionSpecificSchema)
       : commonEncryptionSchema;
   encryptionSchema.unknown(false);
 
+  if(isOAuth2) {
+    return Joi.object({
+      oAuth2: oAuth2Schema,
+      appliesTo: Joi.array().items(Joi.string()),
+      encryptionConfig: encryptionSchema,
+    }).unknown(false)
+  }
+
+  // oauth1
   return Joi.object({
     consumerKey: Joi.string(),
     keyAlias: Joi.string(),
@@ -97,15 +131,17 @@ module.exports.configValidator = (context) => {
     return;
   }
 
+  const isOAuth2 = config.oAuth2 != null;
+
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
   const missingFiles = Object.entries({
-    keystoreP12Path: config.keystoreP12Path,
+    ...(isOAuth2 ? {"config.oAuth2.keystoreP12Path" : config.oAuth2.keystoreP12Path} : {keystoreP12Path: config.keystoreP12Path}),
     encryptionCertificate,
     privateKey,
     keyStore,
   }).filter(([, path]) => path != null && !fs.existsSync(path)); // eslint-disable-line eqeqeq
 
-  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode);
+  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode, isOAuth2);
   const result = schema.validate(config, { abortEarly: false });
 
   const errorDetails = (result.error && result.error.details) || [];
