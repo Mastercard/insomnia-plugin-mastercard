@@ -51,7 +51,7 @@ describe(`QueryString test()`, () => {
     expect(result).to.equal("");
   });
 
-  it("joinUrlAndQueryString returns empty string when url has trailing question mark", () => {
+  it("joinUrlAndQueryString returns params extracted correctly", () => {
     const result = extractQueryStringFromUrl(combinedUrlParams());
     expect(result).to.equal(params());
   });
