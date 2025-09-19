@@ -40,7 +40,7 @@ jobs:
         with:
           args: >
             -Dsonar.sources=.
-            -Dsonar.exclusions=test/**/*,src/utils/src/**/*
+            -Dsonar.exclusions=test/**/*,src/utils/src/**/*,insomnia-plugin-mastercard/src/utils/src/**,insomnia-plugin-mastercard/index.js
             -Dsonar.tests=./test
             -Dsonar.coverage.jacoco.xmlReportPaths=test-results.xml
             -Dsonar.javascript.lcov.reportPaths=.nyc_output/coverage.lcov
