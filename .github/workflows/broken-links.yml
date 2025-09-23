@@ -1,6 +1,6 @@
 'on':
   push:
-    branches: **
+    branches: main, rfeelin-patch-1
   schedule:
     - cron: 0 14 * * *
 name: broken links?
