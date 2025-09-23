@@ -1,6 +1,6 @@
 'on':
   push:
-    branches: main
+    branches: **
   schedule:
     - cron: 0 14 * * *
 name: broken links?
