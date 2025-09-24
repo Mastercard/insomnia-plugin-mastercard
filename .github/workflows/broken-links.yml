@@ -14,6 +14,6 @@ jobs:
         id: lc
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html' --user-agent "curl/8.4.0"
+          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html' --user-agent "curl/8.4.0" --accept 200,204,206
       - name: Fail?
         run: 'exit ${{ steps.lc.outputs.exit_code }}'
