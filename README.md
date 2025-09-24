@@ -3,7 +3,7 @@
 
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/Sonar/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3ASonar)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3A%22broken+links%3F%22)
-[![](https://img.shields.io/npm/v/insomnia-plugin-mastercard.svg)](https://www.npmjs.com/package/insomnia-plugin-mastercard)
+[![](http://img.shields.io/npm/v/insomnia-plugin-mastercard.svg)](http://www.npmjs.com/package/insomnia-plugin-mastercard/v/2.5.1)
 [![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/blob/master/LICENSE)
 [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json)
 
