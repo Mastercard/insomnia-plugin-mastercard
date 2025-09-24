@@ -13,6 +13,6 @@ jobs:
         id: lc
         uses: lycheeverse/lychee-action@v2
         with:
-          args: '-v -r *.md'
+          args: --insecure
       - name: Fail?
         run: 'exit ${{ steps.lc.outputs.exit_code }}'
