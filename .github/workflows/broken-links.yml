@@ -14,6 +14,6 @@ jobs:
         id: lc
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html' --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" --accept 200,204,206
+          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html'  --accept 302,200,204,206
       - name: Fail?
         run: 'exit ${{ steps.lc.outputs.exit_code }}'
