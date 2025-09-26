@@ -14,6 +14,6 @@ jobs:
         id: lc
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html'  --accept 200,204,206
+          args: --insecure --base . --verbose --no-progress './**/*.md' './**/*.html'  --accept 200,204,206 --exclude '^http://npmjs\.org' --exclude '^http://www\.npmjs\.com'
       - name: Fail?
         run: 'exit ${{ steps.lc.outputs.exit_code }}'
