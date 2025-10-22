@@ -10,7 +10,7 @@ describe('Plugin Hook', () => {
     assert.ok(plugin.requestHooks[1] instanceof Function);
     assert.ok(plugin.requestHooks[2] instanceof Function);
   });
-
+//test
   it('plugin should load and provide response encryption function', () => {
     const plugin = require('../index');
 
