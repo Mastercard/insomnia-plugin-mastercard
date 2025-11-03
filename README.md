@@ -97,6 +97,7 @@ Linux/macOS
     "keyAlias": "keyalias",
     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
+    "OauthDisabled": "false",
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -112,6 +113,7 @@ Windows
     "keyAlias": "keyalias",
     "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
+    "OauthDisabled": "false",
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -120,6 +122,8 @@ Windows
 }
 ```
 
+The `OauthDisabled` parameter is optional within the configuration settings. By default, its value is implicitly set to false, indicating that OAuth-based authorization is enabled unless explicitly specified otherwise.
+If the application do not require the use of an authorization header for secure access, this parameter must be explicitly set to true to disable OAuth functionality. In the absence of this parameter, the system assumes OAuth is enabled and proceeds accordingly.
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
 
@@ -189,6 +193,35 @@ As an alternative to providing the `privateKey` in the `encryptionConfig`, you c
   }
 }
 ```
+### SIGNATURE <a name="signature"></a>
+This plugin can take care of generating jws signature creation and/or jws signature verification. To enable jws signing support,
+you need to configure in the environment the `signatureConfig` property.
+
+Here's a quick example for Mastercard Encryption:
+
+```jsonc
+{
+  "mastercard": {
+    
+    // ... // 
+    
+    "signatureConfig": {
+      "paths": [
+        {
+          "path": "/tokenize",
+          "signatureGenerationEnabled": "true",
+          "signatureVerificationEnabled": "true"
+        }
+      ],
+     "signPrivateKey": "/path/to/private/key",
+     "signKeyId": "signatureKID",
+     "signVerificationCertificate": "/path/to/the/signing/certificate",
+     "signAlgorithm": "RS256"
+    }
+  }
+}
+```
+
 
 [See more examples here](docs/configuration-examples.md).
 

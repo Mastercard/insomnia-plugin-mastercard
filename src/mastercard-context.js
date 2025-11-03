@@ -16,6 +16,10 @@ function MastercardContext(context) {
     this.encryptionConfig = this.config.encryptionConfig;
   }
 
+    if (this.config && this.config.signatureConfig) {
+    this.signatureConfig = this.config.signatureConfig;
+  }
+
   // OAuth requires all, as %2C
   // In the above functions (at insomnia-url/src/queryString.js:72) all %2C gets decoded
   this.url = this.commaDecodedUrl.replace(/,/g, '%2C');
@@ -88,6 +92,17 @@ function MastercardContext(context) {
       a[b.name] = b.value;
       return a;
     }, {});
+  };
+
+  this.getRequestType = () => {
+  const method = context.request.getMethod() && context.request.getMethod();
+  if (method === 'GET') return 'GET';
+  if (method === 'POST') return 'POST';
+  return method; // returns the actual method if not GET or POST
+};
+
+  this.getSignatureHeader = () => {
+    return context.response.getHeader('X-Jws-Signature');
   };
 }
 

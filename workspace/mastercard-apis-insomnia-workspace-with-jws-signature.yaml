@@ -1,0 +1,94 @@
+type: collection.insomnia.rest/5.0
+name: Mastercard APIs
+meta:
+  id: wrk_f47ab3fc61a64d459df1e85c0003936b
+  created: 1762194613806
+  modified: 1762194613806
+  description: ""
+collection:
+  - url: "{{
+      host  }}/atms/v1/atm?PageOffset=0&PageLength=5&PostalCode=11101&Format=JS\
+      ON"
+    name: Mastercard ATM Location (update me!)
+    meta:
+      id: req_220e9aa121fc495b8c93495eff1f8fd6
+      created: 1572009619195
+      modified: 1572606757333
+      isPrivate: false
+      description: ""
+      sortKey: -1572009619195
+    method: GET
+    headers:
+      - id: pair_6ee06233d94744bb82fec669f98d45f1
+        name: content-type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_35db81f7bcf9baac12fa9c2b6dba3b243cef22bb
+    created: 1762194617397
+    modified: 1762194617397
+environments:
+  name: New Environment
+  meta:
+    id: env_d78fdcc21a7b47d4befcac6cec5dfee8
+    created: 1551873508962
+    modified: 1572009219908
+    isPrivate: false
+  subEnvironments:
+    - name: Production
+      meta:
+        id: env_74da694a33c140249cd1b0b80892721f
+        created: 1572009184884
+        modified: 1762194869813
+        isPrivate: false
+        sortKey: 1572009184884
+      data:
+        host: https://api.mastercard.com
+        mastercard:
+          OauthDisabled: "true"
+          appliesTo:
+            - mastercard.com
+            - api.ethocaweb.com
+          signatureConfig:
+            paths:
+              - path: /tokenize
+                signatureGenerationEnabled: "true"
+                signatureVerificationEnabled: "true"
+            signPrivateKey: /path/to/private/key
+            signKeyId: signatureKID
+            signVerificationCertificate: /path/to/the/signing/certificate
+            signAlgorithm: RS256
+      color: "#00ff00"
+    - name: Sandbox
+      meta:
+        id: env_aae246a6598146ab8de3e01c2ebb90cd
+        created: 1572542085385
+        modified: 1762194816791
+        isPrivate: false
+        sortKey: 1572542085385
+      data:
+        host: https://sandbox.api.mastercard.com
+        mastercard:
+          OauthDisabled: "true"
+          appliesTo:
+            - mastercard.com
+            - api.ethocaweb.com
+          signatureConfig:
+            paths:
+              - path: /tokenize
+                signatureGenerationEnabled: "true"
+                signatureVerificationEnabled: "true"
+            signPrivateKey: /path/to/private/key
+            signKeyId: signatureKID
+            signVerificationCertificate: /path/to/the/signing/certificate
+            signAlgorithm: RS256
+      color: "#ff8040"

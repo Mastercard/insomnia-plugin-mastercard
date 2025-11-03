@@ -35,7 +35,7 @@ function signRequest(mcContext) {
 module.exports = async (context) => {
   const mcContext = new MastercardContext(context);
 
-  if (mcContext.isMastercardRequest()) {
+  if (mcContext.isMastercardRequest() && (mcContext.config.OauthDisabled !== 'true')) {
     const config = mcContext.config;
     try {
       if (
