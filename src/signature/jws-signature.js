@@ -16,7 +16,7 @@ module.exports.request = async (context) => {
       payload = url.pathname + url.search;
     } else {
       // Use current logic for other methods (e.g., POST)
-      payload = body.text ? JSON.stringify(JSON.parse(body.text)) : undefined;
+      payload = body.text ? body.text : undefined;
     }
 
       const fleConfig = utils.hasConfig(mcContext.signatureConfig, mcContext.url);
