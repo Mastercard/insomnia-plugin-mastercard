@@ -1,12 +1,4 @@
-const fs = require('fs');
-const vm = require('vm');
-const path = require('path');
-
-// Load jsrsasign
-const jsrsasignPath = path.resolve(__dirname, '../lib/jsrsasign-all-min.js');
-const jsrsasignCode = fs.readFileSync(jsrsasignPath, 'utf8');
-
-vm.runInThisContext(jsrsasignCode);
+const { KJUR } = require("jsrsasign");
 
 function jwsSign(payload, KID, privateKeyPEM, algo) {
 

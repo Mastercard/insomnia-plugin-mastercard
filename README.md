@@ -1,5 +1,9 @@
 # insomnia-plugin-mastercard 
-[![](https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-dark.svg)](https://developer.mastercard.com/)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-light.svg">
+  <img src="https://developer.mastercard.com/_/_/src/global/assets/svg/mcdev-logo-dark.svg" alt="mastercard developers logo">
+</picture>
 
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/Sonar/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3ASonar)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3A%22broken+links%3F%22)
