@@ -7,7 +7,7 @@ const context = require('../test/helper').context;
 
 describe('OAuth', () => {
 
-  const oauthHookPosition = 2;
+  const oauthHookPosition = 3;
 
   it('should sign the request and set the Authorization header', async () => {
     let name, value;

@@ -8,6 +8,7 @@ module.exports.request = async (context) => {
   try {
     const mcContext = new MastercardContext(context);
     const body = mcContext.requestBody();
+    const requestPath = mcContext.commaDecodedUrl;
 
     let payload;
     if (mcContext.getRequestType() === 'GET') {
