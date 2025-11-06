@@ -1,6 +1,8 @@
 const assert = require('assert');
 const context = require('./test/helper').context;
 const MastercardContext = require('../src/mastercard-context');
+const sinon = require('sinon');
+const { expect } = require("chai");
 
 describe('MastercardContext', () => {
 
@@ -11,6 +13,14 @@ describe('MastercardContext', () => {
 
     assert.strictEqual(ctx.encryptionConfig, undefined);
   });
+
+    it('should not set signature when not configured', async () => {
+      const config = { ...require('./__res__/config.json').mastercard };
+      config.signatureConfig = null;
+      const ctx = new MastercardContext(context({ config }));
+
+      assert.strictEqual(ctx.signatureConfig, undefined);
+    });
 
   it('should not fail when mastercard configuration is not set in the env', async () => {
     const c = context({ config: null });
@@ -90,5 +100,50 @@ describe('MastercardContext', () => {
     assert.strictEqual(new MastercardContext(ctx).isJsonRequest(), true);
     assert.strictEqual(new MastercardContext(ctx).isJsonResponse(), true);
   });
+
+    it('getRequestType should return POST when request is of POST type', async () => {
+      const ctx = context({ method: 'POST' });
+      assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'POST');
+    });
+
+describe('MastercardContext', () => {
+  describe('getSignatureHeader', () => {
+    let context;
+    let getSignatureHeader;
+
+    beforeEach(() => {
+      context = {
+        response: {
+          getHeader: sinon.stub()
+        }
+      };
+
+      getSignatureHeader = () => {
+        return context.response.getHeader('X-Jws-Signature');
+      };
+    });
+
+    it('should return the signature header when it exists', () => {
+      context.response.getHeader.withArgs('X-Jws-Signature').returns('abc123signature');
+      const result = getSignatureHeader();
+      expect(result).to.equal('abc123signature');
+    });
+
+    it('should return undefined when the signature header does not exist', () => {
+      context.response.getHeader.withArgs('X-Jws-Signature').returns(undefined);
+      const result = getSignatureHeader();
+      expect(result).to.be.undefined;
+    });
+
+    it('should throw an error if context.response is null', () => {
+      context.response = null;
+      getSignatureHeader = () => {
+        return context.response.getHeader('X-Jws-Signature');
+      };
+      expect(() => getSignatureHeader()).to.throw();
+    });
+  });
+});
+
 
 });

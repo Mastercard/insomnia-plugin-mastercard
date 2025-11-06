@@ -95,7 +95,7 @@ function MastercardContext(context) {
   };
 
   this.getRequestType = () => {
-  const method = context.request.getMethod() && context.request.getMethod();
+  const method = context.request.getMethod();
   if (method === 'GET') return 'GET';
   if (method === 'POST') return 'POST';
   return method; // returns the actual method if not GET or POST
