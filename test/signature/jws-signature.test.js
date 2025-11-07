@@ -17,7 +17,6 @@ describe('JWS', () => {
     });
 
   const requestHookPosition = 2;
-  const responseHookPosition = 0;
 
   const originalDocument = global.document;
   before(() => {
@@ -40,7 +39,6 @@ describe('JWS', () => {
 
     await plugin.requestHooks[requestHookPosition](contextJWS); // sign
     assert(setHeader.called);
-
   });
 
     it('should not sign the request when flag is false', async () => {
