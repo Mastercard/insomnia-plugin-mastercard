@@ -17,6 +17,7 @@ describe('JWS', () => {
     });
 
   const requestHookPosition = 2;
+  const responseHookPosition = 0;
 
   const originalDocument = global.document;
   before(() => {
@@ -29,6 +30,17 @@ describe('JWS', () => {
       })
     }
   })
+
+    const mockResponse = (_path) => {
+      const readFileSync = fs.readFileSync;
+      const fn = (path, options) => {
+        if (path === 'mocked-response-path') {
+          path = _path;
+        }
+        return readFileSync(path, options);
+      };
+      sinon.stub(fs, 'readFileSync').callsFake(fn);
+    };
 
   after(() => {
     global.document = originalDocument;
@@ -48,4 +60,22 @@ describe('JWS', () => {
       assert(setHeader.notCalled);
 
     });
+
+      it('should verify the response signature', async () => {
+          mockResponse('./test/__res__/mock-response.json');
+
+          sinon.spy(contextJWS.response, 'setBody');
+          sinon.mock(contextJWS.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
+        const getHeader = sinon.spy(contextJWS.response, 'getHeader');
+
+        await plugin.responseHooks[responseHookPosition](contextJWS); // verify
+        assert(getHeader.called);
+      });
+
+      it('should not verify the response signature', async () => {
+        const getHeader = sinon.spy(contextJWSDisabled.response, 'getHeader');
+
+        await plugin.responseHooks[responseHookPosition](contextJWSDisabled); // verify
+        assert(getHeader.notCalled);
+        });
 });
