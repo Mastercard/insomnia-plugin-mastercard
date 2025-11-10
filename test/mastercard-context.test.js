@@ -106,44 +106,18 @@ describe('MastercardContext', () => {
       assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'POST');
     });
 
-describe('MastercardContext', () => {
-  describe('getSignatureHeader', () => {
-    let context;
-    let getSignatureHeader;
+        it('getRequestType should return GET when request is of GET type', async () => {
+          const ctx = context({ method: 'GET' });
+          assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'GET');
+        });
 
-    beforeEach(() => {
-      context = {
-        response: {
-          getHeader: sinon.stub()
-        }
-      };
+            it('getRequestType should return PATCH when request is of PATCH type', async () => {
+              const ctx = context({ method: 'PATCH' });
+              assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'PATCH');
+            });
 
-      getSignatureHeader = () => {
-        return context.response.getHeader('X-Jws-Signature');
-      };
-    });
-
-    it('should return the signature header when it exists', () => {
-      context.response.getHeader.withArgs('X-Jws-Signature').returns('abc123signature');
-      const result = getSignatureHeader();
-      expect(result).to.equal('abc123signature');
-    });
-
-    it('should return undefined when the signature header does not exist', () => {
-      context.response.getHeader.withArgs('X-Jws-Signature').returns(undefined);
-      const result = getSignatureHeader();
-      expect(result).to.be.undefined;
-    });
-
-    it('should throw an error if context.response is null', () => {
-      context.response = null;
-      getSignatureHeader = () => {
-        return context.response.getHeader('X-Jws-Signature');
-      };
-      expect(() => getSignatureHeader()).to.throw();
-    });
-  });
-});
-
-
+                it('getSignatureHeader should return signature when it is present', async () => {
+                  const ctx = context({ header: 'signature' });
+                  assert.strictEqual(new MastercardContext(ctx).getSignatureHeader(), 'signature');
+                });
 });

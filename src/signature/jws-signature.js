@@ -13,7 +13,7 @@ module.exports.request = async (context) => {
     let payload;
     if (mcContext.getRequestType() === 'GET') {
       // Use endpoint as payload for GET requests
-      const url = new URL(requestPath, 'http://dummy'); // base needed for URL parsing
+      const url = new URL(requestPath, 'https://dummy'); // base needed for URL parsing
       payload = url.pathname + url.search;
     } else {
       // Use current logic for other methods (e.g., POST)
