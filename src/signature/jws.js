@@ -15,7 +15,7 @@ const jws = KJUR.jws.JWS.sign(null, header, payload, privateKeyPEM);
 function jwsVerify(jws, expectedPayload, publicKeyPEM, algo) {
   const stringPyalod = JSON.stringify(expectedPayload);
 const body =  Buffer.from(stringPyalod, 'binary').toString('base64');
- var jwsPayload = body.replace(/=+$/u, '');
+ var jwsPayload =  body.split('=')[0];
  var jwsParts = jws.split(".");
  var jwsHeaders = jwsParts[0];
  var jwsSignature = jwsParts[2];
