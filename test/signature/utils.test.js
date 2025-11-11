@@ -22,7 +22,7 @@ describe('hasConfig', () => {
 
   it('should return null for non-matching endpoint', () => {
     const result = hasConfig(config, '/api/products');
-    expect(result).to.be.null;
+    expect(result).to.be.undefined;
   });
 
   it('should return null if config is null', () => {
@@ -43,7 +43,7 @@ describe('hasConfig', () => {
   it('should handle empty config.paths array', () => {
     const emptyConfig = { paths: [] };
     const result = hasConfig(emptyConfig, '/api/v1/users');
-    expect(result).to.be.null;
+    expect(result).to.be.undefined;
   });
 
   it('should match multiple paths if regex is broad', () => {

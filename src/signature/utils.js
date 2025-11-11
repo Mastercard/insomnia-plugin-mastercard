@@ -5,7 +5,7 @@ module.exports.hasConfig = function(config, endpoint) {
       const regex = new RegExp(elem.path, "g");
       return endpoint.match(regex);
     });
-    return conf ? conf : null;
+    return conf;
   }
   return null;
 };

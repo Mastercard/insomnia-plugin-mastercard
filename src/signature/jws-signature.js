@@ -27,8 +27,7 @@ module.exports.request = async (context) => {
         mcContext.signatureConfig &&
         payload &&
         payload !== '' &&
-        fleConfig &&
-        fleConfig.signatureGenerationEnabled === 'true'
+        fleConfig?.signatureGenerationEnabled === 'true'
       ) {
       const privateKey = fs.readFileSync(mcContext.signatureConfig.signPrivateKey, 'utf8');
       const KID = mcContext.signatureConfig.signKeyId;
@@ -54,15 +53,15 @@ module.exports.response = async (context) => {
        body &&
        mcContext.isJsonResponse() &&
        mcContext.signatureConfig &&
-       fleConfig &&
-       fleConfig.signatureVerificationEnabled === 'true'
+       fleConfig?.signatureVerificationEnabled === 'true'
       ) {
       const jws = mcContext.getSignatureHeader();
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
       const algo = mcContext.signatureConfig.signAlgorithm;
+      const result = jwsVerify(jws, payload, publicKey, algo);
 
-      if (!(jwsVerify(jws, payload, publicKey, algo))) {
+      if (!result) {
         throw new Error('JWS signature verification failed');
       } else {
         console.log('Signature verification successful');
