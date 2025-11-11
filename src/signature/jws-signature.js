@@ -61,10 +61,10 @@ module.exports.response = async (context) => {
       const algo = mcContext.signatureConfig.signAlgorithm;
       const result = jwsVerify(jws, payload, publicKey, algo);
 
-      if (!result) {
-        throw new Error('JWS signature verification failed');
-      } else {
+      if (result) {
         console.log('Signature verification successful');
+      } else {
+        throw new Error('JWS signature verification failed');
       }
     }
   } catch (e) {
