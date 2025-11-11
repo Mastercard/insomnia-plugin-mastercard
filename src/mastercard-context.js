@@ -16,7 +16,7 @@ function MastercardContext(context) {
     this.encryptionConfig = this.config.encryptionConfig;
   }
 
-    if (this.config?.signatureConfig) {
+    if (this.config && this.config.signatureConfig) {
     this.signatureConfig = this.config.signatureConfig;
   }
 

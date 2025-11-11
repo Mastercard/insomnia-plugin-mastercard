@@ -27,7 +27,8 @@ module.exports.request = async (context) => {
         mcContext.signatureConfig &&
         payload &&
         payload !== '' &&
-        fleConfig?.signatureGenerationEnabled === 'true'
+        fleConfig &&
+        fleConfig.signatureGenerationEnabled === 'true'
       ) {
       const privateKey = fs.readFileSync(mcContext.signatureConfig.signPrivateKey, 'utf8');
       const KID = mcContext.signatureConfig.signKeyId;
@@ -53,7 +54,8 @@ module.exports.response = async (context) => {
        body &&
        mcContext.isJsonResponse() &&
        mcContext.signatureConfig &&
-       fleConfig?.signatureVerificationEnabled === 'true'
+       fleConfig &&
+       fleConfig.signatureVerificationEnabled === 'true'
       ) {
       const jws = mcContext.getSignatureHeader();
       const payload = JSON.parse(fs.readFileSync(body.path));
