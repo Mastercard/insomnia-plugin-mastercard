@@ -9,8 +9,8 @@
       "paths": [
         {
           "path": "/resource",
-          "signatureGenerationEnabled": "true",
-          "signatureVerificationEnabled": "true"
+          "signatureGenerationEnabled": true,
+          "signatureVerificationEnabled": true
         }
       ],
       "signVerificationCertificate": "./test/__res__/test_certificate.cert",

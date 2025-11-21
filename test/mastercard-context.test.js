@@ -103,17 +103,17 @@ describe('MastercardContext', () => {
 
     it('getRequestType should return POST when request is of POST type', async () => {
       const ctx = context({ method: 'POST' });
-      assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'POST');
+      assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'POST');
     });
 
         it('getRequestType should return GET when request is of GET type', async () => {
           const ctx = context({ method: 'GET' });
-          assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'GET');
+          assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'GET');
         });
 
             it('getRequestType should return PATCH when request is of PATCH type', async () => {
               const ctx = context({ method: 'PATCH' });
-              assert.strictEqual(new MastercardContext(ctx).getRequestType(), 'PATCH');
+              assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'PATCH');
             });
 
                 it('getSignatureHeader should return signature when it is present', async () => {

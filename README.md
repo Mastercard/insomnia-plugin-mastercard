@@ -101,7 +101,7 @@ Linux/macOS
     "keyAlias": "keyalias",
     "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
-    "OauthDisabled": "false",
+    "oAuthDisabled": false,
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -117,7 +117,7 @@ Windows
     "keyAlias": "keyalias",
     "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
     "keystorePassword": "keystorepassword",
-    "OauthDisabled": "false",
+    "oAuthDisabled": false,
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -126,7 +126,7 @@ Windows
 }
 ```
 
-The `OauthDisabled` parameter is optional within the configuration settings. By default, its value is implicitly set to false, indicating that OAuth-based authorization is enabled unless explicitly specified otherwise.
+The `oAuthDisabled` parameter is optional within the configuration settings. By default, its value is implicitly set to false, indicating that OAuth-based authorization is enabled unless explicitly specified otherwise.
 If the application do not require the use of an authorization header for secure access, this parameter must be explicitly set to true to disable OAuth functionality. In the absence of this parameter, the system assumes OAuth is enabled and proceeds accordingly.
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
@@ -213,8 +213,8 @@ Here's a quick example for Mastercard Encryption:
       "paths": [
         {
           "path": "/tokenize",
-          "signatureGenerationEnabled": "true",
-          "signatureVerificationEnabled": "true"
+          "signatureGenerationEnabled": true,
+          "signatureVerificationEnabled": true
         }
       ],
      "signPrivateKey": "/path/to/private/key",

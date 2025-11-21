@@ -41,14 +41,14 @@ const commonSignatureSchema = Joi.object({
   paths: Joi.array().items(
     Joi.object({
       path: Joi.string(),
-      signatureGenerationEnabled: Joi.string(),
-      signatureVerificationEnabled: Joi.string(),
+      signatureGenerationEnabled: Joi.boolean().default(false),
+      signatureVerificationEnabled: Joi.boolean().default(false),
     }).unknown(false)
   ),
   signPrivateKey: Joi.string(),
   signKeyId: Joi.string(),
   signVerificationCertificate: Joi.string(),
-  signAlgorithm: Joi.string(),
+  signAlgorithm:  Joi.string().valid('RS256','RS384','RS512','HS256','HS384','HS512','ES256','ES384','ES512','PS256','PS384','PS512').required(),
 }).with("signPrivateKey", "signKeyId"); // if privateKey is present, keyId should be
 
 const mastercardEncryptionSpecificSchema = Joi.object({
@@ -99,7 +99,7 @@ function getConfigSchema(encryptionMode) {
     keyAlias: Joi.string(),
     keystoreP12Path: Joi.string(),
     keystorePassword: Joi.string(),
-    OauthDisabled: Joi.string(),
+    oAuthDisabled: Joi.boolean().default(true),
     appliesTo: Joi.array().items(Joi.string()),
     encryptionConfig: encryptionSchema,
     signatureConfig: commonSignatureSchema.unknown(false),

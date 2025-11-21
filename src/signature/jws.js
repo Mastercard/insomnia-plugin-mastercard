@@ -13,10 +13,12 @@ const jws = KJUR.jws.JWS.sign(null, header, payload, privateKeyPEM);
 }
 
 function jwsVerify(jws, expectedPayload, publicKeyPEM, algo) {
-  const stringPyalod = JSON.stringify(expectedPayload);
-const body =  Buffer.from(stringPyalod, 'binary').toString('base64');
- const jwsPayload =  body.split('=')[0];
+ const stringPayload = JSON.stringify(expectedPayload);
+ const jwsPayload =  Buffer.from(stringPayload, 'binary').toString('base64url');
  const jwsParts = jws.split(".");
+  if(jwsParts.length !== 3) {
+      throw new Error('Invalid JWS header')
+   }
  const jwsHeaders = jwsParts[0];
  const jwsSignature = jwsParts[2];
  const jwsSign = jwsHeaders + '.' + jwsPayload + '.' + jwsSignature;

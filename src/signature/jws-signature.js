@@ -11,7 +11,7 @@ module.exports.request = async (context) => {
     const requestPath = mcContext.commaDecodedUrl;
 
     let payload;
-    if (mcContext.getRequestType() === 'GET') {
+    if (mcContext.requestMethod() === 'GET') {
       // Use endpoint as payload for GET requests
       const url = new URL(requestPath, 'https://dummy'); // base needed for URL parsing
       payload = url.pathname + url.search;
@@ -28,7 +28,7 @@ module.exports.request = async (context) => {
         payload &&
         payload !== '' &&
         fleConfig &&
-        fleConfig.signatureGenerationEnabled === 'true'
+        fleConfig.signatureGenerationEnabled
       ) {
       const privateKey = fs.readFileSync(mcContext.signatureConfig.signPrivateKey, 'utf8');
       const KID = mcContext.signatureConfig.signKeyId;
@@ -55,9 +55,12 @@ module.exports.response = async (context) => {
        mcContext.isJsonResponse() &&
        mcContext.signatureConfig &&
        fleConfig &&
-       fleConfig.signatureVerificationEnabled === 'true'
+       fleConfig.signatureVerificationEnabled
       ) {
       const jws = mcContext.getSignatureHeader();
+       if(!jws || !body.path) {
+          throw new Error('Invalid JWS header or response body');
+       }
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
       const algo = mcContext.signatureConfig.signAlgorithm;

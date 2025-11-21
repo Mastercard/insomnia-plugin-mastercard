@@ -54,15 +54,15 @@ environments:
       data:
         host: https://api.mastercard.com
         mastercard:
-          OauthDisabled: "true"
+          oAuthDisabled: true
           appliesTo:
             - mastercard.com
             - api.ethocaweb.com
           signatureConfig:
             paths:
               - path: /tokenize
-                signatureGenerationEnabled: "true"
-                signatureVerificationEnabled: "true"
+                signatureGenerationEnabled: true
+                signatureVerificationEnabled: true
             signPrivateKey: /path/to/private/key
             signKeyId: signatureKID
             signVerificationCertificate: /path/to/the/signing/certificate
@@ -78,15 +78,15 @@ environments:
       data:
         host: https://sandbox.api.mastercard.com
         mastercard:
-          OauthDisabled: "true"
+          oAuthDisabled: true
           appliesTo:
             - mastercard.com
             - api.ethocaweb.com
           signatureConfig:
             paths:
               - path: /tokenize
-                signatureGenerationEnabled: "true"
-                signatureVerificationEnabled: "true"
+                signatureGenerationEnabled: true
+                signatureVerificationEnabled: true
             signPrivateKey: /path/to/private/key
             signKeyId: signatureKID
             signVerificationCertificate: /path/to/the/signing/certificate

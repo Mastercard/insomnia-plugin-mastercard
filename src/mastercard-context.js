@@ -94,12 +94,7 @@ function MastercardContext(context) {
     }, {});
   };
 
-  this.getRequestType = () => {
-  const method = context.request.getMethod();
-  if (method === 'GET') return 'GET';
-  if (method === 'POST') return 'POST';
-  return method; // returns the actual method if not GET or POST
-};
+this.requestMethod = () => context.request.getMethod();
 
   this.getSignatureHeader = () => {
     return context.response.getHeader('X-Jws-Signature');
