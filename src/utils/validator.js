@@ -36,6 +36,21 @@ const commonEncryptionSchema = Joi.object({
   .with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
   .with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone
 
+
+const commonSignatureSchema = Joi.object({
+  paths: Joi.array().items(
+    Joi.object({
+      path: Joi.string(),
+      signatureGenerationEnabled: Joi.boolean().default(false),
+      signatureVerificationEnabled: Joi.boolean().default(false),
+    }).unknown(false)
+  ),
+  signPrivateKey: Joi.string(),
+  signKeyId: Joi.string(),
+  signVerificationCertificate: Joi.string(),
+  signAlgorithm:  Joi.string().valid('RS256','RS384','RS512','HS256','HS384','HS512','ES256','ES384','ES512','PS256','PS384','PS512').required(),
+}).with("signPrivateKey", "signKeyId"); // if privateKey is present, keyId should be
+
 const mastercardEncryptionSpecificSchema = Joi.object({
   publicKeyFingerprintFieldName: Joi.string(),
   oaepHashingAlgorithmFieldName: Joi.string(),
@@ -84,8 +99,10 @@ function getConfigSchema(encryptionMode) {
     keyAlias: Joi.string(),
     keystoreP12Path: Joi.string(),
     keystorePassword: Joi.string(),
+    oAuthDisabled: Joi.boolean().default(true),
     appliesTo: Joi.array().items(Joi.string()),
     encryptionConfig: encryptionSchema,
+    signatureConfig: commonSignatureSchema.unknown(false),
   }).unknown(false);
 }
 
@@ -98,11 +115,15 @@ module.exports.configValidator = (context) => {
   }
 
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
+  const { signPrivateKey, signVerificationCertificate } = config.signatureConfig || {};
+
   const missingFiles = Object.entries({
     keystoreP12Path: config.keystoreP12Path,
     encryptionCertificate,
     privateKey,
     keyStore,
+    signPrivateKey,
+    signVerificationCertificate
   }).filter(([, path]) => path != null && !fs.existsSync(path)); // eslint-disable-line eqeqeq
 
   const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode);

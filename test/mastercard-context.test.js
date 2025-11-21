@@ -1,6 +1,8 @@
 const assert = require('assert');
 const context = require('./test/helper').context;
 const MastercardContext = require('../src/mastercard-context');
+const sinon = require('sinon');
+const { expect } = require("chai");
 
 describe('MastercardContext', () => {
 
@@ -11,6 +13,14 @@ describe('MastercardContext', () => {
 
     assert.strictEqual(ctx.encryptionConfig, undefined);
   });
+
+    it('should not set signature when not configured', async () => {
+      const config = { ...require('./__res__/config.json').mastercard };
+      config.signatureConfig = null;
+      const ctx = new MastercardContext(context({ config }));
+
+      assert.strictEqual(ctx.signatureConfig, undefined);
+    });
 
   it('should not fail when mastercard configuration is not set in the env', async () => {
     const c = context({ config: null });
@@ -91,4 +101,23 @@ describe('MastercardContext', () => {
     assert.strictEqual(new MastercardContext(ctx).isJsonResponse(), true);
   });
 
+    it('getRequestType should return POST when request is of POST type', async () => {
+      const ctx = context({ method: 'POST' });
+      assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'POST');
+    });
+
+        it('getRequestType should return GET when request is of GET type', async () => {
+          const ctx = context({ method: 'GET' });
+          assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'GET');
+        });
+
+            it('getRequestType should return PATCH when request is of PATCH type', async () => {
+              const ctx = context({ method: 'PATCH' });
+              assert.strictEqual(new MastercardContext(ctx).requestMethod(), 'PATCH');
+            });
+
+                it('getSignatureHeader should return signature when it is present', async () => {
+                  const ctx = context({ header: 'signature' });
+                  assert.strictEqual(new MastercardContext(ctx).getSignatureHeader(), 'signature');
+                });
 });
