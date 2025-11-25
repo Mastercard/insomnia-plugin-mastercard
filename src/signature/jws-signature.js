@@ -8,28 +8,30 @@ module.exports.request = async (context) => {
   try {
     const mcContext = new MastercardContext(context);
     const body = mcContext.requestBody();
-    const requestPath = mcContext.commaDecodedUrl;
+    const requestUrl = mcContext.commaDecodedUrl;
+    const hasBody = body && body.text
 
     let payload;
-    if (mcContext.requestMethod() === 'GET') {
-      // Use endpoint as payload for GET requests
-      const url = new URL(requestPath, 'https://dummy'); // base needed for URL parsing
+    if (!hasBody) {
+      const url = new URL(requestUrl);
       payload = url.pathname + url.search;
     } else {
-      // Use current logic for other methods (e.g., POST)
       payload = body.text ? body.text : undefined;
     }
 
-      const fleConfig = utils.hasConfig(mcContext.signatureConfig, mcContext.url);
+    const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
+
+    if (!requestConfig) {
+      return
+    }
 
     if (
-        mcContext.isMastercardRequest(context) &&
-        mcContext.signatureConfig &&
-        payload &&
-        payload !== '' &&
-        fleConfig &&
-        fleConfig.signatureGenerationEnabled
-      ) {
+      mcContext.isMastercardRequest(context) &&
+      mcContext.signatureConfig &&
+      payload &&
+      requestConfig &&
+      requestConfig.signatureGenerationEnabled
+    ) {
       const privateKey = fs.readFileSync(mcContext.signatureConfig.signPrivateKey, 'utf8');
       const KID = mcContext.signatureConfig.signKeyId;
       const algo = mcContext.signatureConfig.signAlgorithm;
@@ -47,20 +49,23 @@ module.exports.response = async (context) => {
   try {
     const mcContext = new MastercardContext(context);
     const body = mcContext.responseBody();
-    const fleConfig = utils.hasConfig(mcContext.signatureConfig, mcContext.url);
+    const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
+    if (!requestConfig) {
+      return
+    }
 
     if (
-       mcContext.isMastercardRequest(context) &&
-       body &&
-       mcContext.isJsonResponse() &&
-       mcContext.signatureConfig &&
-       fleConfig &&
-       fleConfig.signatureVerificationEnabled
-      ) {
+      mcContext.isMastercardRequest(context) &&
+      body &&
+      mcContext.isJsonResponse() &&
+      mcContext.signatureConfig &&
+      requestConfig &&
+      requestConfig.signatureVerificationEnabled
+    ) {
       const jws = mcContext.getSignatureHeader();
-       if(!jws || !body.path) {
-          throw new Error('Invalid JWS header or response body');
-       }
+      if (!jws || !body.path) {
+        throw new Error('Invalid JWS header or response body');
+      }
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
       const algo = mcContext.signatureConfig.signAlgorithm;

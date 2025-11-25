@@ -1,4 +1,4 @@
-module.exports.hasConfig = function(config, endpoint) {
+module.exports.getRequestConfig = function (config, endpoint) {
   if (config && endpoint) {
     endpoint = endpoint.split("?").shift();
     const conf = config.paths.find((elem) => {

@@ -1,4 +1,4 @@
-const hasConfig = require("../../src/signature/utils").hasConfig;
+const hasConfig = require("../../src/signature/utils").getRequestConfig;
 const { expect } = require('chai');
 
 describe('hasConfig', () => {

@@ -94,10 +94,9 @@ function MastercardContext(context) {
     }, {});
   };
 
-this.requestMethod = () => context.request.getMethod();
 
   this.getSignatureHeader = () => {
-    return context.response.getHeader('X-Jws-Signature');
+    return context.response.getHeader('x-jws-signature');
   };
 }
 
