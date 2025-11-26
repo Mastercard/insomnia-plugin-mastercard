@@ -27,7 +27,7 @@ describe('Encryption', () => {
     url: 'https://api.mastercard.com/service/api/resource',
     body: body
   });
-  
+
   const contextPatch = helper.contextPatch({
     url: 'https://api.mastercard.com/service/api/resource',
     body: body
@@ -123,7 +123,7 @@ describe('Encryption', () => {
     sinon.mock(context.response).expects('getHeader').returns('application/json');
     sinon.mock(context.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
 
-    await plugin.responseHooks[0](context); // decrypt
+    await plugin.responseHooks[1](context); // decrypt
 
     const body = context.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -140,7 +140,7 @@ describe('Encryption', () => {
     sinon.mock(contextPatch.response).expects('getHeader').returns('application/merge-patch+json');
     sinon.mock(contextPatch.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
 
-    await plugin.responseHooks[0](contextPatch); // decrypt
+    await plugin.responseHooks[1](contextPatch); // decrypt
 
     const body = contextPatch.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -157,7 +157,7 @@ describe('Encryption', () => {
     sinon.mock(contextJWE.response).expects('getHeader').returns('application/json');
     sinon.mock(contextJWE.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
 
-    await plugin.responseHooks[0](contextJWE); // decrypt
+    await plugin.responseHooks[1](contextJWE); // decrypt
 
     const body = contextJWE.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -174,7 +174,7 @@ describe('Encryption', () => {
     sinon.mock(contextJWEPatch.response).expects('getHeader').returns('application/merge-patch+json');
     sinon.mock(contextJWEPatch.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
 
-    await plugin.responseHooks[0](contextJWEPatch); // decrypt
+    await plugin.responseHooks[1](contextJWEPatch); // decrypt
 
     const body = contextJWEPatch.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -218,7 +218,7 @@ describe('Encryption', () => {
     sinon.mock(contextWithHeader.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
     sinon.stub(contextWithHeader.response, 'getHeader').callsFake(headers);
 
-    await plugin.responseHooks[0](contextWithHeader); // decrypt
+    await plugin.responseHooks[1](contextWithHeader); // decrypt
 
     const body = contextWithHeader.response.setBody.getCall(0).args[0];
     const json = JSON.parse(body);
@@ -280,7 +280,7 @@ describe('Encryption', () => {
     let ctx = helper.context({ url: 'https://api.foo.com/bar' });
     const setBody = sinon.spy(ctx.response, 'setBody');
 
-    await plugin.responseHooks[0](ctx); // decrypt
+    await plugin.responseHooks[1](ctx); // decrypt
 
     assert(setBody.notCalled);
   });
@@ -289,7 +289,7 @@ describe('Encryption', () => {
     let ctx = helper.context({ body: null });
     const setBody = sinon.spy(ctx.response, 'setBody');
 
-    await plugin.responseHooks[0](ctx); // decrypt
+    await plugin.responseHooks[1](ctx); // decrypt
 
     assert(setBody.notCalled);
   });
@@ -300,7 +300,7 @@ describe('Encryption', () => {
 
     const setBody = sinon.spy(ctx.response, 'setBody');
 
-    await plugin.responseHooks[0](ctx); // decrypt
+    await plugin.responseHooks[1](ctx); // decrypt
 
     assert(setBody.notCalled);
   });
@@ -313,7 +313,7 @@ describe('Encryption', () => {
 
     const setBody = sinon.spy(ctx.response, 'setBody');
 
-    await plugin.responseHooks[0](ctx); // decrypt
+    await plugin.responseHooks[1](ctx); // decrypt
 
     assert(setBody.notCalled);
   });
@@ -324,7 +324,7 @@ describe('Encryption', () => {
     sinon.mock(contextWithRootElem.response).expects('getHeader').returns('application/json');
     sinon.mock(contextWithRootElem.response).expects('getBodyStream').returns({ path: 'mocked-response-path' });
 
-    await plugin.responseHooks[0](contextWithRootElem); // decrypt
+    await plugin.responseHooks[1](contextWithRootElem); // decrypt
 
     sinon.assert.notCalled(contextWithRootElem.response.setBody);
 
