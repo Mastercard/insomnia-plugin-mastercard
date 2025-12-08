@@ -22,8 +22,23 @@ function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds) {
   const jwsHeaders = jwsParts[0];
   const jwsSignature = jwsParts[2];
   const jwsSign = jwsHeaders + '.' + jwsPayload + '.' + jwsSignature;
+  const crit = JSON.parse(atob(jwsHeaders)).crit;
   const iat = JSON.parse(atob(jwsHeaders)).iat;
 
+  // crit has exactly one element and it must be "iat"
+  if (!Array.isArray(crit) && crit.length !== 1 || crit[0] !== "iat") {
+    throw new Error('Header crit of JWS Signature must contain only iat');
+  }
+
+  // ---- Validate `iat` presence and type ----
+  if (iat === undefined || iat === null) {
+    throw new Error('Missing header iat in JWS signature');
+  }
+  // Accept number or numeric string; reject non-finite values
+  const iatNum = typeof iat === "number" ? iat : Number(iat);
+  if (!Number.isFinite(iatNum)) {
+    throw new Error('Header iat of JWS Signature must be a finite numeric timestamp');
+  }
 
   if(signExpirationSeconds){
     checkExpiredIat(iat, signExpirationSeconds);
