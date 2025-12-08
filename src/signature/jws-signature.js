@@ -7,6 +7,11 @@ const utils = require('./utils');
 module.exports.request = async (context) => {
   try {
     const mcContext = new MastercardContext(context);
+    const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
+
+       if (!requestConfig) {
+      return
+    }
     const body = mcContext.requestBody();
     const requestUrl = mcContext.commaDecodedUrl;
     const hasBody = body && body.text
@@ -16,13 +21,7 @@ module.exports.request = async (context) => {
       const url = new URL(requestUrl);
       payload = url.pathname + url.search;
     } else {
-      payload = body.text ? body.text : undefined;
-    }
-
-    const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
-
-    if (!requestConfig) {
-      return
+      payload = body.text;
     }
 
     if (
@@ -48,11 +47,12 @@ module.exports.request = async (context) => {
 module.exports.response = async (context) => {
   try {
     const mcContext = new MastercardContext(context);
-    const body = mcContext.responseBody();
     const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
     if (!requestConfig) {
       return
     }
+    const body = mcContext.responseBody();
+
 
     if (
       mcContext.isMastercardRequest(context) &&
@@ -68,8 +68,9 @@ module.exports.response = async (context) => {
       }
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
-      const algo = mcContext.signatureConfig.signAlgorithm;
-      const result = jwsVerify(jws, payload, publicKey, algo);
+      const signExpirationSeconds = mcContext.signatureConfig.signExpirationSeconds;
+
+      const result = jwsVerify(jws, payload, publicKey, signExpirationSeconds);
 
       if (result) {
         console.log('Signature verification successful');

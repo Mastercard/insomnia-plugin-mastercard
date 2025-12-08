@@ -5,18 +5,21 @@
     "keyAlias": "mykeyalias",
     "keystoreP12Path": "./test/__res__/test_key_container.p12",
     "keystorePassword": "Password1",
-    "signatureConfig": {
-      "paths": [
-        {
-          "path": "/resource",
-          "signatureGenerationEnabled": false,
-          "signatureVerificationEnabled": false
-        }
-      ],
-      "signVerificationCertificate": "./test/__res__/test_certificate.cert",
-      "signKeyId": "dPDsC+MS/R/4WMLG/VAfx+DUFTY=",
-      "signPrivateKey": "./test/__res__/sign_private_key.key",
-      "signAlgorithm": "RS256"
+    "extensions": {
+      "signatureConfig": {
+        "paths": [
+          {
+            "path": "/resource",
+            "signatureGenerationEnabled": false,
+            "signatureVerificationEnabled": false
+          }
+        ],
+        "signVerificationCertificate": "./test/__res__/test_certificate.cert",
+        "signKeyId": "dPDsC+MS/R/4WMLG/VAfx+DUFTY=",
+        "signPrivateKey": "./test/__res__/sign_private_key.key",
+        "signAlgorithm": "RS256",
+        "signExpirationSeconds": 300
+      }
     }
   }
 }

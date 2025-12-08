@@ -49,6 +49,7 @@ const commonSignatureSchema = Joi.object({
   signKeyId: Joi.string().required(),
   signVerificationCertificate: Joi.string().required(),
   signAlgorithm: Joi.string().valid('RS256', 'RS384', 'RS512', 'HS256', 'HS384', 'HS512', 'ES256', 'ES384', 'ES512', 'PS256', 'PS384', 'PS512').required(),
+  signExpirationSeconds: Joi.number(),
 }).with("signPrivateKey", "signKeyId"); // if privateKey is present, keyId should be
 
 const mastercardEncryptionSpecificSchema = Joi.object({
@@ -102,7 +103,9 @@ function getConfigSchema(encryptionMode) {
     oAuthDisabled: Joi.boolean().default(false),
     appliesTo: Joi.array().items(Joi.string()),
     encryptionConfig: encryptionSchema,
-    signatureConfig: commonSignatureSchema.unknown(false),
+    extensions: Joi.object({
+      signatureConfig: commonSignatureSchema.unknown(false)
+    }).unknown(false)
   }).unknown(false);
 }
 
@@ -115,7 +118,7 @@ module.exports.configValidator = (context) => {
   }
 
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
-  const { signPrivateKey, signVerificationCertificate } = config.signatureConfig || {};
+  const { signPrivateKey, signVerificationCertificate } = config.extensions && config.extensions.signatureConfig || {};
 
   const missingFiles = Object.entries({
     keystoreP12Path: config.keystoreP12Path,

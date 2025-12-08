@@ -16,8 +16,8 @@ function MastercardContext(context) {
     this.encryptionConfig = this.config.encryptionConfig;
   }
 
-    if (this.config && this.config.signatureConfig) {
-    this.signatureConfig = this.config.signatureConfig;
+  if (this.config && this.config.extensions && this.config.extensions.signatureConfig) {
+    this.signatureConfig = this.config.extensions.signatureConfig;
   }
 
   // OAuth requires all, as %2C

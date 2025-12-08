@@ -201,14 +201,14 @@ As an alternative to providing the `privateKey` in the `encryptionConfig`, you c
 This plugin can take care of generating jws signature creation and/or jws signature verification. To enable jws signing support,
 you need to configure in the environment the `signatureConfig` property.
 
-Here's a quick example for Mastercard Encryption:
+Here's a quick example for SignatureConfig which is part of extensions:
 
 ```jsonc
 {
   "mastercard": {
     
     // ... // 
-    
+    "extensions":{
     "signatureConfig": {
       "paths": [
         {
@@ -220,8 +220,10 @@ Here's a quick example for Mastercard Encryption:
      "signPrivateKey": "/path/to/private/key",
      "signKeyId": "signatureKID",
      "signVerificationCertificate": "/path/to/the/signing/certificate",
-     "signAlgorithm": "RS256"
+     "signAlgorithm": "RS256",
+     "signExpirationSeconds": 300
     }
+   }
   }
 }
 ```

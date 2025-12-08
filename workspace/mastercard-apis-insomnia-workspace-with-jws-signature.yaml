@@ -58,15 +58,17 @@ environments:
           appliesTo:
             - mastercard.com
             - api.ethocaweb.com
-          signatureConfig:
-            paths:
-              - path: /tokenize
-                signatureGenerationEnabled: true
-                signatureVerificationEnabled: true
-            signPrivateKey: /path/to/private/key
-            signKeyId: signatureKID
-            signVerificationCertificate: /path/to/the/signing/certificate
-            signAlgorithm: RS256
+          extensions:
+            signatureConfig:
+              paths:
+                - path: /tokenize
+                  signatureGenerationEnabled: true
+                  signatureVerificationEnabled: true
+              signPrivateKey: /path/to/private/key
+              signKeyId: signatureKID
+              signVerificationCertificate: /path/to/the/signing/certificate
+              signAlgorithm: RS256
+              signExpirationSeconds: 300
       color: "#00ff00"
     - name: Sandbox
       meta:
@@ -82,13 +84,15 @@ environments:
           appliesTo:
             - mastercard.com
             - api.ethocaweb.com
-          signatureConfig:
-            paths:
-              - path: /tokenize
-                signatureGenerationEnabled: true
-                signatureVerificationEnabled: true
-            signPrivateKey: /path/to/private/key
-            signKeyId: signatureKID
-            signVerificationCertificate: /path/to/the/signing/certificate
-            signAlgorithm: RS256
+          extensions:
+            signatureConfig:
+              paths:
+                - path: /tokenize
+                  signatureGenerationEnabled: true
+                  signatureVerificationEnabled: true
+              signPrivateKey: /path/to/private/key
+              signKeyId: signatureKID
+              signVerificationCertificate: /path/to/the/signing/certificate
+              signAlgorithm: RS256
+              signExpirationSeconds: 300
       color: "#ff8040"
