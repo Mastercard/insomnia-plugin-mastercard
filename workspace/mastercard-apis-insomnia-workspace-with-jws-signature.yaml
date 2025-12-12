@@ -69,6 +69,7 @@ environments:
               signVerificationCertificate: /path/to/the/signing/certificate
               signAlgorithm: RS256
               signExpirationSeconds: 300
+              signAlgorithmConstraints: ["PS256","RS256"]
       color: "#00ff00"
     - name: Sandbox
       meta:
@@ -95,4 +96,5 @@ environments:
               signVerificationCertificate: /path/to/the/signing/certificate
               signAlgorithm: RS256
               signExpirationSeconds: 300
+              signAlgorithmConstraints: ["PS256","RS256"]
       color: "#ff8040"

@@ -221,7 +221,8 @@ Here's a quick example for SignatureConfig which is part of extensions:
      "signKeyId": "signatureKID",
      "signVerificationCertificate": "/path/to/the/signing/certificate",
      "signAlgorithm": "RS256",
-     "signExpirationSeconds": 300
+     "signExpirationSeconds": 300,
+     "signAlgorithmConstraints": ["PS256","RS256"]
     }
    }
   }

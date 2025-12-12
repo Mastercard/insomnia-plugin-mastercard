@@ -7,12 +7,10 @@ function jwsSign(payload, KID, privateKeyPEM, algo) {
   const jwsParts = jws.split(".");
   const jwsHeaders = jwsParts[0];
   const jwsSignature = jwsParts[2];
-  const detachedJWS = jwsHeaders + '..' + jwsSignature;
-
-  return detachedJWS;
+  return jwsHeaders + '..' + jwsSignature;
 }
 
-function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds) {
+function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds, signAlgorithmConstraints) {
   const stringPayload = JSON.stringify(expectedPayload);
   const jwsPayload = Buffer.from(stringPayload, 'utf-8').toString('base64url');
   const jwsParts = jws.split(".");
@@ -22,11 +20,16 @@ function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds) {
   const jwsHeaders = jwsParts[0];
   const jwsSignature = jwsParts[2];
   const jwsSign = jwsHeaders + '.' + jwsPayload + '.' + jwsSignature;
-  const crit = JSON.parse(atob(jwsHeaders)).crit;
-  const iat = JSON.parse(atob(jwsHeaders)).iat;
+  const jwsHeaderDecoded = Buffer.from(jwsHeaders, 'base64url').toString('utf-8');
+  const { crit, iat, alg } = JSON.parse(jwsHeaderDecoded);
+  const allowedAlgorithms = new Set(signAlgorithmConstraints);
 
-  // crit has exactly one element and it must be "iat"
-  if (!Array.isArray(crit) && crit.length !== 1 || crit[0] !== "iat") {
+  if(!allowedAlgorithms.has(alg)) {
+    throw Error('Unsupported Signature verification algorithm');
+  }
+
+  // crit has exactly one element, and it must be "iat"
+  if (!Array.isArray(crit) || crit.length !== 1 || crit[0] !== "iat") {
     throw new Error('Header crit of JWS Signature must contain only iat');
   }
 
@@ -36,20 +39,17 @@ function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds) {
   }
   // Accept number or numeric string; reject non-finite values
   const iatNum = typeof iat === "number" ? iat : Number(iat);
-  if (!Number.isFinite(iatNum)) {
-    throw new Error('Header iat of JWS Signature must be a finite numeric timestamp');
+  if (!Number.isInteger(iatNum)) {
+    throw new Error('Header iat of JWS Signature must be a valid timestamp');
   }
 
-  if(signExpirationSeconds){
-    checkExpiredIat(iat, signExpirationSeconds);
-  }
-  const algo = JSON.parse(atob(jwsHeaders)).alg;
-  const isVerified = KJUR.jws.JWS.verify(jwsSign, publicKeyPEM, algo);
-  return isVerified;
+  checkExpiredIat(iatNum, signExpirationSeconds);
+
+  return KJUR.jws.JWS.verify(jwsSign, publicKeyPEM, [alg]);
 }
 
-function checkExpiredIat(iat, signExpirationSeconds){
-    const iatMs = Number(iat) * 1000;
+function checkExpiredIat(iatNum, signExpirationSeconds){
+  const iatMs = iatNum * 1000;
   const expiresAt = new Date(iatMs + signExpirationSeconds * 1000);
   const nowUtc = new Date();
   if (expiresAt < nowUtc) {
@@ -57,4 +57,4 @@ function checkExpiredIat(iat, signExpirationSeconds){
   }
 }
 
-module.exports = { jwsSign, jwsVerify, checkExpiredIat };
+module.exports = { jwsSign, jwsVerify };

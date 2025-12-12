@@ -34,6 +34,10 @@ module.exports.request = async (context) => {
       const privateKey = fs.readFileSync(mcContext.signatureConfig.signPrivateKey, 'utf8');
       const KID = mcContext.signatureConfig.signKeyId;
       const algo = mcContext.signatureConfig.signAlgorithm;
+      const signAlgorithmConstraints = new Set(mcContext.signatureConfig.signAlgorithmConstraints);
+      if(!signAlgorithmConstraints.has(algo)){
+        throw Error('Unsupported Signature algorithm');
+      }
       const jws = jwsSign(payload, KID, privateKey, algo);
       await context.request.setHeader('x-jws-signature', jws);
     }
@@ -68,9 +72,10 @@ module.exports.response = async (context) => {
       }
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
-      const signExpirationSeconds = mcContext.signatureConfig.signExpirationSeconds;
+      const signExpirationSeconds = mcContext.signatureConfig.signExpirationSeconds ?? 300;
+      const signAlgorithmConstraints = mcContext.signatureConfig.signAlgorithmConstraints;
 
-      const result = jwsVerify(jws, payload, publicKey, signExpirationSeconds);
+      const result = jwsVerify(jws, payload, publicKey, signExpirationSeconds, signAlgorithmConstraints);
 
       if (result) {
         console.log('Signature verification successful');

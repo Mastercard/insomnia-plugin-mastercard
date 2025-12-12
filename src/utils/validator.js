@@ -48,8 +48,9 @@ const commonSignatureSchema = Joi.object({
   signPrivateKey: Joi.string().required(),
   signKeyId: Joi.string().required(),
   signVerificationCertificate: Joi.string().required(),
-  signAlgorithm: Joi.string().valid('RS256', 'RS384', 'RS512', 'HS256', 'HS384', 'HS512', 'ES256', 'ES384', 'ES512', 'PS256', 'PS384', 'PS512').required(),
+  signAlgorithm: Joi.string().required(),
   signExpirationSeconds: Joi.number(),
+  signAlgorithmConstraints: Joi.array().items(Joi.string()).unique().required(),
 }).with("signPrivateKey", "signKeyId"); // if privateKey is present, keyId should be
 
 const mastercardEncryptionSpecificSchema = Joi.object({

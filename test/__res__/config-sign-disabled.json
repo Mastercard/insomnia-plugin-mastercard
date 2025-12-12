@@ -18,7 +18,11 @@
         "signKeyId": "dPDsC+MS/R/4WMLG/VAfx+DUFTY=",
         "signPrivateKey": "./test/__res__/sign_private_key.key",
         "signAlgorithm": "RS256",
-        "signExpirationSeconds": 300
+        "signExpirationSeconds": 300,
+        "signAlgorithmConstraints": [
+          "PS256",
+          "RS256"
+        ]
       }
     }
   }
