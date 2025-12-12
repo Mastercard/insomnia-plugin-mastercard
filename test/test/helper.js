@@ -31,13 +31,14 @@ mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHea
 module.exports = {
   context: (
     {
+     method = 'POST',
       url = 'https://api.mastercard.com/service/api',
       config = require('../__res__/config.json').mastercard,
       body = null,
       header = 'application/json;charset=UTF-8'
     } = {}
   ) => mockContext(
-    'POST',
+    method,
     url,
     [{ name: 'name', value: 'value' }],
     header,
@@ -100,5 +101,41 @@ module.exports = {
     () => {
     },
     config
-  )
+  ),
+    contextJWS: (
+      {
+        url = 'https://api.mastercard.com/service/api',
+        config = require('../__res__/config-sign.json').mastercard,
+        body = null,
+        header = 'application/json;charset=UTF-8'
+      } = {}
+    ) => mockContext(
+      'POST',
+      url,
+      [{ name: 'name', value: 'value' }],
+      header,
+      () => [{ name: 'foo', value: 'bar' }],
+      body,
+      () => {
+      },
+      config
+    ),
+     contextJWSDisabled: (
+          {
+            url = 'https://api.mastercard.com/service/api',
+            config = require('../__res__/config-sign-disabled.json').mastercard,
+            body = null,
+            header = 'application/json;charset=UTF-8'
+          } = {}
+        ) => mockContext(
+          'POST',
+          url,
+          [{ name: 'name', value: 'value' }],
+          header,
+          () => [{ name: 'foo', value: 'bar' }],
+          body,
+          () => {
+          },
+          config
+        ),
 };

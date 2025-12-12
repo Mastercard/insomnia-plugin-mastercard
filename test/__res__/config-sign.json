@@ -1,0 +1,29 @@
+{
+  "host": "https://sandbox.api.mastercard.com",
+  "mastercard": {
+    "consumerKey": "H5MR_EL6fmGG_jzvC6T7Wu43IZ-0plTTTfalNHft2482b23a!eab46a89cc2b46ebb31aeec610f52eeb0000000000000000",
+    "keyAlias": "mykeyalias",
+    "keystoreP12Path": "./test/__res__/test_key_container.p12",
+    "keystorePassword": "Password1",
+    "extensions": {
+      "signatureConfig": {
+        "paths": [
+          {
+            "path": "/resource",
+            "signatureGenerationEnabled": true,
+            "signatureVerificationEnabled": true
+          }
+        ],
+        "signVerificationCertificate": "./test/__res__/test_certificate.cert",
+        "signKeyId": "dPDsC+MS/R/4WMLG/VAfx+DUFTY=",
+        "signPrivateKey": "./test/__res__/sign_private_key.key",
+        "signAlgorithm": "RS256",
+        "signExpirationSeconds": 300,
+        "signAlgorithmConstraints": [
+          "PS256",
+          "RS256"
+        ]
+      }
+    }
+  }
+}

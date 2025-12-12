@@ -1,6 +1,8 @@
 const assert = require('assert');
 const context = require('./test/helper').context;
 const MastercardContext = require('../src/mastercard-context');
+const sinon = require('sinon');
+const { expect } = require("chai");
 
 describe('MastercardContext', () => {
 
@@ -11,6 +13,14 @@ describe('MastercardContext', () => {
 
     assert.strictEqual(ctx.encryptionConfig, undefined);
   });
+
+    it('should not set signature when not configured', async () => {
+      const config = { ...require('./__res__/config.json').mastercard };
+      config.signatureConfig = null;
+      const ctx = new MastercardContext(context({ config }));
+
+      assert.strictEqual(ctx.signatureConfig, undefined);
+    });
 
   it('should not fail when mastercard configuration is not set in the env', async () => {
     const c = context({ config: null });
@@ -90,5 +100,4 @@ describe('MastercardContext', () => {
     assert.strictEqual(new MastercardContext(ctx).isJsonRequest(), true);
     assert.strictEqual(new MastercardContext(ctx).isJsonResponse(), true);
   });
-
 });
