@@ -15,7 +15,7 @@ function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds, si
   const jwsPayload = Buffer.from(stringPayload, 'utf-8').toString('base64url');
   const jwsParts = jws.split(".");
   if (jwsParts.length !== 3) {
-    throw new Error('Invalid JWS header')
+    throw new Error('Invalid JWS header');
   }
   const jwsHeaders = jwsParts[0];
   const jwsSignature = jwsParts[2];
