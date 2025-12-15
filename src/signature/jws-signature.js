@@ -72,7 +72,9 @@ module.exports.response = async (context) => {
       }
       const payload = JSON.parse(fs.readFileSync(body.path));
       const publicKey = fs.readFileSync(mcContext.signatureConfig.signVerificationCertificate, 'utf8');
-      const signExpirationSeconds = mcContext.signatureConfig.signExpirationSeconds ?? 300;
+      const signExpirationSeconds = mcContext.signatureConfig.signExpirationSeconds !== undefined
+        ? mcContext.signatureConfig.signExpirationSeconds
+        : 300;
       const signAlgorithmConstraints = mcContext.signatureConfig.signAlgorithmConstraints;
 
       const result = jwsVerify(jws, payload, publicKey, signExpirationSeconds, signAlgorithmConstraints);
