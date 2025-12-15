@@ -10,11 +10,11 @@ module.exports.request = async (context) => {
     const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
 
        if (!requestConfig) {
-      return
+      return;
     }
     const body = mcContext.requestBody();
     const requestUrl = mcContext.commaDecodedUrl;
-    const hasBody = body && body.text
+    const hasBody = body && body.text;
 
     let payload;
     if (!hasBody) {
@@ -53,7 +53,7 @@ module.exports.response = async (context) => {
     const mcContext = new MastercardContext(context);
     const requestConfig = utils.getRequestConfig(mcContext.signatureConfig, mcContext.url);
     if (!requestConfig) {
-      return
+      return;
     }
     const body = mcContext.responseBody();
 
@@ -80,7 +80,7 @@ module.exports.response = async (context) => {
       const result = jwsVerify(jws, payload, publicKey, signExpirationSeconds, signAlgorithmConstraints);
 
       if (result) {
-        console.log('Signature verification successful');
+        UserFeedback.logMessage('Signature verification successful');
       } else {
         throw new Error('JWS signature verification failed');
       }
