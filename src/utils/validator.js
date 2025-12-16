@@ -36,6 +36,23 @@ const commonEncryptionSchema = Joi.object({
   .with("keyStoreAlias", "keyStorePassword") // both should be present together. never alone
   .with("keyStorePassword", "keyStoreAlias"); // both should be present together. never alone
 
+
+const commonSignatureSchema = Joi.object({
+  paths: Joi.array().items(
+    Joi.object({
+      path: Joi.string().required(),
+      signatureGenerationEnabled: Joi.boolean().default(false),
+      signatureVerificationEnabled: Joi.boolean().default(false),
+    }).unknown(false)
+  ).required(),
+  signPrivateKey: Joi.string().required(),
+  signKeyId: Joi.string().required(),
+  signVerificationCertificate: Joi.string().required(),
+  signAlgorithm: Joi.string().required(),
+  signExpirationSeconds: Joi.number(),
+  signAlgorithmConstraints: Joi.array().items(Joi.string()).unique().required(),
+}).with("signPrivateKey", "signKeyId"); // if privateKey is present, keyId should be
+
 const mastercardEncryptionSpecificSchema = Joi.object({
   publicKeyFingerprintFieldName: Joi.string(),
   oaepHashingAlgorithmFieldName: Joi.string(),
@@ -84,8 +101,12 @@ function getConfigSchema(encryptionMode) {
     keyAlias: Joi.string(),
     keystoreP12Path: Joi.string(),
     keystorePassword: Joi.string(),
+    oAuthDisabled: Joi.boolean().default(false),
     appliesTo: Joi.array().items(Joi.string()),
     encryptionConfig: encryptionSchema,
+    extensions: Joi.object({
+      signatureConfig: commonSignatureSchema.unknown(false)
+    }).unknown(false)
   }).unknown(false);
 }
 
@@ -98,11 +119,15 @@ module.exports.configValidator = (context) => {
   }
 
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
+  const { signPrivateKey, signVerificationCertificate } = config.extensions && config.extensions.signatureConfig || {};
+
   const missingFiles = Object.entries({
     keystoreP12Path: config.keystoreP12Path,
     encryptionCertificate,
     privateKey,
     keyStore,
+    signPrivateKey,
+    signVerificationCertificate
   }).filter(([, path]) => path != null && !fs.existsSync(path)); // eslint-disable-line eqeqeq
 
   const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode);
