@@ -54,7 +54,9 @@ describe('jws', () => {
 		};
 
 		it('reconstructs the full JWS and verifies with allowed algorithm', () => {
-			const { jws, headerB64 } = buildJws();
+			const clock = sandbox.useFakeTimers(new Date('2024-01-01T00:00:00Z'));
+			const currentIat = Math.floor(clock.now / 1000);
+			const { jws, headerB64 } = buildJws({ iat: currentIat });
 			const verifyStub = sandbox.stub(KJUR.jws.JWS, 'verify').returns(true);
 
 			const result = jwsVerify(jws, payload, publicKey, 60, [algo]);
@@ -64,7 +66,7 @@ describe('jws', () => {
 		});
 
 		it('throws when JWS is malformed', () => {
-			expect(() => jwsVerify('too.few.parts', payload, publicKey, 60, [algo])).to.throw('Invalid JWS header');
+			expect(() => jwsVerify('onlytwo.parts', payload, publicKey, 60, [algo])).to.throw('Invalid JWS header');
 		});
 
 		it('throws when algorithm is not permitted', () => {
