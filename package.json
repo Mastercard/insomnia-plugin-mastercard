@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-mastercard",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "An Insomnia plugin for consuming Mastercard APIs",
   "license": "Apache-2.0",
   "repository": {
