@@ -1,3 +1,5 @@
+const { version } = require('../package.json');
+
 function MastercardContext(context) {
   const {
     buildQueryStringFromParams,
@@ -11,6 +13,15 @@ function MastercardContext(context) {
   this.commaDecodedUrl = smartEncodeUrl(fullUrl, true);
   this.config = context.request.getEnvironmentVariable('mastercard');
   this.insomnia = context;
+
+  try {
+    const os = require('os');
+    this.osName = os.platform();
+    this.osVersion = os.release();
+  } catch (e) {
+    this.osName = "n/a";
+    this.osVersion = "n/a";
+  }
 
   if (this.config && this.config.encryptionConfig) {
     this.encryptionConfig = this.config.encryptionConfig;
@@ -96,6 +107,16 @@ function MastercardContext(context) {
 
   this.getSignatureHeader = () => {
     return context.response.getHeader('x-jws-signature');
+  };
+
+  this.userAgent = () => {
+    const headers = context.request.getHeaders();
+    const userAgentHeader = headers.find(h => h.name.toLowerCase() === 'user-agent');
+    if (userAgentHeader) {
+      return userAgentHeader.value;
+    } else {
+      return `insomnia-plugin-mastercard / ${version} (${this.osName}; ${this.osVersion})`;
+    }
   };
 }
 

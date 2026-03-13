@@ -24,6 +24,7 @@ function makeMcContext(overrides = {}) {
       }
     },
     url: 'https://api.mastercard.com/resource',
+    userAgent: () => 'test-user-agent',
     insomnia: {
       request: {
         getMethod: () => 'POST',
@@ -61,6 +62,32 @@ describe('oauth2.request', () => {
     const headerMap = Object.fromEntries(calls);
     assert.strictEqual(headerMap['Authorization'], 'Bearer mock-access-token');
     assert.strictEqual(headerMap['DPoP'], 'mock-dpop-proof');
+  });
+
+  it('calls userAgent on builder when mcContext.userAgent() returns a value', async () => {
+    const mockHeaders = { Authorization: 'Bearer mock-access-token' };
+    const userAgentStub = sandbox.stub(OAuth2ClientBuilder.prototype, 'userAgent').returnsThis();
+    sandbox.stub(OAuth2ClientBuilder.prototype, 'build').returns({
+      getOAuth2Headers: sinon.stub().resolves(mockHeaders)
+    });
+
+    const mcContext = makeMcContext({ userAgent: () => 'custom-agent/1.0' });
+    await oauth2.request(mcContext);
+
+    sinon.assert.calledOnceWithExactly(userAgentStub, 'custom-agent/1.0');
+  });
+
+  it('does not call userAgent on builder when mcContext.userAgent() returns null', async () => {
+    const mockHeaders = { Authorization: 'Bearer mock-access-token' };
+    const userAgentStub = sandbox.stub(OAuth2ClientBuilder.prototype, 'userAgent').returnsThis();
+    sandbox.stub(OAuth2ClientBuilder.prototype, 'build').returns({
+      getOAuth2Headers: sinon.stub().resolves(mockHeaders)
+    });
+
+    const mcContext = makeMcContext({ userAgent: () => null });
+    await oauth2.request(mcContext);
+
+    sinon.assert.notCalled(userAgentStub);
   });
 
   it('shows window.alert with the original message and throws error', async () => {

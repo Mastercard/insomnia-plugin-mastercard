@@ -100,4 +100,30 @@ describe('MastercardContext', () => {
     assert.strictEqual(new MastercardContext(ctx).isJsonRequest(), true);
     assert.strictEqual(new MastercardContext(ctx).isJsonResponse(), true);
   });
+
+  describe('userAgent', () => {
+    it('returns plugin user agent string when no user-agent header is present', () => {
+      const ctx = context();
+      ctx.request.getHeaders = () => [{ name: 'content-type', value: 'application/json' }];
+      const mcCtx = new MastercardContext(ctx);
+
+      assert.match(mcCtx.userAgent(), /^insomnia-plugin-mastercard \/ .+ \(.+; .+\)$/);
+    });
+
+    it('returns existing header value when user-agent header is present (lowercase)', () => {
+      const ctx = context();
+      ctx.request.getHeaders = () => [{ name: 'user-agent', value: 'my-custom-agent/1.0' }];
+      const mcCtx = new MastercardContext(ctx);
+
+      assert.strictEqual(mcCtx.userAgent(), 'my-custom-agent/1.0');
+    });
+
+    it('returns existing header value when user-agent header is present (mixed case)', () => {
+      const ctx = context();
+      ctx.request.getHeaders = () => [{ name: 'User-Agent', value: 'my-custom-agent/1.0' }];
+      const mcCtx = new MastercardContext(ctx);
+
+      assert.strictEqual(mcCtx.userAgent(), 'my-custom-agent/1.0');
+    });
+  });
 });

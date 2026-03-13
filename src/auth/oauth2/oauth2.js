@@ -17,8 +17,9 @@ async function getOAuth2Headers(mcContext) {
   );
 
   const scopes = config.scopes;
+  const userAgent = mcContext.userAgent();
 
-  const oauth2Client = new OAuth2ClientBuilder()
+  const oauth2ClientBuilder = new OAuth2ClientBuilder()
     .clientId(config.clientId)
     .kid(config.kid)
     .clientKey(privateKey)
@@ -27,8 +28,13 @@ async function getOAuth2Headers(mcContext) {
     .issuer(config.issuer)
     .dPoPKeyProvider(new StaticDPoPKeyProvider(privateKey, publicKey))
     .clockSkewTolerance(60)
-    .scopeResolver(new StaticScopeResolver(scopes))
-    .build();
+    .scopeResolver(new StaticScopeResolver(scopes));
+
+  if (userAgent) {
+    oauth2ClientBuilder.userAgent(userAgent);
+  }
+
+  const oauth2Client = oauth2ClientBuilder.build();
 
   const method = insomnia.request.getMethod();
   const url = mcContext.url;
