@@ -1,19 +1,22 @@
+name: broken links?
 'on':
   push:
-    branches: 
-     - "**"
+    branches:
+      - "**"
   schedule:
     - cron: 0 14 * * *
-name: broken links?
+  workflow_dispatch:  
 jobs:
   linkChecker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
+
       - name: Link Checker
-        id: lc
-        uses: lycheeverse/lychee-action@a8c4c7cb88f0c7386610c35eb25108e448569cb0
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: --insecure --verbose --no-progress './**/*.md' './**/*.html'  --accept 200,204,206 --exclude '^http://npmjs\.org' --exclude '^http://www\.npmjs\.com'
-      - name: Fail?
-        run: 'exit ${{ steps.lc.outputs.exit_code }}'
+          args: >-
+            --exclude '^https?://(www\.)?npmjs\.org/'
+            --exclude '^https?://(www\.)?npmjs\.com/'
+            "."
+          fail: true
