@@ -36,12 +36,7 @@ describe(`${configValidator.name}()`, () => {
   });
 
   const mockContext = (mastercardConfig) => ({
-    request: {
-      getEnvironmentVariable: () => mastercardConfig,
-    },
-    app: {
-      dialog: () => {},
-    },
+    config: mastercardConfig,
   });
 
   it("does nothing if mastercard config object does not exist", () => {
@@ -445,5 +440,172 @@ describe(`${configValidator.name}()`, () => {
     expect(() => configValidator(context)).not.to.throw();
     expect(showValidationErrorsStub.called).to.be.false;
     expect(consoleErrorStub.called).to.be.false;
+  });
+
+  it("should not produce any errors for a valid oAuth1 config", () => {
+    const context = mockContext({
+      oAuth1: {
+        consumerKey: "valid-string",
+        keyAlias: "valid-string",
+        keystoreP12Path: validCert,
+        keystorePassword: "valid-string",
+      },
+      appliesTo: ["valid-string"],
+      oAuthDisabled: false,
+    });
+
+    expect(() => configValidator(context)).not.to.throw();
+    expect(showValidationErrorsStub.called).to.be.false;
+    expect(consoleErrorStub.called).to.be.false;
+  });
+
+  it("should not produce any errors for a valid oAuth2 config", () => {
+    const context = mockContext({
+      oAuth2: {
+        clientId: "valid-string",
+        kid: "valid-string",
+        keystoreP12Path: validCert,
+        keyAlias: "valid-string",
+        keystorePassword: "valid-string",
+        tokenEndpoint: "https://sandbox.api.mastercard.com/oauth/token",
+        issuer: "https://sandbox.api.mastercard.com",
+        scopes: ["scope-read", "scope-write"],
+      },
+      appliesTo: ["mastercard.com"],
+      oAuthDisabled: false,
+    });
+
+    expect(() => configValidator(context)).not.to.throw();
+    expect(showValidationErrorsStub.called).to.be.false;
+    expect(consoleErrorStub.called).to.be.false;
+  });
+
+  it("should produce errors for invalid oAuth1 config field types", () => {
+    const context = mockContext({
+      oAuth1: {
+        consumerKey: 10,
+        keyAlias: true,
+        keystoreP12Path: null,
+        keystorePassword: { key: "val" },
+      },
+    });
+
+    expect(() => configValidator(context)).to.throw("invalid config");
+    expect(showValidationErrorsStub.calledOnce).to.be.true;
+
+    const [, , { errors }] = showValidationErrorsStub.firstCall.args;
+    const fieldNames = errors.map((e) => e.field);
+    ["oAuth1.consumerKey", "oAuth1.keyAlias", "oAuth1.keystoreP12Path", "oAuth1.keystorePassword"].forEach((field) =>
+      expect(fieldNames).to.include(field)
+    );
+  });
+
+  it("should produce errors for invalid oAuth2 config field types", () => {
+    const context = mockContext({
+      oAuth2: {
+        clientId: 10,
+        kid: null,
+        keystoreP12Path: true,
+        keyAlias: ["array"],
+        keystorePassword: { key: "val" },
+        tokenEndpoint: false,
+        issuer: 42,
+        scopes: "not-an-array",
+      },
+    });
+
+    expect(() => configValidator(context)).to.throw("invalid config");
+    expect(showValidationErrorsStub.calledOnce).to.be.true;
+
+    const [, , { errors }] = showValidationErrorsStub.firstCall.args;
+    const fieldNames = errors.map((e) => e.field);
+    [
+      "oAuth2.clientId",
+      "oAuth2.kid",
+      "oAuth2.keystoreP12Path",
+      "oAuth2.keyAlias",
+      "oAuth2.keystorePassword",
+      "oAuth2.tokenEndpoint",
+      "oAuth2.issuer",
+      "oAuth2.scopes",
+    ].forEach((field) => expect(fieldNames).to.include(field));
+  });
+
+  it("should produce a single clear error when oAuth1 and oAuth2 are both specified", () => {
+    const context = mockContext({ oAuth1: { consumerKey: "val" }, oAuth2: { clientId: "val" } });
+
+    expect(() => configValidator(context)).to.throw("invalid config");
+    expect(showValidationErrorsStub.calledOnce).to.be.true;
+
+    const [, , { errors, warnings }] = showValidationErrorsStub.firstCall.args;
+    expect(errors).to.have.length(1);
+    expect(errors[0].field).to.equal("mastercard");
+    expect(errors[0].message).to.include("oAuth1");
+    expect(errors[0].message).to.include("oAuth2");
+    expect(warnings).to.have.length(0);
+  });
+
+  [
+    [{ oAuth1: { consumerKey: "val" }, consumerKey: "val" }, "oAuth1"],
+    [{ oAuth2: { clientId: "val" }, consumerKey: "val" }, "oAuth2"],
+  ].forEach(([configFields, activeMode]) =>
+    it(`should not produce mutual exclusivity error when ${activeMode} is configured alongside legacy root fields`, () => {
+      const context = mockContext(configFields);
+
+      try {
+        configValidator(context);
+      } catch (e) {
+        // may throw for other reasons (e.g. missing files), ignore
+      }
+
+      const callArgs = showValidationErrorsStub.firstCall;
+      if (callArgs) {
+        const [, , { errors }] = callArgs.args;
+        expect(errors.some((e) => e.field === "mastercard" && e.message.includes("mutually exclusive"))).to.be.false;
+      }
+    })
+  );
+
+  [
+    ["invalidPath", , 1, ["keystoreP12Path"]],
+    [, "invalidPath", 1, ["keystoreP12Path"]],
+  ].forEach(([legacyPath, oAuth1Path, expectedMissingFiles, expectedKeys]) => {
+    it("should produce error when oAuth1.keystoreP12Path is invalid", () => {
+      const context = mockContext(
+        oAuth1Path
+          ? { oAuth1: { keystoreP12Path: oAuth1Path } }
+          : { keystoreP12Path: legacyPath }
+      );
+
+      try {
+        configValidator(context);
+      } catch (e) {
+        // expected
+      }
+      const [, , { missingFiles }] = showValidationErrorsStub.firstCall.args;
+      expect(missingFiles.length).to.equal(1);
+      expect(missingFiles[0][0]).to.equal("keystoreP12Path");
+    });
+  });
+
+  it("should not produce error when oAuth2.keystoreP12Path is invalid (handled by auth module at runtime)", () => {
+    const context = mockContext({ oAuth2: { keystoreP12Path: "invalidPath" } });
+
+    configValidator(context);
+    expect(showValidationErrorsStub.called).to.be.false;
+  });
+
+  it("should not produce error when oAuth1.keystoreP12Path is valid", () => {
+    const context = mockContext({ oAuth1: { keystoreP12Path: validCert } });
+
+    configValidator(context);
+    expect(showValidationErrorsStub.called).to.be.false;
+  });
+
+  it("should not produce error when oAuth2.keystoreP12Path is valid", () => {
+    const context = mockContext({ oAuth2: { keystoreP12Path: validCert } });
+
+    configValidator(context);
+    expect(showValidationErrorsStub.called).to.be.false;
   });
 });

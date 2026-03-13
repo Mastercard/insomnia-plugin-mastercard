@@ -1,9 +1,9 @@
 const assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
-const plugin = require('../../index');
+const plugin = require('../../../index');
 const sinon = require('sinon');
-const { mastercard: config } = require('../__res__/config.json');
-const context = require('../test/helper').context;
+const { mastercard: config } = require('../../__res__/config.json');
+const context = require('../../test/helper').context;
 
 describe('OAuth', () => {
 
@@ -37,7 +37,7 @@ describe('OAuth', () => {
       alert: () => {
       }
     };
-    const config = { ...require('../__res__/config.json').mastercard };
+    const config = { ...require('../../__res__/config.json').mastercard };
     for (const item of ['/path/to/sandbox-signing-key.p12', '/path/to/production-signing-key.p12']) {
       config.keystoreP12Path = '/path/to/sandbox-signing-key.p12';
       const ctx = context({ config });
@@ -58,7 +58,7 @@ describe('OAuth', () => {
       alert: () => {
       }
     };
-    const config = { ...require('../__res__/config.json').mastercard };
+    const config = { ...require('../../__res__/config.json').mastercard };
     config.consumerKey = '000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000';
     const ctx = context({ config });
     await assert.rejects(
@@ -77,7 +77,7 @@ describe('OAuth', () => {
       alert: () => {
       }
     };
-    const config = { ...require('../__res__/config.json').mastercard };
+    const config = { ...require('../../__res__/config.json').mastercard };
     const path = `/path/foo/bar/${uuidv4()}`;
     config.keystoreP12Path = path;
     const ctx = context({ config });
@@ -94,6 +94,16 @@ describe('OAuth', () => {
 
   it('should not intercept when mastercard env not set', async () => {
     const ctx = context({ config: null });
+    const setHeader = sinon.spy(ctx.request, 'setHeader');
+
+    await plugin.requestHooks[oauthHookPosition](ctx);
+
+    assert(setHeader.notCalled);
+  });
+
+  it('should not intercept when oAuthDisabled is true', async () => {
+    const cfg = { ...require('../../__res__/config.json').mastercard, oAuthDisabled: true };
+    const ctx = context({ config: cfg });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
 
     await plugin.requestHooks[oauthHookPosition](ctx);
