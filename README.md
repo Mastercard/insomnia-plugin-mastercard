@@ -82,11 +82,11 @@ Alternatively, you can:
 1. Go to Application > Preferences > Data
 2. Click "Import Data"
 3. Click "From URL"
-4. Input either of these depending on your use case:  
-    - OAuth 1.0a: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace.json
-    - OAuth 2.0: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace-oauth2.json
-    - Mastercard encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json
-    - JWE encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json
+4. Input either of these workspace depending on your use case:  
+    - [OAuth 1.0a](https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace.json)
+    - [OAuth 2.0](https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace-oauth2.json)
+    - [Mastercard encryption](https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json)
+    - [JWE encryption](https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json)
 5. Click "Fetch and Import"
 
 ![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
