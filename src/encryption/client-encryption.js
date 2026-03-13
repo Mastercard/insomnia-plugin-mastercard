@@ -1,16 +1,14 @@
-const MastercardContext = require('../mastercard-context');
 const fs = require('fs');
 const utils = require('./utils');
 const { UserFeedback } = require('../utils/user-feedback');
 
-module.exports.request = async (context) => {
+module.exports.request = async (mcContext) => {
   try {
-  const mcContext = new MastercardContext(context);
 
   const body = mcContext.requestBody();
 
   if (
-    mcContext.isMastercardRequest(context) &&
+    mcContext.isMastercardRequest() &&
     body.text &&
     mcContext.isJsonRequest() &&
     mcContext.encryptionConfig
@@ -31,25 +29,24 @@ module.exports.request = async (context) => {
 
       // override header
       for (const [name, value] of Object.entries(encrypted.header)) {
-        context.request.setHeader(name, value);
+        mcContext.insomnia.request.setHeader(name, value);
       }
 
       // replace body
-      context.request.setBodyText(JSON.stringify(encrypted.body));
+      mcContext.insomnia.request.setBodyText(JSON.stringify(encrypted.body));
   }
-} catch (e) {;
+} catch (e) {
     UserFeedback.logError("Error encrypting request", e);
-    UserFeedback.showUnexpectedError(context, 'Error encrypting request', e);
+    UserFeedback.showUnexpectedError(mcContext.insomnia, 'Error encrypting request', e);
   }
 };
 
-module.exports.response = async (context) => {
+module.exports.response = async (mcContext) => {
   try {
-  const mcContext = new MastercardContext(context);
   const body = mcContext.responseBody();
 
   if (
-    mcContext.isMastercardRequest(context) &&
+    mcContext.isMastercardRequest() &&
     body &&
     mcContext.isJsonResponse() &&
     mcContext.encryptionConfig
@@ -59,15 +56,15 @@ module.exports.response = async (context) => {
     const response = JSON.parse(fs.readFileSync(body.path));
       const decryptedBody = cryptoService.decrypt({
         body: response,
-        header: mcContext.responseHeader(),
+        header: mcContext.encryptionResponseHeader(),
         request: {
           url: mcContext.url
         }
       });
-      context.response.setBody(JSON.stringify(decryptedBody));
+    mcContext.insomnia.response.setBody(JSON.stringify(decryptedBody));
   }
 } catch(e) {
   UserFeedback.logError("Error decrypting response", e);
-  UserFeedback.showUnexpectedError(context, "Error decrypting response", e);
+  UserFeedback.showUnexpectedError(mcContext.insomnia, "Error decrypting response", e);
 }
 };

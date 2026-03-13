@@ -21,7 +21,7 @@
             "metaSortKey": -1572009619195,
             "method": "GET",
             "modified": 1572606757333,
-            "name": "Mastercard ATM Location (update me!)",
+            "name": "Mastercard Service (update me!)",
             "parameters": [],
             "parentId": "wrk_426ef946c0164b68a71f63380a76d395",
             "settingDisableRenderRequestBody": false,
@@ -29,7 +29,7 @@
             "settingRebuildPath": true,
             "settingSendCookies": true,
             "settingStoreCookies": true,
-            "url": "{{ host  }}/atms/v1/atm?PageOffset=0&PageLength=5&PostalCode=11101&Format=JSON",
+            "url": "{{ host }}/service/resource",
             "_type": "request"
         },
         {
@@ -61,29 +61,29 @@
             "data": {
                 "host": "https://api.mastercard.com",
                 "mastercard": {
-                    "oAuth1": {
-                        "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+                    "oAuth2": {
+                        "clientId": "KvoCuUOVXyL8Ep...FMXd-3uq5lzWsns9d58add6",
+                        "kid": "c714fa1407134ac...8e4b597e0000000000000000",
+                        "keystoreP12Path": "/path/to/your/p12",
                         "keyAlias": "keyalias",
-                        "keystoreP12Path": "/path/to/production-signing-key.p12",
                         "keystorePassword": "keystorepassword",
-                    },
-                    "appliesTo": [
-                        "mastercard.com",
-                        "api.ethocaweb.com"
-                    ]
+                        "tokenEndpoint": "https://api.mastercard.com/oauth/token",
+                        "issuer": "https://api.mastercard.com",
+                        "scopes": [
+                            "service:scope1",
+                            "service:scope2"
+                       ]
+                   },
+                   "appliesTo": [
+                       "mastercard.com",
+                       "api.ethocaweb.com"
+                  ]
                 }
             },
             "dataPropertyOrder": {
                 "&": [
                     "host",
                     "mastercard"
-                ],
-                "&~|mastercard": [
-                    "consumerKey",
-                    "keyAlias",
-                    "keystoreP12Path",
-                    "keystorePassword",
-                    "appliesTo"
                 ]
             },
             "isPrivate": false,
@@ -98,29 +98,31 @@
             "color": "#ff8040",
             "created": 1572542085385,
             "data": {
-                "host": "https://sandbox.api.mastercard.com",
-                "mastercard": {
-                    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
-                    "keyAlias": "keyalias",
-                    "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
-                    "keystorePassword": "keystorepassword",
-                    "appliesTo": [
+              "host": "https://sandbox.api.mastercard.com",
+              "mastercard": {
+                  "oAuth2": {
+                      "clientId": "KvoCuUOVXyL8Ep...FMXd-3uq5lzWsns9d58add6",
+                      "kid": "c714fa1407134ac...8e4b597e0000000000000000",
+                      "keystoreP12Path": "/path/to/your/p12",
+                      "keyAlias": "keyalias",
+                      "keystorePassword": "keystorepassword",
+                      "tokenEndpoint": "https://sandbox.api.mastercard.com/oauth/token",
+                      "issuer": "https://sandbox.api.mastercard.com",
+                      "scopes": [
+                          "service:scope1",
+                          "service:scope2"
+                     ]
+                  },
+                  "appliesTo": [
                       "mastercard.com",
                       "api.ethocaweb.com"
-                    ]
-                }
+                  ]
+              }
             },
             "dataPropertyOrder": {
                 "&": [
                     "host",
                     "mastercard"
-                ],
-                "&~|mastercard": [
-                    "consumerKey",
-                    "keyAlias",
-                    "keystoreP12Path",
-                    "keystorePassword",
-                    "appliesTo"
                 ]
             },
             "isPrivate": false,

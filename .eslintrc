@@ -9,7 +9,7 @@ env:
   jest: true
 
 parserOptions:
-  ecmaVersion: 8
+  ecmaVersion: 9
 
 rules:
   semi: 2

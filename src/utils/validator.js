@@ -66,6 +66,24 @@ const mastercardEncryptionSpecificSchema = Joi.object({
   useCertificateContent: Joi.boolean(),
 });
 
+const oAuth1Schema = Joi.object({
+  consumerKey: Joi.string(),
+  keyAlias: Joi.string(),
+  keystoreP12Path: Joi.string(),
+  keystorePassword: Joi.string(),
+}).unknown(false);
+
+const oAuth2Schema = Joi.object({
+  clientId: Joi.string(),
+  kid: Joi.string(),
+  keystoreP12Path: Joi.string(),
+  keyAlias: Joi.string(),
+  keystorePassword: Joi.string(),
+  tokenEndpoint: Joi.string(),
+  issuer: Joi.string(),
+  scopes: Joi.array().items(Joi.string()),
+}).unknown(false);
+
 const warningsConfig = [
   {
     type: "object.unknown",
@@ -89,56 +107,107 @@ const warningsConfig = [
   },
 ];
 
-function getConfigSchema(encryptionMode) {
+function getConfigSchema(encryptionMode, authMode) {
   const encryptionSchema =
     encryptionMode !== "JWE"
       ? commonEncryptionSchema.concat(mastercardEncryptionSpecificSchema)
       : commonEncryptionSchema;
   encryptionSchema.unknown(false);
 
+  const sharedAuthConfig = {
+    oAuthDisabled: Joi.boolean().default(false),
+    appliesTo: Joi.array().items(Joi.string()),
+    encryptionConfig: encryptionSchema,
+    extensions: Joi.object({
+      signatureConfig: commonSignatureSchema.unknown(false),
+    }).unknown(false),
+  };
+
+  const legacyFields = {
+    consumerKey: Joi.any(),
+    keyAlias: Joi.any(),
+    keystoreP12Path: Joi.any(),
+    keystorePassword: Joi.any(),
+  };
+
+  if (authMode === "oAuth2") {
+    return Joi.object({
+      oAuth2: oAuth2Schema,
+      ...legacyFields,
+      ...sharedAuthConfig,
+    }).unknown(false);
+  }
+
+  if (authMode === "oAuth1") {
+    return Joi.object({
+      oAuth1: oAuth1Schema,
+      ...legacyFields,
+      ...sharedAuthConfig,
+    }).unknown(false);
+  }
+
   return Joi.object({
     consumerKey: Joi.string(),
     keyAlias: Joi.string(),
     keystoreP12Path: Joi.string(),
     keystorePassword: Joi.string(),
-    oAuthDisabled: Joi.boolean().default(false),
-    appliesTo: Joi.array().items(Joi.string()),
-    encryptionConfig: encryptionSchema,
-    extensions: Joi.object({
-      signatureConfig: commonSignatureSchema.unknown(false)
-    }).unknown(false)
+    ...sharedAuthConfig,
   }).unknown(false);
 }
 
-module.exports.configValidator = (context) => {
-  const config = context.request.getEnvironmentVariable("mastercard");
+module.exports.configValidator = (mcContext) => {
+  const config = mcContext.config;
   if (!config || Array.isArray(config) || typeof config !== "object") {
     // eslint-disable-next-line no-console
     console.log("No mastercard config object found. Skipping validation.");
     return;
   }
 
+  const hasOAuth1 = config.oAuth1 !== undefined;
+  const hasOAuth2 = config.oAuth2 !== undefined;
+
+  const authMode = hasOAuth2 ? "oAuth2" : hasOAuth1 ? "oAuth1" : "legacy";
+
+  if (hasOAuth1 && hasOAuth2) {
+    UserFeedback.logError("oAuth1 and oAuth2 cannot be used together");
+    UserFeedback.showValidationErrors(mcContext.insomnia, "Errors/Warnings found in Mastercard config:", {
+      errors: [{ field: "mastercard", message: "Remove either oAuth1 or oAuth2 — only one can be configured at a time." }],
+      missingFiles: [],
+      warnings: [],
+    });
+    throw new Error("invalid config");
+  }
+
+  const keystoreP12Path =
+    authMode === "oAuth2"
+      ? undefined
+      : authMode === "oAuth1"
+      ? config.oAuth1 && config.oAuth1.keystoreP12Path
+      : config.keystoreP12Path;
+
   const { encryptionCertificate, privateKey, keyStore } = config.encryptionConfig || {};
-  const { signPrivateKey, signVerificationCertificate } = config.extensions && config.extensions.signatureConfig || {};
+  const { signPrivateKey, signVerificationCertificate } = (config.extensions && config.extensions.signatureConfig) || {};
 
   const missingFiles = Object.entries({
-    keystoreP12Path: config.keystoreP12Path,
+    keystoreP12Path,
     encryptionCertificate,
     privateKey,
     keyStore,
     signPrivateKey,
-    signVerificationCertificate
+    signVerificationCertificate,
   }).filter(([, path]) => path != null && !fs.existsSync(path)); // eslint-disable-line eqeqeq
 
-  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode);
+  const schema = getConfigSchema(config && config.encryptionConfig && config.encryptionConfig.mode, authMode);
   const result = schema.validate(config, { abortEarly: false });
 
   const errorDetails = (result.error && result.error.details) || [];
 
   const warningTypes = warningsConfig.map((w) => w.type);
-  const errors = errorDetails
-    .filter((e) => !warningTypes.includes(e.type))
-    .map((e) => ({ field: e.context && e.context.label, message: e.message }));
+  const errors = [
+    ...errorDetails
+      .filter((e) => !warningTypes.includes(e.type))
+      .map((e) => ({ field: e.context && e.context.label, message: e.message })),
+  ];
 
   const warnings = warningsConfig.flatMap((c) =>
     errorDetails
@@ -150,7 +219,7 @@ module.exports.configValidator = (context) => {
   errors.forEach((e) => UserFeedback.logError(e.message));
 
   if (errors.length || missingFiles.length) {
-    UserFeedback.showValidationErrors(context, "Errors/Warnings found in Mastercard config:", {
+    UserFeedback.showValidationErrors(mcContext.insomnia, "Errors/Warnings found in Mastercard config:", {
       errors,
       missingFiles,
       warnings,

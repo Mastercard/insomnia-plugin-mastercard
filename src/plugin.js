@@ -1,12 +1,29 @@
+const MastercardContext = require('./mastercard-context');
+const auth = require('./auth');
+const { configValidator } = require('./utils/validator');
+
+function createHook(hookFn) {
+  return async (context) => {
+    if (context.__validationFailed) return;
+    return hookFn(new MastercardContext(context));
+  };
+}
+
 module.exports = {
   request: [
-    require('./utils/validator').configValidator,
-    require('./encryption/client-encryption').request,
-    require('./signature/jws-signature').request,
-    require('./auth/oauth')
+    async (context) => {
+      try {
+        configValidator(new MastercardContext(context));
+      } catch (e) {
+        context.__validationFailed = true;
+      }
+    },
+    createHook(require('./encryption/client-encryption').request),
+    createHook(require('./signature/jws-signature').request),
+    createHook(auth.request)
   ],
   response: [
-    require('./signature/jws-signature').response,
-    require('./encryption/client-encryption').response
+    createHook(require('./signature/jws-signature').response),
+    createHook(require('./encryption/client-encryption').response)
   ]
 };

@@ -25,7 +25,7 @@ function jwsVerify(jws, expectedPayload, publicKeyPEM, signExpirationSeconds, si
   const allowedAlgorithms = new Set(signAlgorithmConstraints);
 
   if(!allowedAlgorithms.has(alg)) {
-    throw Error('Unsupported Signature verification algorithm');
+    throw new Error('Unsupported Signature verification algorithm');
   }
 
   // crit has exactly one element, and it must be "iat"

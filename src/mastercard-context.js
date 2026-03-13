@@ -54,7 +54,6 @@ function MastercardContext(context) {
     return this.isJsonHeader(header);
   };
 
-
   this.requestBody = () => {
     return context.request.getBody();
   };
@@ -67,7 +66,7 @@ function MastercardContext(context) {
     return toObj(context.request.getHeaders());
   };
 
-  this.responseHeader = () => {
+  this.encryptionResponseHeader = () => {
     const iv = this.encryptionConfig.ivHeaderName;
     const oaep = this.encryptionConfig.oaepHashingAlgorithmHeaderName;
     const key = this.encryptionConfig.encryptedKeyHeaderName;

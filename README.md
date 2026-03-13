@@ -8,8 +8,7 @@
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/Sonar/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3ASonar)
 [![](https://github.com/Mastercard/insomnia-plugin-mastercard/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/actions?query=workflow%3A%22broken+links%3F%22)
 [![](http://img.shields.io/npm/v/insomnia-plugin-mastercard.svg)](http://www.npmjs.com/package/insomnia-plugin-mastercard)
-[![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/blob/master/LICENSE)
-[![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json)
+[![](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://github.com/Mastercard/insomnia-plugin-mastercard/blob/main/LICENSE)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -19,31 +18,31 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
   * [Configuration](#configuration)
+    + [OAuth 2.0](#oauth-20)
+    + [OAuth 1.0a](#oauth-10a)
+    + [Disable Authentication](#disable-authentication)
   * [Authenticated Requests](#authenticated-requests)
   * [Encryption](#encryption)
+  * [Signature](#signature)
 - [Further Reading](#further-reading)
 
 ## Overview <a name="overview"></a>
-A plugin for consuming Mastercard APIs with support for authentication and encryption. 
-This plugin computes and adds an `Authorization` header to requests sent from [Insomnia REST Client](https://insomnia.rest/) 
-and it can be configured to automatically encrypt request and/or decrypt response payloads.
+An [Insomnia REST Client](https://insomnia.rest/) plugin for consuming [Mastercard APIs](https://developer.mastercard.com/products). It automatically computes and injects an `Authorization` header on outgoing requests, and can be configured to encrypt request payloads, decrypt response payloads, and generate or verify JWS signatures.
 
 ### Compatibility <a name="compatibility"></a>
 Insomnia v5.15.0+
 
 ### References <a name="references"></a>
-* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/security-and-authentication/using-oauth-1a-to-access-mastercard-apis/)
+* [Using OAuth 1.0a to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/authentication/using-oauth-1a-to-access-mastercard-apis/)
+* [Using OAuth 2.0 to Access Mastercard APIs](https://developer.mastercard.com/platform/documentation/authentication/using-oauth-2-to-access-mastercard-apis/)
 * [Securing Sensitive Data Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/)
 * [A Mastercard Plugin for Insomnia REST Client](https://developer.mastercard.com/blog/a-mastercard-plugin-for-insomnia-rest-client)
 
 ## Usage <a name="usage"></a>
 
 ### Prerequisites <a name="prerequisites"></a>
-Before using this library, you will need to set up a project in the [Mastercard Developers Portal](https://developer.mastercard.com). 
 
-As part of this set up, you'll receive credentials for your app:
-* A consumer key (displayed on the Mastercard Developer Portal)
-* A private request signing key (matching the public certificate displayed on the Mastercard Developer Portal)
+You will need a project in the [Mastercard Developers Portal](https://developer.mastercard.com) (See [Quick Start Guide](https://developer.mastercard.com/platform/documentation/getting-started-with-mastercard-apis/quick-start-guide/)).
 
 ### Installation <a name="installation"></a>
 
@@ -66,14 +65,17 @@ As part of this set up, you'll receive credentials for your app:
 #### One-Click Import
 To import two ready to be used "sandbox" and "production" environments:
 1. Depending on your use case, click either of these:
-   - No encryption: 
- [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json) 
+   - OAuth 1.0a: 
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace.json)
+
+   - OAuth 2.0:
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace-oauth2.json)
 
    - Mastercard Encryption: 
- [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json)  
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json)  
 
    - JWE Encryption: 
- [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json)  
+ [![](https://img.shields.io/badge/insomnia-install%20workspace-purple.svg?color=6a57d5)](https://insomnia.rest/run/?label=Import%20Mastercard%20Workspace&uri=https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json)  
 2. Click "Run Import Mastercard Workspace"
 
 Alternatively, you can:
@@ -81,9 +83,10 @@ Alternatively, you can:
 2. Click "Import Data"
 3. Click "From URL"
 4. Input either of these depending on your use case:  
-    - No encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-insomnia-workspace.json
-    - Mastercard encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json
-    - JWE encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/master/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json
+    - OAuth 1.0a: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace.json
+    - OAuth 2.0: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-insomnia-workspace-oauth2.json
+    - Mastercard encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-mastercard-encryption-insomnia-workspace.json
+    - JWE encryption: https://raw.githubusercontent.com/Mastercard/insomnia-plugin-mastercard/main/workspace/mastercard-apis-with-jwe-encryption-insomnia-workspace.json
 5. Click "Fetch and Import"
 
 ![](https://user-images.githubusercontent.com/3964455/68041294-2d966300-fcc8-11e9-887a-cfadf183c4c1.gif)
@@ -91,17 +94,38 @@ Alternatively, you can:
 #### Manual Configuration
 Update your [environment](https://support.insomnia.rest/article/18-environment-variables):
 1. Click "Manage Environments"
-2. Create a "mastercard" environment variable with your credentials:
+2. Create a "Mastercard" environment variable with your credentials.
+
+The authentication mode is determined by which key is present in your `mastercard` config:
+
+| Key present | Auth mode |
+|---|---|
+| `oAuth2` | OAuth 2.0 (FAPI 2.0 — `private_key_jwt` + DPoP) |
+| `oAuth1` | OAuth 1.0a |
+| neither (legacy) | OAuth 1.0a — root-level fields *(deprecated)* |
+
+Only one of `oAuth1` or `oAuth2` may be configured at a time.
+
+---
+
+#### OAuth 2.0 <a name="oauth-20"></a>
+
+Requires a **Client ID**, **Key ID (`kid`)**, **scopes**, and an **Authentication Key** (`.p12` keystore file with its alias and password) from the [Mastercard Developers Portal](https://developer.mastercard.com).
 
 Linux/macOS
 ```json
 {
   "mastercard": {
-    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
-    "keyAlias": "keyalias",
-    "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
-    "keystorePassword": "keystorepassword",
-    "oAuthDisabled": false,
+    "oAuth2": {
+      "clientId": "yourclientid",
+      "kid": "yourkeyid",
+      "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
+      "keyAlias": "keyalias",
+      "keystorePassword": "keystorepassword",
+      "tokenEndpoint": "https://auth.mastercard.com/oauth2/token",
+      "issuer": "https://auth.mastercard.com",
+      "scopes": ["service:scope1", "service:scope2"]
+    },
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -113,11 +137,16 @@ Windows
 ```json
 {
   "mastercard": {
-    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
-    "keyAlias": "keyalias",
-    "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
-    "keystorePassword": "keystorepassword",
-    "oAuthDisabled": false,
+    "oAuth2": {
+      "clientId": "yourclientid",
+      "kid": "yourkeyid",
+      "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
+      "keyAlias": "keyalias",
+      "keystorePassword": "keystorepassword",
+      "tokenEndpoint": "https://auth.mastercard.com/oauth2/token",
+      "issuer": "https://auth.mastercard.com",
+      "scopes": ["service:scope1", "service:scope2"]
+    },
     "appliesTo": [
       "mastercard.com",
       "api.ethocaweb.com"
@@ -126,8 +155,94 @@ Windows
 }
 ```
 
-The `oAuthDisabled` parameter is optional within the configuration settings. By default, its value is implicitly set to false, indicating that OAuth-based authorization is enabled unless explicitly specified otherwise.
-If the application do not require the use of an authorization header for secure access, this parameter must be explicitly set to true to disable OAuth functionality. In the absence of this parameter, the system assumes OAuth is enabled and proceeds accordingly.
+| Property | Description                                                                                                                                            |
+|---|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `clientId` | OAuth 2.0 client identifier                                                                                                                            |
+| `kid` | Key ID for the client authentication key                                                                                                               |
+| `keystoreP12Path` | Absolute path to the P12 keystore file                                                                                                                 |
+| `keyAlias` | Key alias within the P12 keystore                                                                                                                      |
+| `keystorePassword` | Password for the P12 keystore                                                                                                                          |
+| `tokenEndpoint` | OAuth 2.0 token endpoint URL.<br>- Sandbox: `https://sandbox.api.mastercard.com/oauth/token`<br>- Production: `https://api.mastercard.com/oauth/token` |
+| `issuer` | Authorization server issuer URL.<br>- Sandbox: `https://sandbox.api.mastercard.com`<br>- Production: `https://api.mastercard.com`                      |
+| `scopes` | Array of OAuth scopes to request                                                                                                                       |
+
+---
+
+#### OAuth 1.0a <a name="oauth-10a"></a>
+
+Requires a **Consumer Key** and a **Signing Key** (`.p12` keystore file with its alias and password) from the [Mastercard Developers Portal](https://developer.mastercard.com).
+
+Linux/macOS
+```json
+{
+  "mastercard": {
+    "oAuth1": {
+      "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+      "keyAlias": "keyalias",
+      "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
+      "keystorePassword": "keystorepassword"
+    },
+    "appliesTo": [
+      "mastercard.com",
+      "api.ethocaweb.com"
+    ]
+  }
+}
+```
+Windows
+```json
+{
+  "mastercard": {
+    "oAuth1": {
+      "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+      "keyAlias": "keyalias",
+      "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
+      "keystorePassword": "keystorepassword"
+    },
+    "appliesTo": [
+      "mastercard.com",
+      "api.ethocaweb.com"
+    ]
+  }
+}
+```
+
+| Property | Description |
+|---|---|
+| `consumerKey` | Consumer key from the Mastercard Developers Portal |
+| `keyAlias` | Key alias within the P12 keystore |
+| `keystoreP12Path` | Absolute path to the signing key P12 file |
+| `keystorePassword` | Password for the P12 keystore |
+
+---
+
+#### Legacy OAuth 1.0a (deprecated) <a name="legacy-oauth-10a-deprecated"></a>
+
+> **Deprecated.** Root-level OAuth 1.0a fields are still accepted for backwards compatibility but will be removed in a future release. Migrate to the `oAuth1` nested format shown above.
+
+```json
+{
+  "mastercard": {
+    "consumerKey": "000000000000000000000000000000000000000000000000!000000000000000000000000000000000000000000000000",
+    "keyAlias": "keyalias",
+    "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
+    "keystorePassword": "keystorepassword",
+    "appliesTo": [
+      "mastercard.com",
+      "api.ethocaweb.com"
+    ]
+  }
+}
+```
+
+---
+
+#### Disable Authentication
+
+The `oAuthDisabled` property is optional and can be placed at the `mastercard` level regardless of auth mode. By default it is `false`. Set it to `true` to skip adding an `Authorization` header entirely.
+
+**See more configuration examples** [here](https://github.com/Mastercard/insomnia-plugin-mastercard/blob/main/docs/configuration-examples.md).
+
 ### Authenticated Requests <a name="authenticated-requests"></a>
 From now on, an `Authorization` header will be automatically added to every request sent to Mastercard:
 
@@ -197,7 +312,7 @@ As an alternative to providing the `privateKey` in the `encryptionConfig`, you c
   }
 }
 ```
-### SIGNATURE <a name="signature"></a>
+### Signature <a name="signature"></a>
 This plugin can take care of generating jws signature creation and/or jws signature verification. To enable jws signing support,
 you need to configure in the environment the `signatureConfig` property.
 
@@ -228,9 +343,6 @@ Here's a quick example for SignatureConfig which is part of extensions:
   }
 }
 ```
-
-
-[See more examples here](docs/configuration-examples.md).
 
 Both Mastercard encryption and JWE encryption are supported.   
 For more details on the encryption configurations, checkout these links:  
