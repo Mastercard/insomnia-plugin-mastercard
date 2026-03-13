@@ -15,5 +15,7 @@ jobs:
       - name: Link Checker
         uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: ". --exclude '^http://npmjs\.org' --exclude '^http://www\.npmjs\.com'"
+          args: >-
+            --exclude '^https?://(www\.)?npmjs\.org/'
+            --exclude '^https?://(www\.)?npmjs\.com/'
           fail: true
