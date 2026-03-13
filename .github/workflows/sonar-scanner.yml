@@ -27,7 +27,7 @@ jobs:
           node-version: 16
       - name: Build with npm
         run: |
-          npm ci
+          npm ci --ignore-scripts
           npm run build --if-present
           npm test
           npm run coverage
