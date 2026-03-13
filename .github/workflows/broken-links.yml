@@ -18,4 +18,5 @@ jobs:
           args: >-
             --exclude '^https?://(www\.)?npmjs\.org/'
             --exclude '^https?://(www\.)?npmjs\.com/'
+            "."
           fail: true
