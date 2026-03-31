@@ -100,4 +100,40 @@ describe('MastercardContext', () => {
     assert.strictEqual(new MastercardContext(ctx).isJsonRequest(), true);
     assert.strictEqual(new MastercardContext(ctx).isJsonResponse(), true);
   });
+
+  describe('requestBodyText', () => {
+    const cases = [
+      {
+        name: 'returns null when body is not set',
+        body: null,
+        header: undefined,
+        expected: null
+      },
+      {
+        name: 'returns raw text for JSON body',
+        body: '{"hello":"world"}',
+        header: 'application/json',
+        expected: '{"hello":"world"}'
+      },
+      {
+        name: 'serializes params for form-urlencoded body',
+        body: [
+          { name: 'alpha', value: 'one', disabled: false },
+          { name: 'beta space', value: 'two space', disabled: false },
+          { name: 'skipme', value: 'nope', disabled: true }
+        ],
+        header: 'application/x-www-form-urlencoded',
+        expected: `alpha=one&beta%20space=two%20space` // url encoded
+      }
+    ];
+
+    cases.forEach(({ name, body, header, expected }) => {
+      it(name, async () => {
+        const ctx = context({ body, header });
+        const mc = new MastercardContext(ctx);
+
+        assert.strictEqual(mc.requestBodyText(), expected);
+      });
+    });
+  });
 });

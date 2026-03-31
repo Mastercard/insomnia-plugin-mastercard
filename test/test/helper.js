@@ -6,7 +6,16 @@ mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHea
       getEnvironmentVariable: () => configJson,
       getMethod: () => method,
       getBody: () => {
-        return { text: body };
+        if(contentTypeHeader.includes('application/json')) {
+          return { text: body };
+        }
+        
+        if(contentTypeHeader.includes('application/x-www-form-urlencoded')) {
+          return { params: body };
+        }
+
+        return {};
+
       },
       setHeader: (name, value) => mockHeader(name, value),
       getHeader: () => contentTypeHeader,

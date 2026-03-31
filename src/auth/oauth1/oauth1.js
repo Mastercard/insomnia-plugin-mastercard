@@ -23,7 +23,7 @@ function signRequest(mcContext, authConfig) {
   return oauth.getAuthorizationHeader(
     URL.parse(mcContext.url),
     insomnia.request.getMethod(),
-    mcContext.requestBody().text,
+    mcContext.requestBodyText(),
     authConfig.consumerKey,
     signingKey
   );

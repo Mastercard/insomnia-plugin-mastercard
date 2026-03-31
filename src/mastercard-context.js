@@ -58,6 +58,28 @@ function MastercardContext(context) {
     return context.request.getBody();
   };
 
+  this.requestBodyText = () => {
+    const body = context.request.getBody();
+    if(body == null) { // eslint-disable-line eqeqeq
+      return null;
+    }
+
+    // for application/json
+    if(body.text) {
+      return body.text;
+    }
+
+    // for application/x-www-form-urlencoded
+    if (Array.isArray(body.params)) {
+      return body.params
+        .filter(p => !p.disabled)
+        .map(p => `${encodeURIComponent(p.name)}=${encodeURIComponent(p.value)}`)
+        .join('&');
+    }
+
+    return null;
+  };
+
   this.responseBody = () => {
     return context.response.getBodyStream();
   };
