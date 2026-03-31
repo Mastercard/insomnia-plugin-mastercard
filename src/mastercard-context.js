@@ -58,6 +58,10 @@ function MastercardContext(context) {
     return context.request.getBody();
   };
 
+  /**
+   * Returns the request body as a text regardless of content type.
+   * @returns {string|null}
+   */
   this.requestBodyText = () => {
     const body = context.request.getBody();
     if(body == null) { // eslint-disable-line eqeqeq
