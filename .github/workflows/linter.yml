@@ -12,11 +12,12 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 13
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v7
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
         with:
-          node-version: 13
+          node-version: 24
+          cache: 'npm'
       - name: Run eslint
         run: |
           npm ci --ignore-scripts

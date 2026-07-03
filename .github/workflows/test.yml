@@ -1,0 +1,29 @@
+name: Test
+'on':
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+          - 20.x
+          - 22.x
+          - 24.x
+    steps:
+      - uses: actions/checkout@v7
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '${{ matrix.node-version }}'
+          cache: 'npm'
+      - name: Test
+        run: |
+          npm ci --ignore-scripts
+          npm test
