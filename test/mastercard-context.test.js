@@ -1,8 +1,6 @@
 const assert = require('assert');
 const context = require('./test/helper').context;
 const MastercardContext = require('../src/mastercard-context');
-const sinon = require('sinon');
-const { expect } = require("chai");
 
 describe('MastercardContext', () => {
 

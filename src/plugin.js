@@ -14,7 +14,7 @@ module.exports = {
     async (context) => {
       try {
         configValidator(new MastercardContext(context));
-      } catch (e) {
+      } catch {
         context.__validationFailed = true;
       }
     },

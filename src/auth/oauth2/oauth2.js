@@ -46,7 +46,7 @@ module.exports.request = async (mcContext) => {
       mcContext.insomnia.request.setHeader(name, value);
     });
   } catch (err) {
-    window.alert(err.message); // eslint-disable-line no-undef
-    throw new Error(err);
+    window.alert(err.message);
+    throw new Error(err.message, { cause: err });
   }
 };

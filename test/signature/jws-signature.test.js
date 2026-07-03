@@ -28,8 +28,8 @@ describe('JWS', () => {
         innerHTML: '',
         textContent: '',
       })
-    }
-  })
+    };
+  });
 
     const mockResponse = (_path) => {
       const readFileSync = fs.readFileSync;
@@ -44,7 +44,7 @@ describe('JWS', () => {
 
   after(() => {
     global.document = originalDocument;
-  })
+  });
 
   it('should sign the request', async () => {
     const setHeader = sinon.spy(contextJWS.request, 'setHeader');

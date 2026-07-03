@@ -1,4 +1,4 @@
-mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHeader, configJson) => {
+const mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHeader, configJson) => {
   return {
     request: {
       getParameters: () => params,

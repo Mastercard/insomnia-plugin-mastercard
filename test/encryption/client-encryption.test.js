@@ -75,12 +75,12 @@ describe('Encryption', () => {
         innerHTML: '',
         textContent: '',
       })
-    }
-  })
+    };
+  });
 
   after(() => {
     global.document = originalDocument;
-  })
+  });
 
   it('should encrypt the request', async () => {
 
@@ -230,7 +230,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept non Mastercard requests', async () => {
-    let ctx = helper.context({ url: 'https://api.foo.com/bar' });
+    const ctx = helper.context({ url: 'https://api.foo.com/bar' });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
@@ -241,7 +241,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept when body is not defined', async () => {
-    let ctx = helper.context({ body: null });
+    const ctx = helper.context({ body: null });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
@@ -252,7 +252,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept when non json request', async () => {
-    let ctx = helper.context({ header: 'application/html' });
+    const ctx = helper.context({ header: 'application/html' });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
@@ -277,7 +277,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept non Mastercard responses', async () => {
-    let ctx = helper.context({ url: 'https://api.foo.com/bar' });
+    const ctx = helper.context({ url: 'https://api.foo.com/bar' });
     const setBody = sinon.spy(ctx.response, 'setBody');
 
     await plugin.responseHooks[1](ctx); // decrypt
@@ -286,7 +286,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept when body is not defined in response', async () => {
-    let ctx = helper.context({ body: null });
+    const ctx = helper.context({ body: null });
     const setBody = sinon.spy(ctx.response, 'setBody');
 
     await plugin.responseHooks[1](ctx); // decrypt
@@ -295,7 +295,7 @@ describe('Encryption', () => {
   });
 
   it('should not intercept when non json response', async () => {
-    let ctx = helper.context({ header: 'application/html', body: '{}' });
+    const ctx = helper.context({ header: 'application/html', body: '{}' });
     sinon.mock(ctx.response).expects('getBodyStream').returns('{}');
 
     const setBody = sinon.spy(ctx.response, 'setBody');
@@ -332,7 +332,7 @@ describe('Encryption', () => {
   });
 
   it('should not ovveride request if encryption fails', async () => {
-    let ctx = helper.context({ body: "invalid json" });
+    const ctx = helper.context({ body: "invalid json" });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
     const setBodyText = sinon.spy(ctx.request, 'setBodyText');
 
