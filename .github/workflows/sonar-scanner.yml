@@ -18,22 +18,21 @@ jobs:
           github.event.pull_request.head.repo.full_name == github.repository ||
           github.event_name != 'pull_request_target') }}
         run: echo "Unsecure PR, must be labelled with the 'safe' label, then run the workflow again" && exit 1
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Use Node.js 16
-        uses: actions/setup-node@v1
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
         with:
-          node-version: 16
-      - name: Build with npm
+          node-version: 22
+          cache: 'npm'
+      - name: Test & Coverage
         run: |
           npm ci --ignore-scripts
-          npm run build --if-present
           npm test
           npm run coverage
-          cat .nyc_output/coverage.lcov
       - name: SonarCloud
-        uses: sonarsource/sonarcloud-github-action@ba3875ecf642b2129de2b589510c81a8b53dbf4e
+        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
@@ -48,3 +47,4 @@ jobs:
             -Dsonar.pullrequest.branch=${{ github.head_ref }}
             -Dsonar.pullrequest.base=${{ github.base_ref }}
             -Dsonar.scm.revision=${{ github.event.pull_request.head.sha }}
+

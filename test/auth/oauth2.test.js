@@ -5,7 +5,6 @@ const oauth2 = require('../../src/auth/oauth2/oauth2');
 const { OAuth2ClientBuilder } = require('@mastercard/oauth2-client-js');
 
 const VALID_P12_PATH = path.resolve('test/__res__/test_key_container.p12');
-const MISSING_P12_PATH = '/no/such/file.p12';
 
 function makeMcContext(overrides = {}) {
   const setHeaderSpy = sinon.spy();
@@ -65,7 +64,7 @@ describe('oauth2.request', () => {
 
   it('shows window.alert with the original message and throws error', async () => {
     let alertMessage;
-    window = { alert: (msg) => { alertMessage = msg; } }; // eslint-disable-line no-undef
+    global.window = { alert: (msg) => { alertMessage = msg; } };
 
     const authError = new Error('Token endpoint unreachable');
     sandbox.stub(OAuth2ClientBuilder.prototype, 'build').returns({

@@ -2,7 +2,6 @@ const assert = require('assert');
 const { v4: uuidv4 } = require('uuid');
 const plugin = require('../../../index');
 const sinon = require('sinon');
-const { mastercard: config } = require('../../__res__/config.json');
 const context = require('../../test/helper').context;
 
 describe('OAuth', () => {
@@ -11,7 +10,7 @@ describe('OAuth', () => {
 
   it('should sign the request and set the Authorization header', async () => {
     let name, value;
-    let ctx = context();
+    const ctx = context();
     ctx.request.setHeader = (_name, _value) => {
       name = _name;
       value = _value;
@@ -24,7 +23,7 @@ describe('OAuth', () => {
   });
 
   it('should not intercept non Mastercard requests', async () => {
-    let ctx = context({ url: 'https://api.foo.com/bar' });
+    const ctx = context({ url: 'https://api.foo.com/bar' });
     const setHeader = sinon.spy(ctx.request, 'setHeader');
 
     await plugin.requestHooks[oauthHookPosition](ctx); // signer
@@ -33,13 +32,13 @@ describe('OAuth', () => {
   });
 
   it('should throw Error when using default p12s', async () => {
-    window = {
+    global.window = {
       alert: () => {
       }
     };
     const config = { ...require('../../__res__/config.json').mastercard };
     for (const item of ['/path/to/sandbox-signing-key.p12', '/path/to/production-signing-key.p12']) {
-      config.keystoreP12Path = '/path/to/sandbox-signing-key.p12';
+      config.keystoreP12Path = item;
       const ctx = context({ config });
       await assert.rejects(
         async () => {
@@ -47,14 +46,14 @@ describe('OAuth', () => {
         },
         {
           name: 'Error',
-          message: 'Error: Please update the keystoreP12Path property from the default in the Mastercard environment settings'
+          message: 'Please update the keystoreP12Path property from the default in the Mastercard environment settings'
         }
       );
     }
   });
 
   it('should throw Error when using default consumerKey', async () => {
-    window = {
+    global.window = {
       alert: () => {
       }
     };
@@ -67,13 +66,13 @@ describe('OAuth', () => {
       },
       {
         name: 'Error',
-        message: 'Error: Please update the consumerKey property from the default in the Mastercard environment settings'
+        message: 'Please update the consumerKey property from the default in the Mastercard environment settings'
       }
     );
   });
 
   it('should throw Error when p12 not found', async () => {
-    window = {
+    global.window = {
       alert: () => {
       }
     };
@@ -87,7 +86,7 @@ describe('OAuth', () => {
       },
       {
         name: 'Error',
-        message: `Error: No P12 file found at location: ${path}`
+        message: `No P12 file found at location: ${path}`
       }
     );
   });

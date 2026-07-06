@@ -192,7 +192,7 @@ describe(`${configValidator.name}()`, () => {
 
       try {
         configValidator(context);
-      } catch (e) {
+      } catch {
         // expected, ignore it
       }
 
@@ -203,11 +203,11 @@ describe(`${configValidator.name}()`, () => {
   });
 
   [
-    ["invalidPath", , , , 1, ["keystoreP12Path"]],
-    [, "invalidPath", , , 1, ["encryptionCertificate"]],
-    [, , "invalidPath", , 1, ["privateKey"]],
-    [, , , "invalidPath", 1, ["keyStore"]],
-    ["invalidPath", "invalidPath", , , 2, ["keystoreP12Path", "encryptionCertificate"]],
+    ["invalidPath", undefined, undefined, undefined, 1, ["keystoreP12Path"]],
+    [undefined, "invalidPath", undefined, undefined, 1, ["encryptionCertificate"]],
+    [undefined, undefined, "invalidPath", undefined, 1, ["privateKey"]],
+    [undefined, undefined, undefined, "invalidPath", 1, ["keyStore"]],
+    ["invalidPath", "invalidPath", undefined, undefined, 2, ["keystoreP12Path", "encryptionCertificate"]],
   ].forEach(([keystoreP12Path, encryptionCertificate, privateKey, keyStore, expectedMissingFiles, expectedKeys]) => {
     it("should produce error when a file path is invalid", () => {
       const context = mockContext({
@@ -221,7 +221,7 @@ describe(`${configValidator.name}()`, () => {
 
       try {
         configValidator(context);
-      } catch (e) {
+      } catch {
         // expected
       }
       const [, , { missingFiles }] = showValidationErrorsStub.firstCall.args;
@@ -231,10 +231,10 @@ describe(`${configValidator.name}()`, () => {
   });
 
   [
-    [validCert, , ,],
-    [, validCert, ,],
-    [, , validCert],
-    [, , , validCert],
+    [validCert, undefined, undefined, undefined],
+    [undefined, validCert, undefined, undefined],
+    [undefined, undefined, validCert, undefined],
+    [undefined, undefined, undefined, validCert],
   ].forEach(([keystoreP12Path, encryptionCertificate, privateKey, keyStore]) => {
     it("should not produce error when file paths are valid", () => {
       const context = mockContext({
@@ -252,10 +252,10 @@ describe(`${configValidator.name}()`, () => {
   });
 
   [
-    ["a-private-key", "a-key-store", , , "privateKey and keyStore were specified together, only one of them should be"],
+    ["a-private-key", "a-key-store", undefined, undefined, "privateKey and keyStore were specified together, only one of them should be"],
     [
-      ,
-      ,
+      undefined,
+      undefined,
       "the-public-key-fingerprint",
       "certificate",
       "publicKeyFingerprint and publicKeyFingerprintType were specified together, only one of them should be",
@@ -554,7 +554,7 @@ describe(`${configValidator.name}()`, () => {
 
       try {
         configValidator(context);
-      } catch (e) {
+      } catch {
         // may throw for other reasons (e.g. missing files), ignore
       }
 
@@ -567,9 +567,9 @@ describe(`${configValidator.name}()`, () => {
   );
 
   [
-    ["invalidPath", , 1, ["keystoreP12Path"]],
-    [, "invalidPath", 1, ["keystoreP12Path"]],
-  ].forEach(([legacyPath, oAuth1Path, expectedMissingFiles, expectedKeys]) => {
+    ["invalidPath", undefined],
+    [undefined, "invalidPath"],
+  ].forEach(([legacyPath, oAuth1Path]) => {
     it("should produce error when oAuth1.keystoreP12Path is invalid", () => {
       const context = mockContext(
         oAuth1Path
@@ -579,7 +579,7 @@ describe(`${configValidator.name}()`, () => {
 
       try {
         configValidator(context);
-      } catch (e) {
+      } catch {
         // expected
       }
       const [, , { missingFiles }] = showValidationErrorsStub.firstCall.args;

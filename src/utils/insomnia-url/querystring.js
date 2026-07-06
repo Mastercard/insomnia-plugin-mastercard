@@ -114,19 +114,19 @@ strict) => {
         // NOTE: This only splits on first equals sign. '1=2=3' --> ['1', '2=3']
         const [encodedName, ...encodedValues] = stringPair.split('=');
         const encodedValue = encodedValues.join('=');
-        let name = '';
+        let name;
         try {
             name = decodeURIComponent(encodedName || '');
         }
-        catch (error) {
+        catch {
             // Just leave it
             name = encodedName;
         }
-        let value = '';
+        let value;
         try {
             value = decodeURIComponent(encodedValue || '');
         }
-        catch (error) {
+        catch {
             // Just leave it
             value = encodedValue;
         }
