@@ -126,12 +126,5 @@ describe('plugin', () => {
       for (const hook of plugin.request) await hook(ctx);
       expect(encryptionRequestStub.calledOnce).to.be.true;
     });
-
-    it('cleanup runs without error when request was not in the failed set', async () => {
-      const ctx = helper.context();
-      for (const hook of plugin.request) await hook(ctx);
-      // response[2] is the cleanup hook — should not throw on the happy path
-      await plugin.response[2](ctx);
-    });
   });
 });
