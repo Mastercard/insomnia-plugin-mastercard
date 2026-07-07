@@ -34,7 +34,16 @@ class UserFeedback {
         const body = document.createElement('div');
         content.forEach(e => body.appendChild(e));
 
-        context.app.dialog(title, body);
+        const { version } = context.app.getInfo();
+        const major = parseInt(version.split('.')[0], 10);
+
+        if (major >= 13) {
+            // v13+: plugins run in a hidden background window; DOM nodes cannot
+            // cross the IPC boundary, so fall back to plain-text alert
+            context.app.alert(title, body.textContent);
+        } else {
+            context.app.dialog(title, body);
+        }
     }
 
     static unorderedList(headingText, listItems) {
