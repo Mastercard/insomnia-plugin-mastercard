@@ -2,31 +2,18 @@ const { expect } = require("chai");
 const sinon = require("sinon");
 const { UserFeedback } = require("../../src/utils/user-feedback");
 const packageJson = require("../../package.json");
-const { JSDOM } = require("jsdom");
 
 describe(`${UserFeedback.name}`, () => {
-  const originalDocument = global.document;
-  const originalHeadingElement = global.HTMLHeadingElement;
-  const originalUListElement = global.HTMLUListElement;
   let sandbox;
-  let mockDocument;
   let mockContext;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-    mockDocument = dom.window.document;
-
-    global.document = mockDocument;
-    global.HTMLHeadingElement = dom.window.HTMLHeadingElement;
-    global.HTMLUListElement = dom.window.HTMLUListElement;
-
     mockContext = {
       app: {
-        dialog: sinon.stub(),
+        alert: sinon.stub(),
       },
     };
-
     sandbox.stub(console, "error");
     sandbox.stub(console, "warn");
     sandbox.stub(console, "log");
@@ -34,9 +21,6 @@ describe(`${UserFeedback.name}`, () => {
 
   afterEach(() => {
     sandbox.restore();
-    global.document = originalDocument;
-    global.HTMLHeadingElement = originalHeadingElement;
-    global.HTMLUListElement = originalUListElement;
   });
 
   describe(`${UserFeedback.showUnexpectedError.name}()`, () => {
@@ -44,21 +28,21 @@ describe(`${UserFeedback.name}`, () => {
       ["some error", "some error"],
       [undefined, "Unknown error"],
     ].forEach(([errorMessage, expectedMessage]) => {
-      it("shows dialog with error message as expected", () => {
+      it(`shows alert with message: "${expectedMessage}"`, () => {
         const error = new Error(errorMessage);
         const title = "some title";
 
         UserFeedback.showUnexpectedError(mockContext, title, error);
 
-        expect(mockContext.app.dialog.calledOnce).to.be.true;
-        expect(mockContext.app.dialog.firstCall.args[0]).to.equal(title);
-        expect(mockContext.app.dialog.firstCall.args[1].textContent).to.equal(expectedMessage);
+        expect(mockContext.app.alert.calledOnce).to.be.true;
+        expect(mockContext.app.alert.firstCall.args[0]).to.equal(title);
+        expect(mockContext.app.alert.firstCall.args[1]).to.equal(expectedMessage);
       });
     });
   });
 
   describe(`${UserFeedback.showValidationErrors.name}()`, () => {
-    it("shows dialog with errors, warnings and missing files as expected", () => {
+    it("shows alert containing errors, warnings and missing files", () => {
       const title = "some title";
       const errorMessage = "error-message";
       const warningMessage = "warning-message";
@@ -71,53 +55,36 @@ describe(`${UserFeedback.name}`, () => {
         missingFiles: [[missingFileKey, missingFilePath]],
       });
 
-      expect(mockContext.app.dialog.calledOnce).to.be.true;
-      expect(mockContext.app.dialog.firstCall.args[0]).to.equal(title);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(errorMessage);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(warningMessage);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(missingFileKey);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(missingFilePath);
-    });
-
-    it("shows dialog with errors, warnings and missing files as expected", () => {
-      const title = "some title";
-      const errorMessage = "error-message";
-      const warningMessage = "warning-message";
-      const missingFileKey = "missing-file-key";
-      const missingFilePath = "missing-file-path";
-
-      UserFeedback.showValidationErrors(mockContext, title, {
-        errors: [{ field: "error-field", message: errorMessage }],
-        warnings: [{ field: "warning-field", message: warningMessage }],
-        missingFiles: [[missingFileKey, missingFilePath]],
-      });
-
-      expect(mockContext.app.dialog.calledOnce).to.be.true;
-      expect(mockContext.app.dialog.firstCall.args[0]).to.equal(title);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(errorMessage);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(warningMessage);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(missingFileKey);
-      expect(mockContext.app.dialog.firstCall.args[1].textContent).to.include(missingFilePath);
+      expect(mockContext.app.alert.calledOnce).to.be.true;
+      expect(mockContext.app.alert.firstCall.args[0]).to.equal(title);
+      const message = mockContext.app.alert.firstCall.args[1];
+      expect(message).to.include(errorMessage);
+      expect(message).to.include(warningMessage);
+      expect(message).to.include(missingFileKey);
+      expect(message).to.include(missingFilePath);
     });
   });
 
-  describe(`${UserFeedback.unorderedList.name}()`, () => {
-    it("returns heading and ul as expected", () => {
-      const [heading, ul] = UserFeedback.unorderedList("the-heading", ["item1", "item2"]);
-
-      expect(heading).instanceOf(HTMLHeadingElement);
-      expect(heading.textContent).to.equal("the-heading");
-
-      expect(ul).instanceOf(HTMLUListElement);
-      const ulContent = Array.from(ul.children).map((li) => li.textContent);
-      expect(ulContent).to.deep.equal(["item1", "item2"]);
+  describe(`${UserFeedback.showAlert.name}() via window.showAlert`, () => {
+    beforeEach(() => {
+      // simulate Insomnia renderer environment where window.showAlert is defined
+      global.window = { showAlert: sinon.stub() };
     });
 
-    it("does not return heading element if heading is empty", () => {
-      const response = UserFeedback.unorderedList(null, ["item1, item2"]);
+    afterEach(() => {
+      delete global.window;
+    });
 
-      expect(response).to.have.length(1);
-      expect(response[0]).instanceOf(HTMLUListElement);
+    it("calls window.showAlert with force-pre-wrap bodyClassName", () => {
+      UserFeedback.showAlert(mockContext, "title", "line1\nline2");
+
+      expect(global.window.showAlert.calledOnce).to.be.true;
+      expect(global.window.showAlert.firstCall.args[0]).to.deep.equal({
+        title: "title",
+        message: "line1\nline2",
+        bodyClassName: "force-pre-wrap",
+      });
+      expect(mockContext.app.alert.called).to.be.false;
     });
   });
 
