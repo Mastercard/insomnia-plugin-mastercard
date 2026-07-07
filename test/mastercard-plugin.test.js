@@ -11,7 +11,7 @@ describe('Plugin Hook', () => {
   });
 
   it('plugin should load and provide response encryption function', () => {
-    assert.strictEqual(plugin.responseHooks.length, 2);
+    assert.strictEqual(plugin.responseHooks.length, 3);
     assert.ok(plugin.responseHooks[0] instanceof Function);
     assert.ok(plugin.responseHooks[1] instanceof Function);
   });

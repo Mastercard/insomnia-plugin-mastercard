@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const helper = require('./test/helper');
 
 describe('plugin', () => {
   let sandbox;
@@ -8,24 +9,6 @@ describe('plugin', () => {
   let jwsRequestStub, jwsResponseStub;
   let authRequestStub;
   let configValidatorStub;
-
-  const REQUEST_ID = 'test-request-id';
-
-  function makeContext(id = REQUEST_ID) {
-    // Only the fields plugin.js and MastercardContext constructor actually use.
-    // Downstream hooks (encryption, jws, auth) are stubbed so their internals never run.
-    return {
-      request: {
-        getId: () => id,
-        getUrl: () => 'https://api.mastercard.com/test',
-        getEnvironmentVariable: () => null,
-        getMethod: () => 'POST',
-        getHeader: () => null,
-        getParameters: () => [],
-      },
-      response: { getRequestId: () => id },
-    };
-  }
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -67,7 +50,7 @@ describe('plugin', () => {
 
   describe('request hooks', () => {
     it('calls downstream hooks when validation passes', async () => {
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
 
       expect(configValidatorStub.calledOnce).to.be.true;
@@ -78,7 +61,7 @@ describe('plugin', () => {
 
     it('skips downstream hooks when validation fails', async () => {
       configValidatorStub.throws(new Error('invalid config'));
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
 
       expect(configValidatorStub.calledOnce).to.be.true;
@@ -89,7 +72,7 @@ describe('plugin', () => {
 
     it('downstream hooks receive a MastercardContext instance', async () => {
       const MastercardContext = require('../src/mastercard-context');
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
 
       const [mcCtx] = encryptionRequestStub.firstCall.args;
@@ -97,7 +80,7 @@ describe('plugin', () => {
     });
 
     it('clears any previously failed state for the ID before running validation', async () => {
-      const ctx = makeContext();
+      const ctx = helper.context();
 
       // First run: validation fails, ID is added to the failed set
       configValidatorStub.throws(new Error('invalid config'));
@@ -113,7 +96,7 @@ describe('plugin', () => {
 
   describe('response hooks', () => {
     it('calls response hooks when request validation passed', async () => {
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
       for (const hook of plugin.response) await hook(ctx);
 
@@ -123,7 +106,7 @@ describe('plugin', () => {
 
     it('skips response hooks when request validation failed', async () => {
       configValidatorStub.throws(new Error('invalid config'));
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
       for (const hook of plugin.response) await hook(ctx);
 
@@ -134,7 +117,7 @@ describe('plugin', () => {
 
     it('cleanup removes the failed ID so a subsequent request with the same ID is not blocked', async () => {
       configValidatorStub.throws(new Error('invalid config'));
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
       for (const hook of plugin.response) await hook(ctx);
 
@@ -145,7 +128,7 @@ describe('plugin', () => {
     });
 
     it('cleanup runs without error when request was not in the failed set', async () => {
-      const ctx = makeContext();
+      const ctx = helper.context();
       for (const hook of plugin.request) await hook(ctx);
       // response[2] is the cleanup hook — should not throw on the happy path
       await plugin.response[2](ctx);
