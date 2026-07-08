@@ -11,6 +11,13 @@
     "url": "https://github.com/Mastercard/insomnia-plugin-mastercard-auth"
   },
   "main": "index.js",
+  "files": [
+    "src",
+    "index.js",
+    "LICENSE",
+    "README.md",
+    "docs"
+  ],
   "insomnia": {
     "name": "mastercard-auth",
     "displayName": "Mastercard API",
