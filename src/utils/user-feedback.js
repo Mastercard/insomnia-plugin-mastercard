@@ -3,71 +3,47 @@ const prefix = require('../../package.json').name;
 class UserFeedback {
 
     static showUnexpectedError(context, title, error) {
-        const messageStr = error.message || "Unknown error";
-        const message = document.createElement('p');
-        message.innerHTML = messageStr;
-
-        UserFeedback.showAlert(context, title, [message]);
+        const message = error.message || "Unknown error";
+        UserFeedback.showAlert(context, title, message);
     }
 
-    static showValidationErrors(context, title, { missingFiles, errors, warnings}) {
-        const elements = [];
-        if(errors && errors.length) {
-            const htmlFormattedErrors = errors.map(e => e.field ? e.message.replace(e.field, `<strong>${e.field}</strong>`) : e.message);
-            elements.push(...UserFeedback.unorderedList('Errors', htmlFormattedErrors));
+    static showValidationErrors(context, title, { missingFiles, errors, warnings }) {
+        const lines = [];
+
+        if (errors && errors.length) {
+            lines.push('Errors:');
+            errors.forEach(e => lines.push(`  • ${e.message}`));
         }
 
-        if(missingFiles && missingFiles.length) {
-            const fileErrors = missingFiles.map(([key, path]) => `No file found for entry <strong>${key}: ${path}</strong>`);
-            elements.push(...UserFeedback.unorderedList(null, fileErrors));
+        if (missingFiles && missingFiles.length) {
+            missingFiles.forEach(([key, path]) => lines.push(`  • No file found for entry ${key}: ${path}`));
         }
 
-        if(warnings && warnings.length) {
-            const htmlFormattedWarnings = warnings.map(w => w.field ? w.message.replace(w.field, `<strong>${w.field}</strong>`): w.message);
-            elements.push(...UserFeedback.unorderedList('Warnings', htmlFormattedWarnings));
+        if (warnings && warnings.length) {
+            lines.push('Warnings:');
+            warnings.forEach(w => lines.push(`  • ${w.message}`));
         }
 
-        UserFeedback.showAlert(context, title, elements);
-    };
-
-    static showAlert(context, title, content) {
-        const body = document.createElement('div');
-        content.forEach(e => body.appendChild(e));
-
-        context.app.dialog(title, body);
+        UserFeedback.showAlert(context, title, lines.join('\n'));
     }
 
-    static unorderedList(headingText, listItems) {
-        const ul = document.createElement('ul');
-        ul.style.listStyleType = "disc";
-        ul.style.paddingLeft = "20px";
-        listItems.forEach(it => {
-                const li = document.createElement("li");
-                li.innerHTML = it;
-                ul.appendChild(li);
-         });
-
-         if(headingText) {
-            const heading = document.createElement("h4");
-            heading.textContent = headingText;
-            heading.style.fontSize = "1.2em"; 
-            heading.style.fontWeight = "bold";
-
-            return [heading, ul];
-         }
-
-         return [ul];
+    static showAlert(context, title, message) {
+        if (typeof window !== 'undefined' && typeof window.showAlert === 'function') {
+            window.showAlert({ title, message, bodyClassName: 'force-pre-wrap' });
+        } else {
+            context.app.alert(title, message);
+        }
     }
 
     static logError(message, error) {
         // eslint-disable-next-line no-console
         console.error(`${prefix}: ${message}`, error);
-    };
+    }
 
     static logWarning(message) {
         // eslint-disable-next-line no-console
         console.warn(`${prefix}: ${message}`);
-    };
+    }
 
     static logMessage(message) {
         // eslint-disable-next-line no-console

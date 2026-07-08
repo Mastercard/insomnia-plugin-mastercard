@@ -1,6 +1,8 @@
 const mockContext = (method, url, params, contentTypeHeader, getHeaders, body, mockHeader, configJson) => {
+  const requestId = 'test-request-id';
   return {
     request: {
+      getId: () => requestId,
       getParameters: () => params,
       getUrl: () => url,
       getEnvironmentVariable: () => configJson,
@@ -15,6 +17,7 @@ const mockContext = (method, url, params, contentTypeHeader, getHeaders, body, m
       }
     },
     response: {
+      getRequestId: () => requestId,
       getBodyStream: () => {
       },
       getHeader: () => contentTypeHeader,
@@ -23,7 +26,7 @@ const mockContext = (method, url, params, contentTypeHeader, getHeaders, body, m
       hasHeader: () => true
     },
     app: {
-      dialog: () => {}
+      alert: () => {}
     }
   };
 };

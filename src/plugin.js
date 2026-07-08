@@ -2,9 +2,11 @@ const MastercardContext = require('./mastercard-context');
 const auth = require('./auth');
 const { configValidator } = require('./utils/validator');
 
+const validationFailed = new Set();
+
 function createHook(hookFn) {
   return async (context) => {
-    if (context.__validationFailed) return;
+    if (validationFailed.has(context.request.getId())) return;
     return hookFn(new MastercardContext(context));
   };
 }
@@ -12,10 +14,12 @@ function createHook(hookFn) {
 module.exports = {
   request: [
     async (context) => {
+      const id = context.request.getId();
+      validationFailed.delete(id);
       try {
         configValidator(new MastercardContext(context));
       } catch {
-        context.__validationFailed = true;
+        validationFailed.add(id);
       }
     },
     createHook(require('./encryption/client-encryption').request),
@@ -24,6 +28,9 @@ module.exports = {
   ],
   response: [
     createHook(require('./signature/jws-signature').response),
-    createHook(require('./encryption/client-encryption').response)
+    createHook(require('./encryption/client-encryption').response),
+    async (context) => {
+      validationFailed.delete(context.response.getRequestId()); // cleanup
+    },
   ]
 };

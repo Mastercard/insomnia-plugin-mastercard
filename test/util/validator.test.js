@@ -3,18 +3,9 @@ const { configValidator } = require("../../src/utils/validator");
 const { expect } = require("chai");
 const { UserFeedback } = require("../../src/utils/user-feedback");
 const path = require("path");
-const { JSDOM } = require("jsdom");
 
 describe(`${configValidator.name}()`, () => {
   const validCert = path.resolve("test", "__res__", "test_certificate.cert");
-  const originalDocument = global.document;
-  before(() => {
-    global.document = new JSDOM("<!DOCTYPE html><html><body></body></html>").window.document;
-  });
-
-  after(() => {
-    global.document = originalDocument;
-  });
 
   let sandbox;
 
