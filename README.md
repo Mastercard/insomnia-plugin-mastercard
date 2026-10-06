@@ -122,7 +122,7 @@ Linux/macOS
       "keystoreP12Path": "/path/to/sandbox-signing-key.p12",
       "keyAlias": "keyalias",
       "keystorePassword": "keystorepassword",
-      "tokenEndpoint": "https://auth.mastercard.com/oauth2/token",
+      "tokenEndpoint": "https://auth.mastercard.com/oauth/token",
       "issuer": "https://auth.mastercard.com",
       "scopes": ["service:scope1", "service:scope2"]
     },
@@ -143,7 +143,7 @@ Windows
       "keystoreP12Path": "C:\\path\\to\\sandbox-signing-key.p12",
       "keyAlias": "keyalias",
       "keystorePassword": "keystorepassword",
-      "tokenEndpoint": "https://auth.mastercard.com/oauth2/token",
+      "tokenEndpoint": "https://auth.mastercard.com/oauth/token",
       "issuer": "https://auth.mastercard.com",
       "scopes": ["service:scope1", "service:scope2"]
     },
