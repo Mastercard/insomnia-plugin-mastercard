@@ -2,6 +2,23 @@ const fs = require('fs');
 const utils = require('./utils');
 const { UserFeedback } = require('../utils/user-feedback');
 
+//Check to see if there is toEncrypt or toDecrypt in paths
+const hasPathProperty = (mcContext, property) => {
+  const paths = mcContext && mcContext.encryptionConfig && mcContext.encryptionConfig.paths;
+  if (!Array.isArray(paths)) {
+    return false;
+  }
+  return paths.some(
+    (p) => p && Object.prototype.hasOwnProperty.call(p, property)
+  );
+};
+
+const hasToEncrypt = (mcContext) => hasPathProperty(mcContext, 'toEncrypt');
+const hasToDecrypt = (mcContext) => hasPathProperty(mcContext, 'toDecrypt');
+
+module.exports.hasToEncrypt = hasToEncrypt;
+module.exports.hasToDecrypt = hasToDecrypt;
+
 module.exports.request = async (mcContext) => {
   try {
 
@@ -11,7 +28,7 @@ module.exports.request = async (mcContext) => {
     mcContext.isMastercardRequest() &&
     body.text &&
     mcContext.isJsonRequest() &&
-    mcContext.encryptionConfig
+    hasToEncrypt(mcContext)
   ) {
     const headers = mcContext.requestHeader();
 
@@ -49,7 +66,7 @@ module.exports.response = async (mcContext) => {
     mcContext.isMastercardRequest() &&
     body &&
     mcContext.isJsonResponse() &&
-    mcContext.encryptionConfig
+    hasToDecrypt(mcContext)
   ) {
     const cryptoService = utils.cryptoService(mcContext.encryptionConfig);
 
