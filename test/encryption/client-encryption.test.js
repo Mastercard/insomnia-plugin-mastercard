@@ -276,6 +276,19 @@ describe('Encryption', () => {
     assert(setBodyText.notCalled);
   });
 
+  it('should not encrypt the request when paths only define toDecrypt', async () => {
+    const config = JSON.parse(JSON.stringify(require('../__res__/config.json').mastercard));
+    config.encryptionConfig.paths.forEach((p) => delete p.toEncrypt);
+    const ctx = helper.context({ config: config, body: body });
+    const setHeader = sinon.spy(ctx.request, 'setHeader');
+    const setBodyText = sinon.spy(ctx.request, 'setBodyText');
+
+    await plugin.requestHooks[requestHookPosition](ctx); // encrypt
+
+    assert(setHeader.notCalled);
+    assert(setBodyText.notCalled);
+  });
+
   it('should not intercept non Mastercard responses', async () => {
     const ctx = helper.context({ url: 'https://api.foo.com/bar' });
     const setBody = sinon.spy(ctx.response, 'setBody');
@@ -311,6 +324,18 @@ describe('Encryption', () => {
     const ctx = helper.context({ config: config, body: '{}' });
     sinon.mock(ctx.response).expects('getBodyStream').returns('{}');
 
+    const setBody = sinon.spy(ctx.response, 'setBody');
+
+    await plugin.responseHooks[1](ctx); // decrypt
+
+    assert(setBody.notCalled);
+  });
+
+  it('should not decrypt the response when paths only define toEncrypt', async () => {
+    const config = JSON.parse(JSON.stringify(require('../__res__/config.json').mastercard));
+    config.encryptionConfig.paths.forEach((p) => delete p.toDecrypt);
+    const ctx = helper.context({ config: config, body: '{}' });
+    sinon.mock(ctx.response).expects('getBodyStream').returns('{}');
     const setBody = sinon.spy(ctx.response, 'setBody');
 
     await plugin.responseHooks[1](ctx); // decrypt
