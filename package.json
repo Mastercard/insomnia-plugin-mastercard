@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-mastercard",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "An Insomnia plugin for consuming Mastercard APIs",
   "license": "Apache-2.0",
   "repository": {
@@ -58,7 +58,7 @@
     "@mastercard/oauth2-client-js": "^1.0.0",
     "joi": "^18.2.3",
     "jsrsasign": "^11.1.3",
-    "mastercard-client-encryption": "^1.10.8",
+    "mastercard-client-encryption": "^1.10.9",
     "mastercard-oauth1-signer": "^1.2.0",
     "node-forge": "^1.4.0"
   },
